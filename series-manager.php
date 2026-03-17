@@ -85,7 +85,7 @@ function sm_enqueue_post_editor_assets()
     wp_enqueue_script(
         $script_handle,
         plugins_url('build/index.js', __FILE__),
-        $asset_file['dependencies'] ?? ['wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data'],
+        array_merge($asset_file['dependencies'] ?? ['wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data'], ['wp-api-fetch']),
         $asset_file['version'] ?? filemtime(plugin_dir_path(__FILE__) . 'build/index.js'),
         true
     );
