@@ -40,11 +40,29 @@ export const createSeriesApi = ({
   };
 
   const createSeriesTerm = async (name) => {
-    return wpData.dispatch('core').saveEntityRecord(
-      'taxonomy',
-      'series',
-      { name }
-    );
+    const formData = new URLSearchParams({
+      action: 'sm_create_series_term',
+      nonce,
+      name: name.name || name,
+    });
+
+    const res = await fetchFn(ajaxurl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString(),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      // Return object compatible with WordPress entity format
+      return {
+        id: data.data.id,
+        name: data.data.name,
+        slug: data.data.slug,
+        taxonomy: data.data.taxonomy,
+      };
+    }
+    throw new Error(data.data?.message || 'Failed to create series');
   };
 
   return {

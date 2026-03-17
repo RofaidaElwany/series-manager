@@ -13,12 +13,89 @@ class SeriesController
         $this->formatter  = $formatter;
 
         // AJAX
+        add_action('wp_ajax_sm_get_series_terms', [$this, 'ajaxGetSeriesTerms']);
+        add_action('wp_ajax_sm_create_series_term', [$this, 'ajaxCreateSeriesTerm']);
         add_action('wp_ajax_sm_get_series_posts', [$this, 'ajaxGetSeriesPosts']);
         add_action('wp_ajax_sm_update_series_order', [$this, 'ajaxUpdateOrder']);
         add_action('wp_ajax_sm_remove_post_from_series', [$this, 'ajaxRemovePostFromSeries']);
 
         // Hook
         add_action('save_post', [$this, 'syncPostOrderOnSave'], 20, 3);
+    }
+
+    /* =========================
+     * AJAX: Get Series Terms
+     ========================= */
+    public function ajaxGetSeriesTerms()
+    {
+        if (! current_user_can('edit_posts')) {
+            wp_send_json_error(['message' => 'No permission']);
+        }
+
+        $nonce = $_POST['nonce'] ?? '';
+        if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
+            wp_send_json_error(['message' => 'Invalid nonce']);
+        }
+
+        $terms = get_terms([
+            'taxonomy'   => 'series',
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        ]);
+
+        if (is_wp_error($terms)) {
+            wp_send_json_error(['message' => 'Failed to fetch series']);
+        }
+
+        // Format terms to match WordPress REST API structure for compatibility
+        $formatted_terms = array_map(function ($term) {
+            return [
+                'id'   => $term->term_id,
+                'name' => $term->name,
+                'slug' => $term->slug,
+                'taxonomy' => $term->taxonomy,
+                'count' => $term->count,
+            ];
+        }, $terms);
+
+        wp_send_json_success($formatted_terms);
+    }
+
+    /* =========================
+     * AJAX: Create Series Term
+     ========================= */
+    public function ajaxCreateSeriesTerm()
+    {
+        if (! current_user_can('manage_categories')) {
+            wp_send_json_error(['message' => 'No permission']);
+        }
+
+        $nonce = $_POST['nonce'] ?? '';
+        if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
+            wp_send_json_error(['message' => 'Invalid nonce']);
+        }
+
+        $name = sanitize_text_field($_POST['name'] ?? '');
+        if (empty($name)) {
+            wp_send_json_error(['message' => 'Series name is required']);
+        }
+
+        $result = wp_insert_term($name, 'series');
+        if (is_wp_error($result)) {
+            wp_send_json_error(['message' => $result->get_error_message()]);
+        }
+
+        $term = get_term($result['term_id'], 'series');
+        $response = [
+            'id'   => $term->term_id,
+            'name' => $term->name,
+            'slug' => $term->slug,
+            'taxonomy' => $term->taxonomy,
+            'count' => $term->count,
+        ];
+
+        wp_send_json_success($response);
     }
 
     /* =========================

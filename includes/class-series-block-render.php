@@ -20,7 +20,7 @@ class SM_Series_Block_Render
 
     public static function render($attributes)
     {
-        if (! is_singular('post')) {
+        if (! is_singular($customPostType->getSupportedPostTypes())) {
             return '';
         }
 
@@ -51,7 +51,7 @@ class SM_Series_Block_Render
                 // Fallback to date ordering if no term_order rows exist
                 if (empty($posts)) {
                     $posts = get_posts([
-                        'post_type'   => 'post',
+                        'post_type'   => $customPostType->getSupportedPostTypes(),
                         'numberposts' => -1,
                         'tax_query'   => [
                             [

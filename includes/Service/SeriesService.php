@@ -22,4 +22,10 @@ class SeriesService
 
         return $posts;
     }
+    public function getSupportedPostTypes()
+    {   
+        $postTypes = get_post_types(['public' => true], 'names');   
+        return apply_filters('sm_series_supported_post_types', $postTypes);
+    }
+
 }
