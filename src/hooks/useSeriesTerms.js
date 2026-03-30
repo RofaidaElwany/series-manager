@@ -1,6 +1,7 @@
 import { useEffect, useState } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 
-export const useSeriesTerms = () => {
+export const useSeriesTerms = (postType) => {
   const [seriesTerms, setSeriesTerms] = useState([]);
   const [isResolvingTerms, setIsResolvingTerms] = useState(true);
 
@@ -11,6 +12,7 @@ export const useSeriesTerms = () => {
         const formData = new URLSearchParams({
           action: 'sm_get_series_terms',
           nonce: SMSeries?.nonce || '',
+          post_type: postType || 'post',
         });
 
         const response = await fetch(SMSeries?.ajaxurl || '/wp-admin/admin-ajax.php', {
@@ -35,7 +37,7 @@ export const useSeriesTerms = () => {
     };
 
     fetchTerms();
-  }, []);
+  }, [postType]);
 
   return {
     seriesTerms,

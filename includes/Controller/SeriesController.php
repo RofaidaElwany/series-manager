@@ -37,25 +37,37 @@ class SeriesController
             wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
-        $terms = get_terms([
-            'taxonomy'   => 'series',
-            'hide_empty' => false,
-            'orderby'    => 'name',
-            'order'      => 'ASC',
-        ]);
+        $post_type = sanitize_key($_POST['post_type'] ?? 'post');
+
+        // Get series terms that have posts of this specific post type only
+        global $wpdb;
+        $terms = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT DISTINCT t.term_id, t.name, t.slug, tx.taxonomy,
+                        COUNT(p.ID) as post_count
+                 FROM {$wpdb->terms} t
+                 INNER JOIN {$wpdb->term_taxonomy} tx ON t.term_id = tx.term_id
+                 INNER JOIN {$wpdb->term_relationships} tr ON tx.term_taxonomy_id = tr.term_taxonomy_id
+                 INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID AND p.post_type = %s
+                 WHERE tx.taxonomy = 'series'
+                 GROUP BY t.term_id, t.name, t.slug, tx.taxonomy
+                 ORDER BY t.name ASC",
+                $post_type
+            )
+        );
 
         if (is_wp_error($terms)) {
             wp_send_json_error(['message' => 'Failed to fetch series']);
         }
 
-        // Format terms to match WordPress REST API structure for compatibility
+        // Format terms
         $formatted_terms = array_map(function ($term) {
             return [
-                'id'   => $term->term_id,
+                'id'   => (int) $term->term_id,
                 'name' => $term->name,
                 'slug' => $term->slug,
                 'taxonomy' => $term->taxonomy,
-                'count' => $term->count,
+                'count' => (int) $term->post_count,
             ];
         }, $terms);
 

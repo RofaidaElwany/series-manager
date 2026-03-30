@@ -12,12 +12,13 @@ import { createSeriesTerm } from '../../services/seriesApiExports';
 const SeriesSidebarContainer = () => {
     /* ========================= Editor Data ========================= */
 
-  const { postId, postTitle, currentSeries } = useSelect((select) => {
+  const { postId, postTitle, postType, currentSeries } = useSelect((select) => {
     const editor = select('core/editor');
 
     return {
       postId: editor.getCurrentPostId(),
       postTitle: editor.getEditedPostAttribute('title'),
+      postType: editor.getCurrentPostType(),
       currentSeries: editor.getEditedPostAttribute('series') || [],
     };
   });
@@ -40,7 +41,7 @@ const SeriesSidebarContainer = () => {
   const { editPost } = useDispatch('core/editor');
 
   /* ========================= Terms ========================= */
-  const { seriesTerms, isResolvingTerms } = useSeriesTerms();
+  const { seriesTerms, isResolvingTerms } = useSeriesTerms(postType);
 
     /* =========================    Posts  ========================= */
   const { orderedPosts, setOrderedPosts } =
@@ -87,6 +88,7 @@ const SeriesSidebarContainer = () => {
       seriesTerms={seriesTerms}
       isResolvingTerms={isResolvingTerms}
       orderedPosts={orderedPosts}
+      postType={postType}
       onChangeSeries={onChangeSeries}
       onCreateSeries={handleCreateSeries}
       onReorder={handleReorder}

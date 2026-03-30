@@ -1,5 +1,7 @@
 <?php
 
+use Service\SeriesService;
+
 if (! defined('ABSPATH')) {
     exit;
 }
@@ -20,12 +22,12 @@ class SM_Series_Block_Render
 
     public static function render($attributes)
     {
-        if (! is_singular($customPostType->getSupportedPostTypes())) {
+        $post_id = get_the_ID();
+        $post_type = get_post_type($post_id);
+        $supported = SeriesService::getSupportedPostTypes();
+        if (! in_array($post_type, $supported)) {
             return '';
         }
-
-        $post_id = get_the_ID();
-        $post = get_post($post_id);
         $terms = wp_get_post_terms($post_id, 'series');
 
         if (empty($terms) || is_wp_error($terms)) {
@@ -51,7 +53,7 @@ class SM_Series_Block_Render
                 // Fallback to date ordering if no term_order rows exist
                 if (empty($posts)) {
                     $posts = get_posts([
-                        'post_type'   => $customPostType->getSupportedPostTypes(),
+                        'post_type'   => SeriesService::getSupportedPostTypes(),
                         'numberposts' => -1,
                         'tax_query'   => [
                             [

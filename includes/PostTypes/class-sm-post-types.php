@@ -20,8 +20,17 @@ class SM_Post_Types
             $label = $cpt['label'];
 
             register_post_type($name, [
-                'label' => $label,
-                'add_new_item' => "Add New $name",
+                'labels' => [
+                    'name' => $label,
+                    'singular_name' => $label,
+                    'add_new' => 'Add ' . $label,
+                    'add_new_item' => 'Add New ' . $label,
+                    'edit_item' => 'Edit ' . $label,
+                    'new_item' => 'New ' . $label,
+                    'view_item' => 'View ' . $label,
+                    'all_items' => 'All ' . $label . 's',
+                    'menu_name' => $label,
+                ],
                 'public' => true,
                 'show_in_rest' => true,
                 'supports' => ['title', 'editor'],
