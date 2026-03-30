@@ -9,11 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SM_Series_Taxonomy {
 
     public static function register() {
-        $customPostType = new SeriesService();
+        $postTypes = SeriesService::getSupportedPostTypes();
         register_taxonomy(
             'series',
-            $customPostType->getSupportedPostTypes(),
-            
+            $postTypes,
             [
                 'labels' => [
                     'name'          => 'Series',
@@ -21,7 +20,7 @@ class SM_Series_Taxonomy {
                 ],
                 'public'            => true,
                 'hierarchical'      => false,
-                'show_in_rest'      => true,
+                'show_in_rest'      => false,
                 'show_ui'          => false,
                 'show_admin_column' => true,
                 'sort'               => true,

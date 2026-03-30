@@ -11,16 +11,18 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/includes/Repository/SeriesRepository.php';
-require_once __DIR__ . '/includes/Service/SeriesService.php';
-require_once __DIR__ . '/includes/Helpers/SeriesFormatter.php';
-require_once __DIR__ . '/includes/Controller/SeriesController.php';
-require_once __DIR__ . '/includes/class-series-taxonomy.php';
-require_once __DIR__ . '/includes/class-series-taxonomy-edit.php';
-require_once __DIR__ . '/includes/class-series-block-render.php';
+require_once plugin_dir_path(__FILE__) . '/includes/Repository/SeriesRepository.php';
+require_once plugin_dir_path(__FILE__) . '/includes/Helpers/SeriesFormatter.php';
+require_once plugin_dir_path(__FILE__) . '/includes/Controller/SeriesController.php';
+require_once plugin_dir_path(__FILE__) . '/includes/class-series-taxonomy.php';
+require_once plugin_dir_path(__FILE__) . '/includes/class-series-taxonomy-edit.php';
+require_once plugin_dir_path(__FILE__) .'/includes/class-series-block-render.php';
+require_once plugin_dir_path(__FILE__) . '/includes/Admin/class-series-admin.php';
+require_once plugin_dir_path(__FILE__) . '/includes/Service/SeriesService.php';
+require_once plugin_dir_path(__FILE__) . '/includes/PostTypes/class-sm-post-types.php';
 
 use Service\SeriesService;
-
+SM_Series_Admin::init();
 
 /* ========= INIT FUNCTION ========= */
 
@@ -39,23 +41,6 @@ function sm_series_manager_init()
 /* ========= HOOK ========= */
 
 add_action('init', 'sm_series_manager_init');
-// Register AJAX handlers early (before admin_init)
-// SM_Series_Order::register();
-
-function sm_register_everything()
-{
-    SM_Series_Taxonomy::register();
-    SM_Series_Taxonomy_Edit::register();
-
-    register_block_type(
-        __DIR__,
-        [
-            'render_callback' => ['SM_Series_Block_Render', 'render'],
-        ]
-    );
-}
-
-add_action('init', 'sm_register_everything');
 
 function sm_enqueue_post_editor_assets()
 {
@@ -68,8 +53,12 @@ function sm_enqueue_post_editor_assets()
     }
 
     // Only enqueue for post types that support series when screen is available
-    if ($screen && $screen->post_type && ! in_array($screen->post_type, ['post', 'page'])) {
-        return;
+    if ($screen && $screen->post_type) {
+        $service = new SeriesService();
+        $supported = $service->getSupportedPostTypes();
+        if (!in_array($screen->post_type, $supported)) {
+            return;
+        }
     }
 
     $asset_file_path = plugin_dir_path(__FILE__) . 'build/index.asset.php';
@@ -175,4 +164,10 @@ add_action('enqueue_block_assets', function () {
         [],
         null
     );
+});
+
+// Register custom post types on init
+add_action('init', function () {
+    SM_Post_Types::register();
+    SM_Series_Taxonomy::register();
 });

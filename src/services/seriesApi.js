@@ -1,5 +1,3 @@
-import { apiFetch } from '@wordpress/api-fetch';
-
 export const createSeriesApi = ({
   ajaxurl,
   nonce,
@@ -14,8 +12,6 @@ export const createSeriesApi = ({
       nonce,
       term_id: termId,
     });
-
-
 
     const res = await fetchFn(ajaxurl, {
       method: 'POST',
@@ -42,16 +38,28 @@ export const createSeriesApi = ({
   };
 
   const createSeriesTerm = async (name) => {
-    try {
-      const term = await apiFetch({
-        path: '/wp/v2/series',
-        method: 'POST',
-        data: { name: name.name || name },
-      });
-      return term;
-    } catch (error) {
-      throw new Error(error.message || 'Failed to create series');
+    const formData = new URLSearchParams({
+      action: 'sm_create_series_term',
+      nonce,
+      name: name.name || name,
+    });
+
+    const res = await fetchFn(ajaxurl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString(),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      return {
+        id: data.data.id,
+        name: data.data.name,
+        slug: data.data.slug,
+        taxonomy: data.data.taxonomy,
+      };
     }
+    throw new Error(data.data?.message || 'Failed to create series');
   };
 
   return {
