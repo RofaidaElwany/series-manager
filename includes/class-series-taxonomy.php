@@ -21,7 +21,7 @@ class SM_Series_Taxonomy {
                 'public'            => true,
                 'hierarchical'      => false,
                 'show_in_rest'      => false,
-                'show_ui'          => false,
+                'show_ui'          => true,
                 'show_admin_column' => true,
                 'sort'               => true,
                 'args'              => [ 'orderby' => 'term_order' ],
