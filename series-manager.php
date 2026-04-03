@@ -16,12 +16,12 @@ require_once plugin_dir_path(__FILE__) . '/includes/Helpers/SeriesFormatter.php'
 require_once plugin_dir_path(__FILE__) . '/includes/Controller/SeriesController.php';
 require_once plugin_dir_path(__FILE__) . '/includes/class-series-taxonomy.php';
 require_once plugin_dir_path(__FILE__) . '/includes/class-series-taxonomy-edit.php';
-require_once plugin_dir_path(__FILE__) .'/includes/class-series-block-render.php';
+require_once plugin_dir_path(__FILE__) . '/includes/class-series-block-render.php';
 require_once plugin_dir_path(__FILE__) . '/includes/Admin/class-series-admin.php';
 require_once plugin_dir_path(__FILE__) . '/includes/Service/SeriesService.php';
-require_once plugin_dir_path(__FILE__) . '/includes/PostTypes/class-sm-post-types.php';
 
 use Service\SeriesService;
+
 SM_Series_Admin::init();
 
 /* ========= INIT FUNCTION ========= */
@@ -166,8 +166,7 @@ add_action('enqueue_block_assets', function () {
     );
 });
 
-// Register custom post types on init
+// Register taxonomy on init
 add_action('init', function () {
-    SM_Post_Types::register();
     SM_Series_Taxonomy::register();
 });
