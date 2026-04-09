@@ -2,13 +2,15 @@
 
 use Service\SeriesService;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
-class SM_Series_Taxonomy {
+class SM_Series_Taxonomy
+{
 
-    public static function register() {
+    public static function register()
+    {
         $postTypes = SeriesService::getSupportedPostTypes();
         register_taxonomy(
             'series',
@@ -20,13 +22,11 @@ class SM_Series_Taxonomy {
                 ],
                 'public'            => true,
                 'hierarchical'      => false,
-                'show_in_rest'      => false,
+                'show_in_rest'      => true,
                 'show_ui'          => true,
                 'show_admin_column' => true,
-                'sort'               => true,
-                'args'              => [ 'orderby' => 'term_order' ],
-                'rewrite'           => [ 'slug' => 'series' ],
-                'meta_box_cb'        =>  false ,
+                'rewrite'           => ['slug' => 'series'],
+                'meta_box_cb'        => false,
             ]
         );
     }

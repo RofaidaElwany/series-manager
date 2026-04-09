@@ -1,0 +1,30 @@
+#sm-series-posts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#sm-series-posts li {
+  background: #f9f9fa;
+  padding: 10px 15px;
+  margin-bottom: 5px;
+  cursor: move;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+#sm-series-posts li:hover {
+  background: #f2f4f5;
+}
+
+#sm-series-posts li.ui-sortable-helper {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-color: #0062a2;
+}
+
+.sm-series-posts-field .description {
+  margin-top: 10px;
+  color: #5b6062;
+  font-style: italic;
+}

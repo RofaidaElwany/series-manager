@@ -82,9 +82,9 @@ class SM_Series_Block_Render
                     ? get_post($post_ids[$current_index + 1])
                     : null;
             ?>
-                <div class="w-full max-w-3xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden">
+                <div class="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
                     <!-- Header -->
-                    <div class="px-6 py-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                    <div class="px-6 py-5 bg-surface-container-low flex items-center justify-between">
                         <!-- Series title and part info -->
                         <div class="flex flex-col">
                             <h2 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
@@ -114,15 +114,15 @@ class SM_Series_Block_Render
                                         <span class="text-[10px] text-primary/70 font-bold uppercase tracking-widest">You are here</span>
                                     </div>
                                     <div class="shrink-0">
-                                        <span class="text-primary text-xs font-semibold px-2 py-1 bg-white dark:bg-gray-900 rounded border border-primary/20">Current Post</span>
+                                        <span class="text-primary text-xs font-semibold px-2 py-1 bg-surface-container-lowest rounded">Current Post</span>
                                     </div>
                                 </div>
                             <?php else : ?>
-                                <a class="group flex items-center gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" href="<?php echo esc_url(get_permalink($p)); ?>">
-                                    <div class="flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 w-10 h-10 flex-shrink-0 group-hover:text-primary transition-colors">
+                                <a class="group flex items-center gap-4 px-6 py-4 hover:bg-surface-container-low transition-colors" href="<?php echo esc_url(get_permalink($p)); ?>">
+                                    <div class="flex items-center justify-center rounded-lg bg-surface-container-low text-on-surface w-10 h-10 flex-shrink-0">
                                         <span class="material-symbols-outlined">link</span>
                                     </div>
-                                    <p class="text-gray-900 dark:text-gray-200 text-base font-medium flex-1 truncate">
+                                    <p class="text-on-surface text-base font-medium flex-1 truncate">
                                         <?php echo esc_html($p->post_title); ?>
                                     </p>
                                     <div class="shrink-0 text-gray-300 group-hover:text-primary transition-colors">

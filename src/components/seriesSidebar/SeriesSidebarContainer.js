@@ -1,3 +1,4 @@
+import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 
 import { SeriesSidebarView } from './SeriesSidebarView';
@@ -36,7 +37,22 @@ const SeriesSidebarContainer = () => {
     return Number.isNaN(num) ? null : num;
   };
 
-  const selectedSeriesId = normalizeSeriesId(currentSeries[0] ?? null);
+
+  // Active series ID for UI state (e.g., highlighting selected series)
+  const [activeSeriesId, setActiveSeriesId] = useState(null);  
+    // Normalize and filter out invalid series IDs
+
+
+  const selectedSeriesIds = currentSeries
+    .map(normalizeSeriesId)
+    .filter(Boolean);
+
+  // Default to the most recently selected series if none is active
+  useEffect(() => {
+    if (!activeSeriesId && selectedSeriesIds.length > 0) {
+      setActiveSeriesId(selectedSeriesIds[selectedSeriesIds.length - 1]);
+    }
+  }, [selectedSeriesIds]);
 
   const { editPost } = useDispatch('core/editor');
 
@@ -45,27 +61,75 @@ const SeriesSidebarContainer = () => {
 
     /* =========================    Posts  ========================= */
   const { orderedPosts, setOrderedPosts } =
-    useSeriesPosts(selectedSeriesId, postId, postTitle);
+    useSeriesPosts(activeSeriesId || null, postId, postTitle);
+
+  // Track original posts for cancel functionality
+  const [originalPosts, setOriginalPosts] = useState([]);
+
+  // Update original posts when series changes or posts are first loaded
+  useEffect(() => {
+    if (activeSeriesId && orderedPosts.length > 0) {
+      setOriginalPosts([...orderedPosts]);
+    }
+  }, [activeSeriesId]);
+
+  // Check if there are unsaved changes
+  const hasUnsavedChanges = originalPosts.length > 0 && (
+    originalPosts.length !== orderedPosts.length ||
+    originalPosts.some((post, idx) => post.id !== orderedPosts[idx]?.id)
+  );
 
     /* =========================    Post Actions (Reorder, Delete)  ========================= */
-  const { handleReorder, handleDelete } =
+  const { handleReorder, handleDelete, saveOrderToDB } =
     useSeriesPostActions(
-      selectedSeriesId,
+      activeSeriesId,
       orderedPosts,
       setOrderedPosts
     );
 
     /* =========================    Sync with Post Saving  ========================= */
   usePostSavingSync(
-    selectedSeriesId,
+    activeSeriesId,
     orderedPosts,
-    (posts) => posts
+    saveOrderToDB
   );
+
+  /* =========================    Save and Cancel Handlers  ========================= */
+  const handleSave = () => {
+    saveOrderToDB(orderedPosts);
+    setOriginalPosts([...orderedPosts]);
+  };
+
+  const handleCancel = () => {
+    setOrderedPosts([...originalPosts]);
+  };
 
   /* =========================    Handler(Change series)  ========================= */
   const onChangeSeries = (seriesId) => {
+    const id = Number(seriesId);
+
+    let updated;
+    if (selectedSeriesIds.includes(id)) {
+      //remove from series
+      updated = selectedSeriesIds.filter(s => s !== id);
+
+      // If the removed series was active, clear active selection
+      if (activeSeriesId === id) {
+        setActiveSeriesId(updated[0] || null);
+      }
+
+    } else {
+      //add to series
+      updated = [...selectedSeriesIds, id];
+
+      //if no active series, set the newly added one as active
+      if (!activeSeriesId) {
+        setActiveSeriesId(id);
+      }
+    }
+
     editPost({
-      series: seriesId ? [Number(seriesId)] : [],
+      series: updated,
     });
   };
 
@@ -84,7 +148,9 @@ const SeriesSidebarContainer = () => {
 
   return (
     <SeriesSidebarView
-      selectedSeriesId={selectedSeriesId}
+      activeSeriesId={activeSeriesId}
+      onSetActiveSeries={setActiveSeriesId}
+      selectedSeriesIds={selectedSeriesIds}
       seriesTerms={seriesTerms}
       isResolvingTerms={isResolvingTerms}
       orderedPosts={orderedPosts}
@@ -93,6 +159,9 @@ const SeriesSidebarContainer = () => {
       onCreateSeries={handleCreateSeries}
       onReorder={handleReorder}
       onDelete={handleDelete}
+      onSave={handleSave}
+      onCancel={handleCancel}
+      hasUnsavedChanges={hasUnsavedChanges}
     />
   );
 };

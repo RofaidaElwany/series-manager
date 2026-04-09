@@ -9,17 +9,22 @@ export const prepareOrderedPosts = (data, currentId, postTitle) => {
   let posts = (data || []).map((p) => ({
     ...p,
     isCurrent: Number(p.id) === numericCurrentId,
+    isExistingInSeries: true, // Mark posts fetched from DB
   }));
 
   const alreadyExists = posts.some(
     (p) => Number(p.id) === numericCurrentId
   );
 
+  // Only add current post if it doesn't already exist
+  // New posts will be added at the end of the list
   if (!alreadyExists) {
     posts.push({
       id: numericCurrentId,
       title: { rendered: postTitle || 'Current Post' },
       isCurrent: true,
+      isExistingInSeries: false, // Mark as newly added
+      post_status: 'draft', // New posts start as draft
     });
   }
 

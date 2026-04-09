@@ -2,7 +2,7 @@ import { useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 
 export const usePostSavingSync = (
-  selectedSeriesId,
+  selectedSeriesIds,
   orderedPosts,
   saveOrderToDB
 ) => {
@@ -18,7 +18,7 @@ export const usePostSavingSync = (
     if (
       isSavingPost &&
       !isAutosavingPost &&
-      selectedSeriesId &&
+      selectedSeriesIds &&
       orderedPosts.length
     ) {
       saveOrderToDB(orderedPosts);

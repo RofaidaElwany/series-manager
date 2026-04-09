@@ -28,6 +28,8 @@ SM_Series_Admin::init();
 
 function sm_series_manager_init()
 {
+    SM_Series_Taxonomy::register();
+    SM_Series_Taxonomy_Edit::register();
 
     global $wpdb;
 

@@ -2,14 +2,14 @@ import { reorderPosts, removePostFromList } from '../utils/postHelpers';
 import { updateSeriesOrder } from '../services/seriesApiExports';
 
 export const useSeriesPostActions = (
-  selectedSeriesId,
+  selectedSeriesIds,
   orderedPosts,
   setOrderedPosts
 ) => {
 
   const saveOrderToDB = (posts) => {
-    if (!selectedSeriesId) return;
-    updateSeriesOrder(selectedSeriesId, posts);
+    if (!selectedSeriesIds) return;
+    updateSeriesOrder(selectedSeriesIds, posts);
   };
 
   const handleReorder = (activeId, overId) => {
@@ -20,7 +20,7 @@ export const useSeriesPostActions = (
     );
 
     setOrderedPosts(newPosts);
-    saveOrderToDB(newPosts);
+    // Removed automatic save - will save only on Save button click
   };
 
   const handleDelete = (postToDelete) => {
@@ -30,11 +30,12 @@ export const useSeriesPostActions = (
     );
 
     setOrderedPosts(updatedPosts);
-    saveOrderToDB(updatedPosts);
+    // Removed automatic save - will save only on Save button click
   };
 
   return {
     handleReorder,
     handleDelete,
+    saveOrderToDB,
   };
 };

@@ -31,7 +31,7 @@
 
   /* ADD button text font */
   .components-button.is-primary {
-    font-family: 'Poppins', sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
   }
 }
 
@@ -46,10 +46,9 @@
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   background: transparent;
-  border: 1px solid transparent;
-  color: #2563eb;
+  color: #0062a2;
   font-weight: 600;
 }
 .sm-new-series-action:hover {
-  background: #eff6ff;
+  background: rgba(0, 98, 162, 0.05);
 }

@@ -9,7 +9,9 @@ import { useState } from '@wordpress/element';
 import '../index.css';
 
 const SeriesSelector = ({
-  selectedSeriesId,
+  selectedSeriesIds=[],
+  activeSeriesId,
+  onSetActiveSeries,
   seriesTerms,
   isLoading,
   onChangeSeries,
@@ -31,14 +33,15 @@ const SeriesSelector = ({
       {!isLoading && (
         <div>
           {/* Label */}
-          <label className="block text-xs font-bold uppercase text-gray-500 mb-2">
+          <label className="block text-xs font-bold uppercase text-on-surface-variant mb-2">
             Series
           </label>
 
           {/* Combobox */}
           <div className="sm-series-combo mb-2">
             <ComboboxControl
-              value={selectedSeriesId ? String(selectedSeriesId) : ''}
+            //value = "" to be add not replace
+              value= ""
               options={[
                 { value: '', label: 'Select the series' },
                 ...seriesTerms.map((t) => ({
@@ -46,15 +49,47 @@ const SeriesSelector = ({
                   label: t.name,
                 })),
               ]}
-              onChange={onChangeSeries}
+              onChange={(value) =>{
+                if (!value) return; // Prevent empty selection
+                onChangeSeries(value)
+              }}
             />
+            <div className="flex flex-wrap gap-2 mt-2">
+              {selectedSeriesIds.map((id) => {
+                const series = seriesTerms.find(t => t.id === id);
+                if (!series) return null;
+
+                return (
+                  <span
+                    key={id}
+                    onClick={() => onSetActiveSeries(id)}
+                    className={`px-2 py-1 text-xs rounded cursor-pointer flex items-center gap-1 ${
+                      id === activeSeriesId
+                        ? ' bg-primary/10 text-primary ring-1 ring-primary/20 px-3 py-1.5 rounded text-sm font-bold flex items-center gap-2 cursor-default'
+                        : ' text-on-surface bg-surface-container-highest px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 group transition-all hover:bg-surface-container-low cursor-default'
+                    }`}
+                  >
+                    {series.name}
+                    <span
+                      className="material-symbols-outlined text-sm opacity-60 group-hover:opacity-100 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onChangeSeries(id); // remove
+                      }}
+                    >
+                      close
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
           </div>
 
           {/* New Series Button */}
           <div className="sm-new-series-action-container mb-4">
             <button
               type="button"
-              className="sm-new-series-action px-3 py-1 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="sm-new-series-action px-3 py-1 text-sm font-medium text-primary rounded hover:bg-primary/5 transition-colors"
               onClick={() => {
                 setNewSeriesName('');
                 setIsModalOpen(true);
@@ -69,7 +104,7 @@ const SeriesSelector = ({
             <Modal
               title="Add new series"
               onRequestClose={() => setIsModalOpen(false)}
-              className="bg-white dark:bg-[#1e1e1e] rounded-lg shadow-2xl border border-gray-200 dark:border-gray-800 overflow-hidden"
+              className="bg-surface-container-lowest border-outline-variant rounded-lg shadow-2xl overflow-hidden"
             >
               <TextControl
                 label="Series name"
@@ -82,7 +117,7 @@ const SeriesSelector = ({
                 <Button
                   variant="secondary"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-on-surface bg-surface-container-highest rounded hover:bg-surface-container-low transition-colors"
                 >
                   Cancel
                 </Button>
@@ -91,7 +126,7 @@ const SeriesSelector = ({
                   variant="primary"
                   onClick={handleCreate}
                   disabled={!newSeriesName}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded shadow-sm transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-surface-container-lowest bg-gradient-to-br from-primary to-primary-dim rounded shadow-sm transition-colors"
                 >
                   ADD
                 </Button>

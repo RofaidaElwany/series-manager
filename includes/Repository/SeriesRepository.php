@@ -36,13 +36,13 @@ class SeriesRepository
 
         return $this->wpdb->get_results(
             $this->wpdb->prepare(
-                "SELECT p.ID, p.post_title, tr.term_order
+                "SELECT p.ID, p.post_title, p.post_status, p.post_type, tr.term_order
                  FROM {$this->wpdb->posts} p
                  INNER JOIN {$this->wpdb->term_relationships} tr
                      ON p.ID = tr.object_id
                  WHERE tr.term_taxonomy_id = %d
-                 AND p.post_status = 'publish'
-                 ORDER BY tr.term_order ASC",
+                 AND p.post_status IN ('publish', 'draft', 'pending')
+                 ORDER BY tr.term_order ASC, p.ID ASC",
                 $term_taxonomy_id
             )
         );

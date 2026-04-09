@@ -5,7 +5,9 @@ import { SeriesSelector } from '../SeriesSelector';
 import { SeriesPostsList } from '../SeriesPostsList';
 
 const SeriesSidebarView = ({
-  selectedSeriesId,
+  selectedSeriesIds=[],
+  activeSeriesId,
+  onSetActiveSeries,
   seriesTerms,
   isResolvingTerms,
   orderedPosts,
@@ -14,6 +16,9 @@ const SeriesSidebarView = ({
   onCreateSeries,
   onReorder,
   onDelete,
+  onSave,
+  onCancel,
+  hasUnsavedChanges,
 }) => {
   // Format post type label (convert 'post' to 'Posts', 'page' to 'Pages', etc.)
   const getPostTypeLabel = () => {
@@ -24,6 +29,13 @@ const SeriesSidebarView = ({
     }
     return `Series for ${postType}s`;
   };
+
+  // Get the active series name
+  const getActiveSeriesName = () => {
+    if (!activeSeriesId || !seriesTerms) return '';
+    const activeSeries = seriesTerms.find(term => term.id === activeSeriesId);
+    return activeSeries ? activeSeries.name : '';
+  };
   return (
     <PluginDocumentSettingPanel
       name="sm-series-sidebar"
@@ -33,7 +45,9 @@ const SeriesSidebarView = ({
       <PanelBody>
 
         <SeriesSelector
-          selectedSeriesId={selectedSeriesId}
+          selectedSeriesIds={selectedSeriesIds}
+          activeSeriesId={activeSeriesId}
+          onSetActiveSeries={onSetActiveSeries}
           seriesTerms={seriesTerms}
           isLoading={isResolvingTerms}
           onChangeSeries={onChangeSeries}
@@ -44,6 +58,10 @@ const SeriesSidebarView = ({
           posts={orderedPosts}
           onReorder={onReorder}
           onDelete={onDelete}
+          seriesName={getActiveSeriesName()}
+          onSave={onSave}
+          onCancel={onCancel}
+          hasUnsavedChanges={hasUnsavedChanges}
         />
 
       </PanelBody>

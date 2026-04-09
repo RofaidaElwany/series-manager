@@ -22,14 +22,14 @@ const normalizeSeriesId = (value) => {
 };
 
 export const useSeriesPosts = (
-  selectedSeriesId,
+  selectedSeriesIds,
   postId,
   postTitle
 ) => {
   const [orderedPosts, setOrderedPosts] = useState([]);
 
   useEffect(() => {
-    const seriesId = normalizeSeriesId(selectedSeriesId);
+    const seriesId = normalizeSeriesId(selectedSeriesIds);
 
     if (!seriesId) {
       setOrderedPosts([]);
@@ -52,7 +52,7 @@ export const useSeriesPosts = (
         setOrderedPosts(prepared);
       })
       .catch(() => setOrderedPosts([]));
-  }, [selectedSeriesId, postId, postTitle]);
+  }, [selectedSeriesIds, postId, postTitle]);
 
   return { orderedPosts, setOrderedPosts };
 };

@@ -39,16 +39,16 @@ class SeriesController
 
         $post_type = sanitize_key($_POST['post_type'] ?? 'post');
 
-        // Get series terms that have posts of this specific post type only
+        // Get all series terms for this post type, regardless of whether they have posts
         global $wpdb;
         $terms = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT DISTINCT t.term_id, t.name, t.slug, tx.taxonomy,
-                        COUNT(p.ID) as post_count
+                "SELECT t.term_id, t.name, t.slug, tx.taxonomy,
+                        COUNT(tr.object_id) as post_count
                  FROM {$wpdb->terms} t
                  INNER JOIN {$wpdb->term_taxonomy} tx ON t.term_id = tx.term_id
-                 INNER JOIN {$wpdb->term_relationships} tr ON tx.term_taxonomy_id = tr.term_taxonomy_id
-                 INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID AND p.post_type = %s
+                 LEFT JOIN {$wpdb->term_relationships} tr ON tx.term_taxonomy_id = tr.term_taxonomy_id
+                 LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID AND p.post_type = %s
                  WHERE tx.taxonomy = 'series'
                  GROUP BY t.term_id, t.name, t.slug, tx.taxonomy
                  ORDER BY t.name ASC",
@@ -244,22 +244,10 @@ class SeriesController
         if (is_wp_error($terms) || empty($terms)) {
             return;
         }
+
         global $wpdb;
 
         foreach ($terms as $term_id) {
-
-            $order_str = get_term_meta($term_id, 'sm_series_order', true);
-            if (! $order_str) {
-                continue;
-            }
-
-            $post_ids = $this->service->parsePostIds($order_str);
-            $index    = array_search($post_id, $post_ids, true);
-
-            if ($index === false) {
-                continue;
-            }
-
             $term_taxonomy_id = $wpdb->get_var(
                 $wpdb->prepare(
                     "SELECT term_taxonomy_id FROM {$wpdb->term_taxonomy} WHERE term_id = %d",
@@ -271,16 +259,52 @@ class SeriesController
                 continue;
             }
 
-            $wpdb->query(
+            $order_str = get_term_meta($term_id, 'sm_series_order', true);
+            if ($order_str) {
+                $post_ids = $this->service->parsePostIds($order_str);
+                $index    = array_search($post_id, $post_ids, true);
+
+                if ($index === false) {
+                    $post_ids[] = $post_id;
+                    $this->repository->updateOrder($term_taxonomy_id, $post_ids);
+                    $this->repository->persistOrderMeta($term_id, $post_ids);
+                    continue;
+                }
+
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "UPDATE {$wpdb->term_relationships}
+                         SET term_order = %d
+                         WHERE term_taxonomy_id = %d AND object_id = %d",
+                        $index,
+                        $term_taxonomy_id,
+                        $post_id
+                    )
+                );
+
+                continue;
+            }
+
+            $existing_post_ids = $wpdb->get_col(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->term_relationships}
-                     SET term_order = %d
-                     WHERE term_taxonomy_id = %d AND object_id = %d",
-                    $index,
-                    $term_taxonomy_id,
-                    $post_id
+                    "SELECT object_id FROM {$wpdb->term_relationships}
+                     WHERE term_taxonomy_id = %d
+                     ORDER BY term_order ASC, object_id ASC",
+                    $term_taxonomy_id
                 )
             );
+
+            if (empty($existing_post_ids)) {
+                continue;
+            }
+
+            $existing_post_ids = array_map('intval', $existing_post_ids);
+            if (! in_array($post_id, $existing_post_ids, true)) {
+                $existing_post_ids[] = $post_id;
+            }
+
+            $this->repository->updateOrder($term_taxonomy_id, $existing_post_ids);
+            $this->repository->persistOrderMeta($term_id, $existing_post_ids);
         }
     }
 }
