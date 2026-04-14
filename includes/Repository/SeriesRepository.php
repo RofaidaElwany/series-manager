@@ -87,4 +87,92 @@ class SeriesRepository
             )
         );
     }
+
+    /* =========================
+     * Get all series terms
+    ========================= */
+    public function getAllSeries(): array
+    {
+        return get_terms([
+            'taxonomy' => 'series',
+            'hide_empty' => false,
+        ]);
+    }
+
+    /* =========================
+     * Get top series by post count
+    ========================= */
+    public function getTopSeries(int $limit = 5): array
+    {
+        return get_terms([
+            'taxonomy' => 'series',
+            'orderby' => 'count',
+            'order' => 'DESC',
+            'number' => $limit,
+            'hide_empty' => true,
+        ]);
+    }
+
+    /* =========================
+     * Get series by user (author of posts in series)
+    ========================= */
+    public function getSeriesByUser(int $user_id): array
+    {
+        $terms = get_terms([
+            'taxonomy' => 'series',
+            'hide_empty' => false,
+        ]);
+
+        $user_series = [];
+        foreach ($terms as $term) {
+            $posts = get_posts([
+                'post_type' => 'any',
+                'tax_query' => [
+                    [
+                        'taxonomy' => 'series',
+                        'terms' => $term->term_id,
+                    ],
+                ],
+                'author' => $user_id,
+                'posts_per_page' => 1,
+            ]);
+
+            if (!empty($posts)) {
+                $user_series[] = $term;
+            }
+        }
+
+        return $user_series;
+    }
+
+    /* =========================
+     * Get topics/CSCs by user (assuming topics is another taxonomy or custom logic)
+     * For now, assuming 'topics' is a custom taxonomy related to user
+    ========================= */
+    public function getTopicsByUser(int $user_id): array
+    {
+        // Check if topics taxonomy exists
+        if (!taxonomy_exists('topics')) {
+            return []; // Return empty array if taxonomy doesn't exist
+        }
+
+        // Assuming 'topics' is a taxonomy. Adjust if it's different.
+        $terms = get_terms([
+            'taxonomy' => 'topics', // Change if different
+            'hide_empty' => false,
+            'meta_query' => [
+                [
+                    'key' => 'user_id',
+                    'value' => $user_id,
+                    'compare' => '=',
+                ],
+            ],
+        ]);
+
+        if (is_wp_error($terms)) {
+            return [];
+        }
+
+        return $terms;
+    }
 }
