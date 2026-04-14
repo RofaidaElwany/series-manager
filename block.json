@@ -1,15 +1,29 @@
 {
-  "apiVersion": 2,
-  "name": "series-manager/series",
-  "title": "Series Manager",
+  "apiVersion": 3,
+  "name": "series-manager/series-list",
+  "title": "Series List",
   "style": "file:./assets/frontend/series-block.css",
   "category": "widgets",
-    "supports": {
+  "supports": {
     "html": false
   },
   "icon": "list-view",
-  "description": "Manage post series.",
-  "editorScript": "file:./build/index.js"
+  "description": "Display series based on different modes.",
+  "editorScript": "file:./build/index.js",
+  "attributes": {
+    "mode": {
+      "type": "string",
+      "default": "all"
+    },
+    "limit": {
+      "type": "number",
+      "default": 5
+    },
+    "userId": {
+      "type": "string",
+      "default": ""
+    }
+  }
 }
 
 
