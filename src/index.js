@@ -1,4 +1,4 @@
 import { registerSeriesPlugin } from "./plugin/register";
-import "./edit";
+import "../blocks/series-list/index";
 
 registerSeriesPlugin();
