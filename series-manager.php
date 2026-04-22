@@ -49,17 +49,17 @@ function sm_enqueue_post_editor_assets()
 {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
 
-    // If we have a screen object, limit to post edit/site editor screens.
-    // If screen is not available at this hook, continue and enqueue (Gutenberg may still be active).
-    if ($screen && ($screen->base !== 'post' && $screen->base !== 'site-editor')) {
+    // If we have a screen object, only enqueue for post editor, site editor, widgets, or the customizer.
+    // This ensures the block is available in widget-area/block-based widget editors too.
+    if ($screen && ! in_array($screen->base, ['post', 'site-editor', 'widgets', 'customize'], true)) {
         return;
     }
 
-    // Only enqueue for post types that support series when screen is available
+    // Only enqueue for post types that support series when editing posts.
     if ($screen && $screen->post_type) {
         $service = new SeriesService();
         $supported = $service->getSupportedPostTypes();
-        if (!in_array($screen->post_type, $supported)) {
+        if (! in_array($screen->post_type, $supported, true)) {
             return;
         }
     }
