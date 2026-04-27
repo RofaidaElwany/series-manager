@@ -11,14 +11,14 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-require_once plugin_dir_path(__FILE__) . '/includes/Repository/SeriesRepository.php';
-require_once plugin_dir_path(__FILE__) . '/includes/Helpers/SeriesFormatter.php';
-require_once plugin_dir_path(__FILE__) . '/includes/Controller/SeriesController.php';
-require_once plugin_dir_path(__FILE__) . '/includes/class-series-taxonomy.php';
-require_once plugin_dir_path(__FILE__) . '/includes/class-series-taxonomy-edit.php';
-require_once plugin_dir_path(__FILE__) . '/includes/class-series-block-render.php';
+require_once plugin_dir_path(__FILE__) . '/includes/core/Repository/SeriesRepository.php';
+require_once plugin_dir_path(__FILE__) . '/includes/core/Helpers/SeriesFormatter.php';
+require_once plugin_dir_path(__FILE__) . '/includes/core/Controller/SeriesController.php';
+require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxonomy.php';
+require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxonomy-edit.php';
+require_once plugin_dir_path(__FILE__) . '/includes/frontend/class-series-block-render.php';
 require_once plugin_dir_path(__FILE__) . '/includes/Admin/class-series-admin.php';
-require_once plugin_dir_path(__FILE__) . '/includes/Service/SeriesService.php';
+require_once plugin_dir_path(__FILE__) . '/includes/core/Service/SeriesService.php';
 
 use Service\SeriesService;
 
@@ -44,6 +44,20 @@ function sm_series_manager_init()
 /* ========= HOOK ========= */
 
 add_action('init', 'sm_series_manager_init');
+
+function sm_enqueue_frontend_assets()
+{
+    if (is_tax('series')) {
+        wp_enqueue_script(
+            'sm-series-frontend',
+            plugins_url('assets/frontend.js', __FILE__),
+            [],
+            filemtime(plugin_dir_path(__FILE__) . 'assets/frontend.js'),
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'sm_enqueue_frontend_assets');
 
 function sm_enqueue_post_editor_assets()
 {

@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/../Service/SeriesService.php';
+require_once __DIR__ . '/../core/Service/SeriesService.php';
 
 use Service\SeriesService;
 
