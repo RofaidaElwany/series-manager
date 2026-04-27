@@ -14,8 +14,8 @@ if (! defined('ABSPATH')) {
 require_once plugin_dir_path(__FILE__) . '/includes/core/Repository/SeriesRepository.php';
 require_once plugin_dir_path(__FILE__) . '/includes/core/Helpers/SeriesFormatter.php';
 require_once plugin_dir_path(__FILE__) . '/includes/core/Controller/SeriesController.php';
-require_once plugin_dir_path(__FILE__) . '/includes/Admin/taxonomy/class-series-taxonomy.php';
-require_once plugin_dir_path(__FILE__) . '/includes/Admin/taxonomy/class-series-taxonomy-edit.php';
+require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxonomy.php';
+require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxonomy-edit.php';
 require_once plugin_dir_path(__FILE__) . '/includes/frontend/class-series-block-render.php';
 require_once plugin_dir_path(__FILE__) . '/includes/Admin/class-series-admin.php';
 require_once plugin_dir_path(__FILE__) . '/includes/core/Service/SeriesService.php';
