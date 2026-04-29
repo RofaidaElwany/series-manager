@@ -1,55 +1,13 @@
 <?php
 
-if (!defined('ABSPATH')) {
+namespace Admin\Pages;
+
+if(!defined('ABSPATH')) {
     exit;
 }
-
-require_once __DIR__ . '/../core/Service/SeriesService.php';
-
-use Service\SeriesService;
-
-class SM_Series_Admin
+class CPTpage
 {
-    public static function init()
-    {
-        add_action('admin_menu', [self::class, 'register_menu']);
-    }
-
-    public static function register_menu()
-    {
-        // Main Menu
-        add_menu_page(
-            'Series Manager',
-            'Series Manager',
-            'manage_options',
-            'series-manager',
-            [self::class, 'render_dashboard'],
-            'dashicons-list-view',
-            25
-        );
-
-        // Submenu: Settings
-        add_submenu_page(
-            'series-manager',
-            'Settings',
-            'Settings',
-            'manage_options',
-            'series-manager-settings',
-            [self::class, 'render_settings']
-        );
-    }
-
-    public static function render_dashboard()
-    {
-?>
-        <div class="wrap">
-            <h1>Series Manager</h1>
-            <p>Welcome 👋</p>
-        </div>
-    <?php
-    }
-
-    public static function render_settings()
+public static function render()
     {
         if (isset($_POST['sm_supported_post_types']) && check_admin_referer('sm_save_settings')) {
             $supported = isset($_POST['supported_post_types']) ? (array) $_POST['supported_post_types'] : [];
@@ -91,3 +49,4 @@ class SM_Series_Admin
 <?php
     }
 }
+

@@ -3,14 +3,14 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "./assets/**/*.{css,js}",
-    "./includes/class-series-block-render.php",
+    "./includes/**/**/*.php",
     "./includes/**/*.php",
     "./*.php",
   ],
   theme: {
     extend: {
       colors: {
-        primary: "#0062a2",
+        "primary": "#0062a2",
         "primary-dim": "#00568e",
         "primary-container": "#75b8fd",
         "background": "#f9f9fa",
