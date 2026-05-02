@@ -63,7 +63,7 @@ function sm_series_manager_init()
     SM_Series_Taxonomy_Edit::register();
 
     // Initialize frontend block rendering
-    SM_Series_Block_Render::init();
+    SM_Series_Renderer::init();
 
     // Setup database access
     global $wpdb;
@@ -146,20 +146,21 @@ add_action('wp_enqueue_scripts', 'sm_enqueue_front_assets');
  */
 function sm_append_series_to_content(string $content)
 {
-    // Only apply to single blog posts
     if (! is_singular('post')) {
         return $content;
     }
-
-    // Avoid duplicate output when the block is already inserted in content.
-    if (function_exists('has_block') && has_block('series-manager/series-list', get_the_ID())) {
+    if (function_exists('has_block') && has_block('series-manager/series-list', $content)) {
         return $content;
     }
 
-    // Render selected layout in the configured top/bottom position.
-    // return SM_Series_Block_Render::series_navigation_position($content);
+    $series_html = SM_Series_Renderer::render_series();
+    if (! $series_html) {
+        return $content;
+    }
+
+    return $content . $series_html;
 }
-// add_filter('the_content', 'sm_append_series_to_content');
+add_filter('the_content', 'sm_append_series_to_content', 20);
 
 
 /* =====================================================
@@ -271,7 +272,7 @@ add_action('init', function () {
 /**
  * Enqueue Tailwind CSS for plugin admin pages only
  */
-function sm_enqueue_admin_assets($hook)
+function sm_enqueue_admin_assets(string $hook): void
 {
     // Limit to plugin admin pages
     if (! in_array($hook, ['toplevel_page_series-manager', 'series-manager_page_available-custom-post-types', 'series-manager_page_series-layouts'], true)) {
