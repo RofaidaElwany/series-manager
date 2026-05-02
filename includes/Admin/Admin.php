@@ -14,6 +14,7 @@ class SM_Series_Admin
     public static function init()
     {
         add_action('admin_menu', [self::class, 'register_menu']);
+        add_action('admin_post_sm_save_layout_settings', [Layouts::class, 'handle_save']);
     }
 
     public static function register_menu()

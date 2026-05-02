@@ -32,7 +32,7 @@ require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxono
 require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxonomy-edit.php';
 
 // Frontend rendering
-require_once plugin_dir_path(__FILE__) . '/includes/frontend/class-series-block-render.php';
+require_once plugin_dir_path(__FILE__) . '/includes/frontend/renderer.php';
 
 // Admin panel
 require_once plugin_dir_path(__FILE__) . '/includes/Admin/Admin.php';
@@ -144,29 +144,22 @@ add_action('wp_enqueue_scripts', 'sm_enqueue_front_assets');
 /**
  * Append series UI to post content
  */
-function sm_append_series_to_content($content)
+function sm_append_series_to_content(string $content)
 {
     // Only apply to single blog posts
     if (! is_singular('post')) {
         return $content;
     }
 
-    // Ensure main loop
-    if (! in_the_loop() || ! is_main_query()) {
+    // Avoid duplicate output when the block is already inserted in content.
+    if (function_exists('has_block') && has_block('series-manager/series-list', get_the_ID())) {
         return $content;
     }
 
-    // Render series block
-    $series_html = SM_Series_Block_Render::render([]);
-
-    if (! $series_html) {
-        return $content;
-    }
-
-    // Append to post content
-    return $content . $series_html;
+    // Render selected layout in the configured top/bottom position.
+    // return SM_Series_Block_Render::series_navigation_position($content);
 }
-add_filter('the_content', 'sm_append_series_to_content');
+// add_filter('the_content', 'sm_append_series_to_content');
 
 
 /* =====================================================

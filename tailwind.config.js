@@ -21,6 +21,9 @@ module.exports = {
         "on-surface": "#2f3335",
         "on-surface-variant": "#5b6062",
         "outline-variant": "#afb2b5",
+        "on-primary": "#ffffff",
+        "surface-container": "#eceef4",
+        "surface-container-high": "#e6e8ee",
       },
       fontFamily: {
         display: ["Manrope", "sans-serif"],
@@ -54,6 +57,17 @@ module.exports = {
         "label-lg": ["0.875rem", { lineHeight: "1.4", fontWeight: "500" }],
         "label-md": ["0.75rem", { lineHeight: "1.4", fontWeight: "500" }],
         "label-sm": ["0.6875rem", { lineHeight: "1.3", fontWeight: "500" }],
+      },
+      spacing: {
+        xs: "4px",
+        sm: "8px",
+        md: "16px",
+        lg: "24px",
+        xl: "32px",
+      },
+      borderRadius: {
+        lg: "0.5rem",
+        xl: "0.75rem",
       },
     },
   },
