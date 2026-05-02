@@ -156,10 +156,7 @@ function sm_append_series_to_content(string $content)
         return $content;
     }
 
-    // Render selected layout in the configured top/bottom position.
-    // return SM_Series_Block_Render::series_navigation_position($content);
 }
-// add_filter('the_content', 'sm_append_series_to_content');
 
 
 /* =====================================================
