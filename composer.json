@@ -8,7 +8,7 @@
     "autoload": {
         "psr-4": {
             "Admin\\": "includes/Admin/",
-            "Service\\": "includes/Service/"
+            "Service\\": "includes/core/Service/"
         }
     }
 }
