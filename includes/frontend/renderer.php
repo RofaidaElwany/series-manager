@@ -1,13 +1,14 @@
 <?php
 
-if (!defined('ABSPATH')) {
+
+if (! defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/designes/list.php';
-require_once __DIR__ . '/designes/accordion.php';
-require_once __DIR__ . '/designes/graid.php';
-
+require_once __DIR__ . '/designes/list/list.php';
+require_once __DIR__ . '/designes/accordion/accordion.php';
+require_once __DIR__ . '/designes/graid/graid.php';
+    
 class SM_Series_Renderer
 {
     /**
@@ -39,12 +40,12 @@ class SM_Series_Renderer
         }
 
         $map = [
-            'list'      => \frontend\designes\ListLayout::class,
-            'accordion' => \frontend\designes\AccordionLayout::class,
-            'grid'      => \frontend\designes\GraidLayout::class,
+            'list'      => '\\frontend\\designes\\list\\ListLayout',
+            'accordion' => '\\frontend\\designes\\accordion\\AccordionLayout',
+            'grid'      => '\\frontend\\designes\\grid\\GridLayout',
         ];
 
-        return $map[$layout] ?? \frontend\designes\ListLayout::class;
+        return $map[$layout] ?? '\\frontend\\designes\\list\\ListLayout';
     }
 
     /**

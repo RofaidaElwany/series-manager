@@ -26,6 +26,7 @@ require_once plugin_dir_path(__FILE__) . '/includes/core/Repository/SeriesReposi
 require_once plugin_dir_path(__FILE__) . '/includes/core/Helpers/SeriesFormatter.php';
 require_once plugin_dir_path(__FILE__) . '/includes/core/Controller/SeriesController.php';
 require_once plugin_dir_path(__FILE__) . '/includes/core/Service/SeriesService.php';
+require_once plugin_dir_path(__FILE__) . '/includes/core/Service/SeriesDataProvider.php';
 
 // Taxonomy logic
 require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxonomy.php';
@@ -103,6 +104,24 @@ function sm_enqueue_frontend_assets()
     }
 }
 add_action('wp_enqueue_scripts', 'sm_enqueue_frontend_assets');
+
+
+/**
+ * Enqueue accordion JavaScript on single posts
+ */
+function sm_enqueue_accordion_assets()
+{
+    if (is_singular('post')) {
+        wp_enqueue_script(
+            'sm-accordion',
+            plugins_url('assets/accordion.js', __FILE__),
+            [],
+            filemtime(plugin_dir_path(__FILE__) . 'assets/accordion.js'),
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'sm_enqueue_accordion_assets');
 
 
 /**

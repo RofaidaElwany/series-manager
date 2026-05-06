@@ -120,48 +120,6 @@ class Layouts
                                     </div>
                                 </div>
                             </label>
-                            <!-- Layout Card: Accordion -->
-                            <label class="relative cursor-pointer group">
-                                <input
-                                    class="peer sr-only"
-                                    name="post_layout"
-                                    type="radio"
-                                    value="accordion"
-                                    <?php checked($selected_layout, 'accordion'); ?> />
-                                <div
-                                    class="flex flex-col h-full bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary/20 peer-checked:bg-surface-container-low">
-                                    <div
-                                        class="h-32 bg-surface-container-high flex items-center justify-center border-b border-outline-variant p-md">
-                                        <div class="flex flex-col gap-xs w-full h-full opacity-60">
-                                            <div
-                                                class="h-6 bg-primary rounded-sm w-full"></div>
-                                            <div
-                                                class="h-12 bg-white rounded-sm w-full border border-outline-variant"></div>
-                                            <div
-                                                class="h-6 bg-primary rounded-sm w-full"></div>
-                                        </div>
-                                    </div>
-                                    <div class="p-md flex items-start justify-between">
-                                        <div>
-                                            <p
-                                                class="font-title-lg text-body-md font-semibold text-on-surface">
-                                                Accordion
-                                            </p>
-                                            <p
-                                                class="font-body-sm text-label-sm text-on-surface-variant">
-                                                Collapsible sectioned list
-                                            </p>
-                                        </div>
-                                        <div class="hidden peer-checked:block text-primary">
-                                            <span
-                                                class="material-symbols-outlined"
-                                                data-icon="check_circle"
-                                                data-weight="fill"
-                                                style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
                             <!-- Layout Card: List -->
                             <label class="relative cursor-pointer group">
                                 <input
@@ -212,54 +170,7 @@ class Layouts
                             </label>
                         </div>
                     </section>
-                    <!-- Section 2: Segmented Control -->
-                    <section
-                        class="bg-surface-container-lowest rounded-xl border border-outline-variant p-xl shadow-sm">
-                        <div
-                            class="flex flex-col md:flex-row md:items-center justify-between gap-lg">
-                            <div class="max-w-md">
-                                <div class="flex items-center gap-sm mb-base">
-                                    <span
-                                        class="material-symbols-outlined text-primary"
-                                        data-icon="navigation">navigation</span>
-                                    <h3 class="font-title-lg text-title-lg">
-                                        Series Navigation Position
-                                    </h3>
-                                </div>
-                                <p class="font-body-sm text-on-surface-variant">
-                                    Determine where the "Previous" and "Next" series controls will
-                                    appear on single post pages.
-                                </p>
-                            </div>
-                            <div
-                                class="flex bg-surface-container-low p-sm rounded-lg border border-outline-variant w-fit">
-                                <label class="cursor-pointer">
-                                    <input
-                                        class="peer sr-only"
-                                        name="navigation_position"
-                                        type="radio"
-                                        value="top"
-                                        <?php checked($position, 'top'); ?> />
-                                    <span
-                                        class="px-xl py-md rounded-md font-label-md transition-all peer-checked:bg-primary peer-checked:text-on-primary text-on-surface-variant hover:bg-surface-container-high block">
-                                        Top
-                                    </span>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input
-                                        class="peer sr-only"
-                                        name="navigation_position"
-                                        type="radio"
-                                        value="bottom"
-                                        <?php checked($position, 'bottom'); ?> />
-                                    <span
-                                        class="px-xl py-md rounded-md font-label-md transition-all peer-checked:bg-primary peer-checked:text-on-primary text-on-surface-variant hover:bg-surface-container-high block">
-                                        Bottom
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                    </section>
+                    
                     <div class="flex justify-end">
                         <button
                             class="px-xl py-md rounded-md font-label-md bg-primary text-on-primary hover:opacity-90 transition"
