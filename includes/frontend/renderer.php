@@ -5,10 +5,11 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/designes/list/list.php';
+require_once __DIR__ . '/designes/list/MediaList.php';
+require_once __DIR__ . '/designes/list/LinkList.php';
 require_once __DIR__ . '/designes/accordion/accordion.php';
 require_once __DIR__ . '/designes/graid/graid.php';
-    
+
 class SM_Series_Renderer
 {
     /**
@@ -20,7 +21,6 @@ class SM_Series_Renderer
             'render_callback' => [self::class, 'render_series'],
         ]);
     }
-
     /**
      * Decide layout
      */
@@ -29,7 +29,7 @@ class SM_Series_Renderer
         $post_id = get_the_ID();
 
         // 👇 default
-        $layout = 'list';
+        $layout = get_option('post_layout', 'link-list');
 
         if ($post_id) {
             $terms = wp_get_post_terms($post_id, 'series');
@@ -40,12 +40,13 @@ class SM_Series_Renderer
         }
 
         $map = [
-            'list'      => '\\frontend\\designes\\list\\ListLayout',
-            'accordion' => '\\frontend\\designes\\accordion\\AccordionLayout',
-            'grid'      => '\\frontend\\designes\\grid\\GridLayout',
+            'media-list' => '\\frontend\\designes\\list\\MediaList',
+            'link-list'  => '\\frontend\\designes\\list\\LinkList',
+            'accordion'  => '\\frontend\\designes\\accordion\\AccordionLayout',
+            'grid'       => '\\frontend\\designes\\grid\\GridLayout',
         ];
 
-        return $map[$layout] ?? '\\frontend\\designes\\list\\ListLayout';
+        return $map[$layout] ?? '\\frontend\\designes\\list\\MediaList';
     }
 
     /**

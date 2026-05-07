@@ -1,13 +1,16 @@
 <?php
+
 namespace frontend\designes\list;
+
 require_once __DIR__ . '/../../../core/Service/SeriesDataProvider.php';
+
 use Service\SeriesDataProvider;
 
 if (! defined('ABSPATH')) {
     exit;
 }
 
-class ListLayout
+class LinkList
 {
     public static function render($attributes)
     {
@@ -35,11 +38,14 @@ class ListLayout
                 }
                 ?>
 
-                <div class="w-full max-w-3xl bg-surface-container-lowest rounded-3xl neumorphic-raised overflow-hidden mt-20 pt-6 border-t">
+                <div class="w-full max-w-3xl bg-surface-container-lowest rounded-3xl neumorphic-raised overflow-hidden mt-20 border-t">
                     <!-- Series Header -->
-                    <div class="px-6 pb-4">
+                    <div class="px-4 flex items-center justify-between p-4 bg-primary/10 border border-indigo-100/50 rounded-xl shadow-sm">
+                        <h3 class="font-semibold text-lg text-on-surface">
+                            <?php echo esc_html($term->name); ?>
+                        </h3>
                         <?php if ($current_index !== false): ?>
-                            <div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium inline-block">
+                            <div class="bg-primary/10 text-primary px-4 py-2 rounded-full text-xs font-medium inline-block">
                                 Part <?php echo intval($current_index + 1); ?> of <?php echo intval($total_posts); ?>
                             </div>
                         <?php endif; ?>
@@ -72,25 +78,18 @@ class ListLayout
 
                             <?php if ($is_current): ?>
                                 <div class="relative flex items-center gap-4 bg-primary/10 px-6 py-4 border-l-4 border-primary">
-                                    <div class="flex items-center justify-center rounded-lg bg-surface-container-low text-on-surface w-10 h-10 overflow-hidden">
-                                        <?php if ($avatar_img_url): ?>
-                                            <img
-                                                src="<?php echo esc_url($avatar_img_url); ?>"
-                                                alt="<?php echo esc_attr($p->post_title); ?>"
-                                                class="w-full h-full object-cover" />
-                                        <?php else: ?>
-                                            <span class="text-sm font-bold tracking-wide uppercase text-primary">
-                                                <?php echo esc_html($initial); ?>
-                                            </span>
-                                        <?php endif; ?>
-                                    </div>
 
+                                    <div class="flex items-center justify-center rounded-lg text-on-surface w-10 h-10 overflow-hidden">
+                                        <div class="flex items-center justify-center rounded-lg text-primary w-10 h-10">
+                                            <span class="material-symbols-outlined text-2xl">link</span>
+                                        </div>
+                                    </div>
                                     <p class="text-on-surface font-medium flex-1 truncate">
                                         <?php echo esc_html($p->post_title); ?>
                                     </p>
 
                                     <div class="flex items-center justify-center rounded-lg bg-primary/20 text-primary w-10 h-10">
-                                        <span class="material-symbols-outlined">check_circle</span>
+                                        <span class="material-symbols-outlined text-2xl">check_circle</span>
                                     </div>
                                 </div>
                             <?php else: ?>
@@ -98,25 +97,17 @@ class ListLayout
                                 <a href="<?php echo esc_url($link_url); ?>"
                                     class="group flex items-center gap-4 px-6 py-4 hover:bg-surface-container-low transition">
 
-                                    <div class="flex items-center justify-center rounded-lg bg-surface-container-low text-on-surface w-10 h-10 overflow-hidden">
-                                        <?php if ($avatar_img_url): ?>
-                                            <img
-                                                src="<?php echo esc_url($avatar_img_url); ?>"
-                                                alt="<?php echo esc_attr($p->post_title); ?>"
-                                                class="w-full h-full object-cover" />
-                                        <?php else: ?>
-                                            <span class="text-sm font-bold tracking-wide uppercase text-primary">
-                                                <?php echo esc_html($initial); ?>
-                                            </span>
-                                        <?php endif; ?>
+                                    <div class="flex items-center justify-center rounded-lg text-on-surface w-10 h-10 overflow-hidden">
+                                        <div class="flex items-center justify-center rounded-lg text-gray-300 group-hover:text-primary w-16 ">
+                                            <span class="material-symbols-outlined text-2xl">link</span>
+                                        </div>
                                     </div>
-
                                     <p class="text-on-surface font-medium flex-1 truncate group-hover:text-primary">
                                         <?php echo esc_html($p->post_title); ?>
                                     </p>
 
                                     <div class="text-gray-300 group-hover:text-primary">
-                                        <span class="material-symbols-outlined">chevron_right</span>
+                                        <span class="material-symbols-outlined text-2xl">chevron_right</span>
                                     </div>
                                 </a>
                             <?php endif; ?>
@@ -133,7 +124,7 @@ class ListLayout
                                     class="group flex items-center gap-4 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
 
                                     <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 group-hover:bg-primary group-hover:text-white">
-                                        <span class="material-symbols-outlined">arrow_back</span>
+                                        <span class="material-symbols-outlined text-2xl">arrow_back</span>
                                     </div>
 
                                     <div class="flex flex-col">
@@ -162,7 +153,7 @@ class ListLayout
                                     </div>
 
                                     <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 group-hover:bg-primary group-hover:text-white">
-                                        <span class="material-symbols-outlined">arrow_forward</span>
+                                        <span class="material-symbols-outlined text-2xl">arrow_forward</span>
                                     </div>
                                 </a>
                             <?php else: ?>

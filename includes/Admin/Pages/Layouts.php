@@ -18,11 +18,11 @@ class Layouts
             wp_die(esc_html__('Security check failed.', 'series-manager'));
         }
 
-        $selected_layout = isset($_POST['post_layout']) ? sanitize_text_field(wp_unslash($_POST['post_layout'])) : 'list';
+        $selected_layout = isset($_POST['post_layout']) ? sanitize_text_field(wp_unslash($_POST['post_layout'])) : 'link-list';
         $position        = isset($_POST['navigation_position']) ? sanitize_text_field(wp_unslash($_POST['navigation_position'])) : 'bottom';
 
-        if (! in_array($selected_layout, ['list', 'accordion', 'grid'], true)) {
-            $selected_layout = 'list';
+        if (! in_array($selected_layout, ['link-list', 'media-list', 'grid'], true)) {
+            $selected_layout = 'link-list';
         }
         if (! in_array($position, ['top', 'bottom'], true)) {
             $position = 'bottom';
@@ -37,7 +37,7 @@ class Layouts
 
     public static function render()
     {
-        $selected_layout = get_option('post_layout', 'list');
+        $selected_layout = get_option('post_layout', 'link-list');
         $position = get_option('navigation_position', '');
         if ($position === '') {
             $position = 'bottom';
@@ -120,14 +120,14 @@ class Layouts
                                     </div>
                                 </div>
                             </label>
-                            <!-- Layout Card: List -->
+                            <!-- Layout Card: List with img -->
                             <label class="relative cursor-pointer group">
                                 <input
                                     class="peer sr-only"
                                     name="post_layout"
                                     type="radio"
-                                    value="list"
-                                    <?php checked($selected_layout, 'list'); ?> />
+                                    value="media-list"
+                                    <?php checked($selected_layout, 'media-list'); ?> />
                                 <div
                                     class="flex flex-col h-full bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary/20 peer-checked:bg-surface-container-low">
                                     <div
@@ -135,15 +135,18 @@ class Layouts
                                         <div class="flex flex-col gap-xs w-full h-full opacity-60">
                                             <div
                                                 class="h-6 bg-primary rounded-sm w-full flex items-center px-2">
-                                                <div class="w-2 h-2 bg-white rounded-full"></div>
+                                                <div class="w-4 h-4 bg-white rounded-full mr-2"></div> <!-- صورة -->
+                                                <div class="h-2 bg-white/70 rounded w-1/3"></div> <!-- نص -->
                                             </div>
                                             <div
                                                 class="h-6 bg-primary rounded-sm w-full flex items-center px-2">
-                                                <div class="w-2 h-2 bg-white rounded-full"></div>
+                                                <div class="w-4 h-4 bg-white rounded-full mr-2"></div> <!-- صورة -->
+                                                <div class="h-2 bg-white/70 rounded w-1/3"></div> <!-- نص -->
                                             </div>
                                             <div
                                                 class="h-6 bg-primary rounded-sm w-full flex items-center px-2">
-                                                <div class="w-2 h-2 bg-white rounded-full"></div>
+                                                <div class="w-4 h-4 bg-white rounded-full mr-2"></div> <!-- صورة -->
+                                                <div class="h-2 bg-white/70 rounded w-1/3"></div> <!-- نص -->
                                             </div>
                                         </div>
                                     </div>
@@ -151,11 +154,69 @@ class Layouts
                                         <div>
                                             <p
                                                 class="font-title-lg text-body-md font-semibold text-on-surface">
-                                                List
+                                                Media List
                                             </p>
                                             <p
                                                 class="font-body-sm text-label-sm text-on-surface-variant">
-                                                Traditional vertical stack
+                                                Display posts with featured images and titles
+                                            </p>
+                                        </div>
+                                        <div class="hidden peer-checked:block text-primary">
+                                            <span
+                                                class="material-symbols-outlined"
+                                                data-icon="check_circle"
+                                                data-weight="fill"
+                                                style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer group">
+                                <input
+                                    class="peer sr-only"
+                                    name="post_layout"
+                                    type="radio"
+                                    value="link-list"
+                                    <?php checked($selected_layout, 'link-list'); ?> />
+                                <div
+                                    class="flex flex-col h-full bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary/20 peer-checked:bg-surface-container-low">
+                                    <div
+                                        class="h-32 bg-surface-container-high flex items-center justify-center border-b border-outline-variant p-md">
+                                        <div class="flex flex-col gap-xs w-full h-full opacity-60">
+                                            <div
+                                                class="h-6 bg-primary rounded-sm w-full flex items-center mr-2">
+                                                <div class="flex items-center justify-center rounded-lg bg-primary text-on-primary w-10 ">
+                                                    <span class="material-symbols-outlined">link</span>
+                                                </div>
+                                                <div class="h-2 bg-white/70 rounded w-1/3"></div> <!-- نص -->
+
+                                            </div>
+                                            <div
+                                                class="h-6 bg-primary rounded-sm w-full flex items-center mr-2">
+                                                <div class="flex items-center justify-center rounded-lg bg-primary text-on-primary w-10 ">
+                                                    <span class="material-symbols-outlined">link</span>
+                                                </div>
+                                                <div class="h-2 bg-white/70 rounded w-1/3"></div> <!-- نص -->
+
+                                            </div>
+                                            <div
+                                                class="h-6 bg-primary rounded-sm w-full flex items-center mr-2">
+                                                <div class="flex items-center justify-center rounded-lg bg-primary text-on-primary w-10 ">
+                                                    <span class="material-symbols-outlined">link</span>
+                                                </div>
+                                                <div class="h-2 bg-white/70 rounded w-1/3"></div> <!-- نص -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-md flex items-start justify-between">
+                                        <div>
+                                            <p
+                                                class="font-title-lg text-body-md font-semibold text-on-surface">
+                                                Link List
+                                            </p>
+                                            <p
+                                                class="font-body-sm text-label-sm text-on-surface-variant">
+                                                Minimal link-style display with icons and titles
                                             </p>
                                         </div>
                                         <div class="hidden peer-checked:block text-primary">
@@ -170,7 +231,7 @@ class Layouts
                             </label>
                         </div>
                     </section>
-                    
+
                     <div class="flex justify-end">
                         <button
                             class="px-xl py-md rounded-md font-label-md bg-primary text-on-primary hover:opacity-90 transition"

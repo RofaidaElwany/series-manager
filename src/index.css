@@ -28,7 +28,11 @@
 
   /* Material Symbols icon sizing */
   .material-symbols-outlined {
-    font-size: 18px !important;
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
   }
 
   .components-button.is-primary:disabled {
