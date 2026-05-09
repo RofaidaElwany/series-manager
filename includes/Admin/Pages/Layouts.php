@@ -21,7 +21,7 @@ class Layouts
         $selected_layout = isset($_POST['content_variant']) ? sanitize_text_field(wp_unslash($_POST['content_variant'])) : 'link-list';
         $position        = isset($_POST['navigation_position']) ? sanitize_text_field(wp_unslash($_POST['navigation_position'])) : 'bottom';
 
-        if (! in_array($selected_layout, ['link-list', 'media-list', 'grid'], true)) {
+        if (! in_array($selected_layout, ['link-list', 'media-list', 'media-grid'], true)) {
             $selected_layout = 'link-list';
         }
         if (! in_array($position, ['top', 'bottom'], true)) {
@@ -83,8 +83,8 @@ class Layouts
                                     class="peer sr-only"
                                     name="content_variant"
                                     type="radio"
-                                    value="grid"
-                                    <?php checked($selected_layout, 'grid'); ?> />
+                                    value="media-grid"
+                                    <?php checked($selected_layout, 'media-grid'); ?> />
                                 <div
                                     class="flex flex-col h-full bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary/20 peer-checked:bg-surface-container-low">
                                     <div
@@ -103,7 +103,7 @@ class Layouts
                                         <div>
                                             <p
                                                 class="font-title-lg text-body-md font-semibold text-on-surface">
-                                                Grid Layout
+                                                Media Grid Layout
                                             </p>
                                             <p
                                                 class="font-body-sm text-label-sm text-on-surface-variant">

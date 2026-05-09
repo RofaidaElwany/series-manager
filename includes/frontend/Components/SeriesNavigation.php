@@ -18,7 +18,7 @@ class SeriesNavigation
             <!-- Previous -->
             <?php if ($prev_post): ?>
                 <a href="<?php echo esc_url(get_permalink($prev_post)); ?>"
-                    class="flex items-center gap-2 px-6 py-3 rounded-full text-on-surface hover:bg-surface-container-low transition-all active:scale-95">
+                    class="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-all active:scale-95 shadow-sm">
 
                     <span class="material-symbols-outlined">arrow_back</span>
 
