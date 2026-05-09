@@ -18,7 +18,7 @@ class Layouts
             wp_die(esc_html__('Security check failed.', 'series-manager'));
         }
 
-        $selected_layout = isset($_POST['post_layout']) ? sanitize_text_field(wp_unslash($_POST['post_layout'])) : 'link-list';
+        $selected_layout = isset($_POST['content_variant']) ? sanitize_text_field(wp_unslash($_POST['content_variant'])) : 'link-list';
         $position        = isset($_POST['navigation_position']) ? sanitize_text_field(wp_unslash($_POST['navigation_position'])) : 'bottom';
 
         if (! in_array($selected_layout, ['link-list', 'media-list', 'grid'], true)) {
@@ -28,7 +28,7 @@ class Layouts
             $position = 'bottom';
         }
 
-        update_option('post_layout', $selected_layout);
+        update_option('content_variant', $selected_layout);
         update_option('navigation_position', $position);
 
         wp_safe_redirect(admin_url('admin.php?page=series-layouts&updated=1'));
@@ -37,7 +37,7 @@ class Layouts
 
     public static function render()
     {
-        $selected_layout = get_option('post_layout', 'link-list');
+        $selected_layout = get_option('content_variant', 'link-list');
         $position = get_option('navigation_position', '');
         if ($position === '') {
             $position = 'bottom';
@@ -64,7 +64,7 @@ class Layouts
                     action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
                     class="space-y-xl"
                     method="post"
-                    name="post_layout_form">
+                    name="content_variant_form">
                     <input type="hidden" name="action" value="sm_save_layout_settings" />
                     <?php wp_nonce_field('sm_save_layout_settings'); ?>
                     <!-- Section 1: Layout Selection -->
@@ -81,7 +81,7 @@ class Layouts
                             <label class="relative cursor-pointer group">
                                 <input
                                     class="peer sr-only"
-                                    name="post_layout"
+                                    name="content_variant"
                                     type="radio"
                                     value="grid"
                                     <?php checked($selected_layout, 'grid'); ?> />
@@ -124,7 +124,7 @@ class Layouts
                             <label class="relative cursor-pointer group">
                                 <input
                                     class="peer sr-only"
-                                    name="post_layout"
+                                    name="content_variant"
                                     type="radio"
                                     value="media-list"
                                     <?php checked($selected_layout, 'media-list'); ?> />
@@ -174,7 +174,7 @@ class Layouts
                             <label class="relative cursor-pointer group">
                                 <input
                                     class="peer sr-only"
-                                    name="post_layout"
+                                    name="content_variant"
                                     type="radio"
                                     value="link-list"
                                     <?php checked($selected_layout, 'link-list'); ?> />
