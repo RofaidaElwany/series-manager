@@ -168,3 +168,7 @@
   color: #1e40af;
   line-height: 1.4;
 }
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

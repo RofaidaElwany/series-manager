@@ -12,6 +12,7 @@ require_once __DIR__ . '/Layouts/AccordionLayout.php';
 require_once __DIR__ . '/Variants/MediaList.php';
 require_once __DIR__ . '/Variants/LinkList.php';
 require_once __DIR__ . '/Variants/MediaGrid.php';
+require_once __DIR__ . '/Variants/LinkGrid.php';
 
 use Layouts\StandardLayout;
 use Layouts\AccordionLayout;
@@ -20,6 +21,7 @@ use Layouts\AccordionLayout;
 use Variants\MediaList;
 use Variants\LinkList;
 use Variants\MediaGrid;
+use Variants\LinkGrid;
 
 use Service\SeriesDataProvider;
 
@@ -42,6 +44,7 @@ class SM_Series_Renderer
         $map = [
             'media-list' => MediaList::class,
             'link-list'  => LinkList::class,
+            'link-grid'  => LinkGrid::class,
             'media-grid' => MediaGrid::class,
         ];
 

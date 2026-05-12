@@ -74,7 +74,7 @@ class MediaGrid
                                 <div
                                     class="w-full h-64 bg-primary/10 rounded-3xl flex items-center justify-center border border-primary/20">
                                     <svg
-                                        class="w-36 h-36 text-primary"
+                                        class="w-3 h-36 text-primary"
                                         fill="currentColor"
                                         viewBox="0 0 20 20">
                                         <path

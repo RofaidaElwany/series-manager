@@ -21,7 +21,7 @@ class Layouts
         $selected_layout = isset($_POST['content_variant']) ? sanitize_text_field(wp_unslash($_POST['content_variant'])) : 'link-list';
         $position        = isset($_POST['navigation_position']) ? sanitize_text_field(wp_unslash($_POST['navigation_position'])) : 'bottom';
 
-        if (! in_array($selected_layout, ['link-list', 'media-list', 'media-grid'], true)) {
+        if (! in_array($selected_layout, ['link-list', 'media-list', 'media-grid', 'link-grid'], true)) {
             $selected_layout = 'link-list';
         }
         if (! in_array($position, ['top', 'bottom'], true)) {
@@ -77,7 +77,7 @@ class Layouts
                             <h3 class="font-title-lg text-title-lg">Display Layout</h3>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
-                            <!-- Layout Card: Grid -->
+                            <!-- Layout Card: Media Grid -->
                             <label class="relative cursor-pointer group">
                                 <input
                                     class="peer sr-only"
@@ -120,7 +120,50 @@ class Layouts
                                     </div>
                                 </div>
                             </label>
-                            <!-- Layout Card: List with img -->
+                            <!-- Layout Card: Link grid  -->
+                            <label class="relative cursor-pointer group">
+                                <input
+                                    class="peer sr-only"
+                                    name="content_variant"
+                                    type="radio"
+                                    value="link-grid"
+                                    <?php checked($selected_layout, 'link-grid'); ?> />
+                                <div
+                                    class="flex flex-col h-full bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary/20 peer-checked:bg-surface-container-low">
+                                    <div
+                                        class="h-32 bg-surface-container-high flex items-center justify-center border-b border-outline-variant p-md">
+                                        <div
+                                            class="grid grid-cols-3 gap-xs w-full h-full opacity-60">
+                                            <div class="bg-primary rounded-sm"></div>
+                                            <div class="bg-primary rounded-sm"></div>
+                                            <div class="bg-primary rounded-sm"></div>
+                                            <div class="bg-primary rounded-sm"></div>
+                                            <div class="bg-primary rounded-sm"></div>
+                                            <div class="bg-primary rounded-sm"></div>
+                                        </div>
+                                    </div>
+                                    <div class="p-md flex items-start justify-between">
+                                        <div>
+                                            <p
+                                                class="font-title-lg text-body-md font-semibold text-on-surface">
+                                                Link Grid Layout
+                                            </p>
+                                            <p
+                                                class="font-body-sm text-label-sm text-on-surface-variant">
+                                                Clean multi-column display
+                                            </p>
+                                        </div>
+                                        <div class="hidden peer-checked:block text-primary">
+                                            <span
+                                                class="material-symbols-outlined"
+                                                data-icon="check_circle"
+                                                data-weight="fill"
+                                                style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <!-- Layout Card: Media List -->
                             <label class="relative cursor-pointer group">
                                 <input
                                     class="peer sr-only"
@@ -171,6 +214,7 @@ class Layouts
                                     </div>
                                 </div>
                             </label>
+                            <!-- Layout Card: Link List -->
                             <label class="relative cursor-pointer group">
                                 <input
                                     class="peer sr-only"

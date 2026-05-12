@@ -7,14 +7,58 @@ module.exports = {
     "./includes/**/*.php",
     "./*.php",
   ],
+  safelist: [
+    "bg-blue-500",
+    "bg-purple-500",
+    "bg-green-500",
+    "bg-orange-500",
+    "bg-indigo-500",
+    "bg-red-500",
+    
+    "bg-blue-600",
+    "bg-purple-600",
+    "bg-green-600",
+    "bg-orange-600",
+    "bg-indigo-600",
+
+    "bg-blue-50",
+    "bg-purple-50",
+    "bg-green-50",
+    "bg-orange-50",
+    "bg-indigo-50",
+
+    "bg-blue-100",
+    "bg-purple-100",
+    "bg-green-100",
+    "bg-orange-100",
+    "bg-indigo-100",
+
+    "text-blue-600",
+    "text-purple-600",
+    "text-green-600",
+    "text-orange-600",
+    "text-indigo-600",
+
+    "border-blue-500",
+    "border-purple-500",
+    "border-green-500",
+    "border-orange-500",
+    "border-indigo-500",
+
+    "shadow-[0_20px_60px_rgba(59,130,246,0.3)]",
+    "shadow-[0_20px_60px_rgba(168,85,247,0.3)]",
+    "shadow-[0_20px_60px_rgba(34,197,194,0.3)]",
+    "shadow-[0_20px_60px_rgba(249,115,22,0.3)]",
+    "shadow-[0_20px_60px_rgba(99,102,241,0.3)]",
+  ],
   theme: {
     extend: {
       colors: {
-        "primary": "#0062a2",
+        primary: "#0062a2",
         "primary-dim": "#00568e",
         "primary-container": "#75b8fd",
-        "background": "#f9f9fa",
-        "surface": "#f9f9fa",
+        background: "#f9f9fa",
+        surface: "#f9f9fa",
         "surface-container-lowest": "#ffffff",
         "surface-container-low": "#f2f4f5",
         "surface-container-highest": "#dfe3e5",
@@ -68,6 +112,10 @@ module.exports = {
       borderRadius: {
         lg: "0.5rem",
         xl: "0.75rem",
+      },
+      boxShadow: {
+        soft: "0 10px 40px rgba(15,23,42,0.06)",
+        softLg: "0 20px 60px rgba(15,23,42,0.10)",
       },
     },
   },
