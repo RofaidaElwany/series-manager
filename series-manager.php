@@ -41,14 +41,14 @@ require_once plugin_dir_path(__FILE__) . '/includes/Admin/Admin.php';
 use Service\SeriesService;
 
 /* =====================================================
- * 🧠 Admin Initialization
+ *  Admin Initialization
  * ===================================================== */
 
 // Initialize admin UI (menus, pages, etc.)
 SM_Series_Admin::init();
 
 /* =====================================================
- * 🚀 Plugin Initialization (Core Logic)
+ *  Plugin Initialization (Core Logic)
  * ===================================================== */
 
 /**
@@ -85,7 +85,7 @@ add_action('init', 'sm_series_manager_init');
 
 
 /* =====================================================
- * 🎨 FRONTEND ASSETS (Public Site)
+ *  FRONTEND ASSETS (Public Site)
  * ===================================================== */
 
 /**
@@ -157,7 +157,7 @@ add_action('wp_enqueue_scripts', 'sm_enqueue_front_assets');
 
 
 /* =====================================================
- * 📝 POST CONTENT MODIFICATION (Filter)
+ *  POST CONTENT MODIFICATION (Filter)
  * ===================================================== */
 
 /**
@@ -183,7 +183,7 @@ add_filter('the_content', 'sm_append_series_to_content', 20);
 
 
 /* =====================================================
- * 🧩 BLOCK EDITOR (Gutenberg) ASSETS
+ *  BLOCK EDITOR (Gutenberg) ASSETS
  * ===================================================== */
 
 /**
@@ -256,7 +256,7 @@ add_action('enqueue_block_editor_assets', 'sm_enqueue_post_editor_assets');
 
 
 /* =====================================================
- * 🎨 GLOBAL BLOCK ASSETS (Frontend + Editor)
+ * GLOBAL BLOCK ASSETS (Frontend + Editor)
  * ===================================================== */
 
 /**
@@ -273,7 +273,7 @@ add_action('enqueue_block_assets', function () {
 
 
 /* =====================================================
- * 🧾 TAXONOMY REGISTRATION (Fallback)
+ *  TAXONOMY REGISTRATION (Fallback)
  * ===================================================== */
 
 /**
@@ -285,7 +285,7 @@ add_action('init', function () {
 
 
 /* =====================================================
- * 🛠️ ADMIN PANEL ASSETS (Dashboard)
+ *  ADMIN PANEL ASSETS (Dashboard)
  * ===================================================== */
 
 /**

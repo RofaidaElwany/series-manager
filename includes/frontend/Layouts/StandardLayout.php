@@ -30,9 +30,8 @@ class StandardLayout
             $current_post_id = get_the_ID();
 
 ?>
-        <div class="flex justify-center my-7">
 
-            <div class="w-full max-w-4xl mx-auto mt-20 space-y-8">
+            <div class="max-w-7xl mx-auto px-6 mt-20 space-y-8">
 
                 <?php
                 echo SeriesHeader::render(
@@ -57,8 +56,6 @@ class StandardLayout
                 ?>
 
             </div>
-        </div>
-
 <?php
         }
 
