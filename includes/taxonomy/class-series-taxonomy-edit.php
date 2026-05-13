@@ -23,7 +23,7 @@ class SM_Series_Taxonomy_Edit
     {
         global $wpdb;
 
-        // نجيب term_taxonomy_id الصح
+        // get term_taxonomy_id for the current term
         $term_taxonomy_id = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT term_taxonomy_id 
@@ -37,7 +37,7 @@ class SM_Series_Taxonomy_Edit
             return;
         }
 
-        // نجيب البوستات مرتبة حسب term_order
+        // get posts ordered by term_order
         $posts = $wpdb->get_results(
             $wpdb->prepare(
                 "
@@ -83,7 +83,7 @@ class SM_Series_Taxonomy_Edit
     public static function enqueue_assets($hook)
     {
 
-        // نشتغل بس في صفحة تعديل التاكسونومي
+        // enqueue scripts only on the Edit Series page
         if ($hook !== 'term.php') {
             return;
         }
