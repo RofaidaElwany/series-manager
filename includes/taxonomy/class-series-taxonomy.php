@@ -19,6 +19,12 @@ class SM_Series_Taxonomy
                 'labels' => [
                     'name'          => 'Series',
                     'singular_name' => 'Series',
+                    'add_new_item' => 'Add New Series',
+                    'edit_item' => 'Edit Series',
+                    'new_item' => 'New Series',
+                    'view_item' => 'View Series',
+                    'search_items' => 'Search Series',
+                    'not_found' => 'No Series found',
                 ],
                 'public'            => true,
                 'hierarchical'      => false,
