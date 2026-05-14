@@ -64,7 +64,7 @@ class LinkGrid
 ?>
 
         <!-- SECTION -->
-        <section class="max-w-7xl mx-auto px-6 bg-background font-body">
+        <section class="max-w-7xl mx-auto font-body">
 
             <!-- GRID -->
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
@@ -85,7 +85,7 @@ class LinkGrid
                     <!-- CARD -->
                     <a
                         href="<?php echo esc_url($link_url); ?>"
-                        class="group relative overflow-hidden rounded-2xl min-h-[280px] flex flex-col p-7 border-2 transition-all duration-500 hover:-translate-y-2
+                        class="group relative overflow-hidden rounded-2xl flex flex-col p-7 border-2 transition-all duration-500 hover:-translate-y-2
 
                             <?php echo $is_current
                                 ? "{$classes['bg']} {$classes['border']} {$classes['shadow']}"
@@ -108,11 +108,10 @@ class LinkGrid
                         <?php endif; ?>
 
                         <!-- CONTENT -->
-                        <div class="flex flex-col h-full">
+                        <div class="flex flex-col">
 
                             <!-- ICON -->
-                            <div class="mb-10">
-
+                            <div class="mb-5 flex  items-start justify-between gap-4">
                                 <div
                                     class="
                                         w-20
@@ -123,64 +122,34 @@ class LinkGrid
                                         justify-center
                                         <?php echo $classes['icon_bg']; ?>
                                     ">
-
-                                    <svg
-                                        class="w-10 h-10 <?php echo $classes['text']; ?>"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        viewBox="0 0 24 24">
-
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656a4 4 0 015.656 5.656l-1.5 1.5m-4.242-4.242l-4.242 4.242" />
-
-                                    </svg>
-
+                                    <span class="material-symbols-outlined  text-[32px] p-1 w-10 h-10 <?php echo $classes['text']; ?>">link</span>
                                 </div>
-
-                            </div>
-
-                            <!-- TEXT -->
-                            <div class="mt-auto">
-
                                 <!-- PART -->
                                 <div
                                     class="
+                                        flex
                                         text-sm
                                         font-semibold
                                         tracking-[-0.01em]
-                                        mb-4
+                                        mt-8
                                         <?php echo $is_current
                                             ? $classes['text']
                                             : 'text-slate-500'; ?>
                                     ">
-
                                     Part <?php echo intval($part_number); ?>
-
                                 </div>
-
-                                <!-- TITLE -->
-                                <h3
-                                    class="
-                                        max-w-[13ch]
-                                        text-[1.9rem]
-                                        leading-[1.05]
-                                        tracking-[-0.04em]
-                                        font-display
-                                        font-semibold
-                                        text-slate-900
-                                    ">
-
-                                    <?php echo esc_html($p->post_title); ?>
-
-                                </h3>
-
                             </div>
-
+                            <!-- TEXT -->
+                            <div class="mt-1 flex-2">
+                                <!-- TITLE -->
+                                <h2
+                                    class="
+                                        font-semibold
+                                    ">
+                                    <?php echo esc_html($p->post_title); ?>
+                                </h2>
+                            </div>
                         </div>
-
                         <!-- BOTTOM GLOW -->
                         <div
                             class="

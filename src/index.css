@@ -168,6 +168,21 @@
   color: #1e40af;
   line-height: 1.4;
 }
+details summary {
+  list-style: none;
+  display: block;
+}
+
+details summary::-webkit-details-marker,
+details summary::marker {
+  display: none;
+  content: none;
+}
+
+details summary:focus {
+  outline: none;
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;

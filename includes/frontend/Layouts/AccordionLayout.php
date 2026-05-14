@@ -15,11 +15,9 @@ class AccordionLayout
         ob_start();
 
 ?>
-
-        <div class="space-y-6 mt-20">
+        <div class="max-w-5xl mx-auto px-6 mt-20 space-y-8">
 
             <?php foreach ($data as $item): ?>
-
                 <?php
                 $term           = $item['term'];
                 $posts          = $item['posts'];
@@ -28,9 +26,7 @@ class AccordionLayout
 
                 $current_post_id = get_the_ID();
                 ?>
-
                 <details class="group bg-surface-container-lowest rounded-2xl border border-outline-variant/20 overflow-hidden">
-
                     <summary class="list-none cursor-pointer p-2">
                         <?php
                         echo SeriesHeader::render(
@@ -40,25 +36,20 @@ class AccordionLayout
                         );
                         ?>
                     </summary>
-
                     <div class="p-6 pt-2">
-
                         <?php
                         echo $variant_class::render(
                             $posts,
                             $current_post_id
                         );
                         ?>
-
                     </div>
-
                 </details>
-
             <?php endforeach; ?>
-
+                
         </div>
 
-<?php
+    <?php
 
         return ob_get_clean();
     }

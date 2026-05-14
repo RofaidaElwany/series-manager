@@ -31,7 +31,7 @@ class StandardLayout
 
 ?>
 
-            <div class="max-w-7xl mx-auto px-6 mt-20 space-y-8">
+            <div class="max-w-6xl mx-auto px-6 mt-20 space-y-8">
 
                 <?php
                 echo SeriesHeader::render(
