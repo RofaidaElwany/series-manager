@@ -29,9 +29,15 @@ class SM_Series_Renderer
 {
     public static function init()
     {
-        register_block_type('series-manager/series-list', [
-            'render_callback' => [self::class, 'render_series'],
-        ]);
+        if (function_exists('register_block_type_from_metadata')) {
+            register_block_type_from_metadata(__DIR__ . '/../../block.json', [
+                'render_callback' => [self::class, 'render_series'],
+            ]);
+        } else {
+            register_block_type('series-manager/series-list', [
+                'render_callback' => [self::class, 'render_series'],
+            ]);
+        }
     }
 
     /**
