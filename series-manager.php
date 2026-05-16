@@ -8,14 +8,14 @@
  */
 
 /* =====================================================
- * 🔒 Security: Prevent direct access
+ *  Security: Prevent direct access
  * ===================================================== */
 if (! defined('ABSPATH')) {
     exit;
 }
 
 /* =====================================================
- * 📦 Autoload & Core Includes
+ *  Autoload & Core Includes
  * ===================================================== */
 
 // Composer autoload (if used)
@@ -82,6 +82,7 @@ function sm_series_manager_init()
  * Hook into WordPress initialization
  */
 add_action('init', 'sm_series_manager_init');
+
 
 
 /* =====================================================
@@ -253,7 +254,7 @@ function sm_enqueue_post_editor_assets()
     );
 }
 add_action('enqueue_block_editor_assets', 'sm_enqueue_post_editor_assets');
-
+add_action('enqueue_widgets_block_editor_assets', 'sm_enqueue_post_editor_assets');
 
 /* =====================================================
  * GLOBAL BLOCK ASSETS (Frontend + Editor)
@@ -270,19 +271,6 @@ add_action('enqueue_block_assets', function () {
         null
     );
 });
-
-
-/* =====================================================
- *  TAXONOMY REGISTRATION (Fallback)
- * ===================================================== */
-
-/**
- * Ensure taxonomy is registered (safety hook)
- */
-add_action('init', function () {
-    SM_Series_Taxonomy::register();
-});
-
 
 /* =====================================================
  *  ADMIN PANEL ASSETS (Dashboard)
