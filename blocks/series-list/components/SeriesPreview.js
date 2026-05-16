@@ -3,93 +3,110 @@ import { __, sprintf, _n } from "@wordpress/i18n";
 
 const SeriesPreview = ({ mode, seriesTerms, isResolvingSeriesTerms }) => {
   return (
-    <div
-      style={{
-        marginTop: "16px",
-        paddingTop: "16px",
-        borderTop: "1px solid #ddd",
-      }}
-    >
-      <label
-        style={{
-          display: "block",
-          fontSize: "11px",
-          fontWeight: "500",
-          color: "#666",
-          marginBottom: "8px",
-          textTransform: "uppercase",
-        }}
-      >
-        {__("Series Preview", "series-manager")}
-      </label>
+    <div className="mt-4 pt-4 border-t border-surface-container-high">
 
-      <div className="series-sidebar-preview">
+      {/* Header */}
+      <div className="mb-3">
+        <label className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
+          {__("Series Preview", "series-manager")}
+        </label>
+      </div>
+
+      <div className="space-y-3">
+
+        {/* MODE NOTICE */}
         {(mode === "user" || mode === "topics") && (
-          <div className="series-mode-notice">
-            <p className="series-notice-text">
+          <div className="p-3 rounded-lg bg-surface-container text-body-sm text-on-surface-variant border border-outline-variant">
+            <p>
               {mode === "user"
                 ? __(
                     "Preview shows sample series. Actual results depend on selected user.",
-                    "series-manager",
+                    "series-manager"
                   )
                 : __(
                     "Topics taxonomy not available for preview.",
-                    "series-manager",
+                    "series-manager"
                   )}
             </p>
           </div>
         )}
 
+        {/* LOADING */}
         {isResolvingSeriesTerms ? (
-          <div className="series-loading">
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-surface-container">
             <Spinner />
-            <span>{__("Loading series...", "series-manager")}</span>
+            <span className="text-body-sm text-on-surface-variant">
+              {__("Loading series...", "series-manager")}
+            </span>
           </div>
         ) : !seriesTerms || seriesTerms.length === 0 ? (
-          <p className="series-empty">
+          <div className="p-3 rounded-lg bg-surface-container text-body-sm text-on-surface-variant">
             {mode === "topics"
               ? __("Topics taxonomy not available.", "series-manager")
               : __("No series found.", "series-manager")}
-          </p>
+          </div>
         ) : (
-          <div className="series-list">
-            <p className="series-count">
-              {mode === "top"
-                ? sprintf(
-                    _n(
-                      "Top %d series by popularity",
-                      "Top %d series by popularity",
-                      seriesTerms.length,
-                      "series-manager",
-                    ),
-                    seriesTerms.length,
-                  )
-                : sprintf(
-                    _n(
-                      "%d series",
-                      "%d series",
-                      seriesTerms.length,
-                      "series-manager",
-                    ),
-                    seriesTerms.length,
-                  )}
-            </p>
-            <ul className="series-items">
-              {seriesTerms.slice(0, 10).map((term) => (
-                <li key={term.id} className="series-item">
-                  <span className="series-name">{term.name}</span>
-                  <span className="series-count">({term.count})</span>
-                </li>
+          <div className="space-y-3">
+
+            {/* COUNT HEADER */}
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-on-surface">
+                {mode === "top"
+                  ? sprintf(
+                      _n(
+                        "Top %d series by popularity",
+                        "Top %d series by popularity",
+                        seriesTerms.length,
+                        "series-manager"
+                      ),
+                      seriesTerms.length
+                    )
+                  : sprintf(
+                      _n(
+                        "%d series",
+                        "%d series",
+                        seriesTerms.length,
+                        "series-manager"
+                      ),
+                      seriesTerms.length
+                    )}
+              </p>
+
+              <span className="text-xs px-2 py-1 rounded-full bg-primary-container text-on-primary">
+                {mode === "top" ? "Top" : seriesTerms.length}
+              </span>
+            </div>
+
+            {/* LIST */}
+            <div className="space-y-2">
+
+              {seriesTerms.slice(0, 10).map((term, index) => (
+                <div
+                  key={term.id}
+                  className="flex items-center justify-between p-3 rounded-lg border border-outline-variant bg-surface-container hover:bg-surface-container-high transition"
+                >
+                  {/* NAME */}
+                  <span className="text-sm font-medium text-on-surface">
+                    {term.name}
+                  </span>
+
+                  {/* COUNT BADGE */}
+                  <span className="text-xs px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant">
+                    {term.count}
+                  </span>
+                </div>
               ))}
+
+              {/* MORE */}
               {seriesTerms.length > 10 && (
-                <li className="series-more">
+                <div className="text-xs text-on-surface-variant px-2">
                   {sprintf(
                     __("... and %d more", "series-manager"),
-                    seriesTerms.length - 10,
+                    seriesTerms.length - 10
                   )}
-                </li>
+                </div>
               )}
-            </ul>
+            </div>
           </div>
         )}
       </div>
