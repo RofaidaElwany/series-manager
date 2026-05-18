@@ -1,3 +1,4 @@
+import { createBlock } from '@wordpress/blocks';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 
@@ -12,15 +13,23 @@ import { createSeriesTerm } from '../../services/seriesApiExports';
 
 const SeriesSidebarContainer = () => {
     /* ========================= Editor Data ========================= */
-
-  const { postId, postTitle, postType, currentSeries } = useSelect((select) => {
+ // Get necessary data from the editor store
+  const {
+    postId,
+    postTitle,
+    postType,
+    currentSeries,
+    blocks,
+  } = useSelect((select) => {
     const editor = select('core/editor');
+    const blockEditor = select('core/block-editor');
 
     return {
       postId: editor.getCurrentPostId(),
       postTitle: editor.getEditedPostAttribute('title'),
       postType: editor.getCurrentPostType(),
       currentSeries: editor.getEditedPostAttribute('series') || [],
+      blocks: blockEditor.getBlocks(),
     };
   });
 
@@ -55,6 +64,7 @@ const SeriesSidebarContainer = () => {
   }, [selectedSeriesIds]);
 
   const { editPost } = useDispatch('core/editor');
+  const { insertBlocks } = useDispatch('core/block-editor');
 
   /* ========================= Terms ========================= */
   const { seriesTerms, isResolvingTerms } = useSeriesTerms(postType);
@@ -105,6 +115,19 @@ const SeriesSidebarContainer = () => {
   };
 
   /* =========================    Handler(Change series)  ========================= */
+ // Ensure the series block exists in the editor when changing series
+  const ensureSeriesBlockExists = () => {
+    const hasSeriesBlock = blocks.some(
+      (block) => block.name === 'series-manager/series-list'
+    );
+
+    if (!hasSeriesBlock) {
+      const block = createBlock('series-manager/series-list');
+
+      insertBlocks(block);
+    }
+  };
+
   const onChangeSeries = (seriesId) => {
     const id = Number(seriesId);
 
@@ -121,6 +144,7 @@ const SeriesSidebarContainer = () => {
     } else {
       //add to series
       updated = [...selectedSeriesIds, id];
+      ensureSeriesBlockExists();
 
       //if no active series, set the newly added one as active
       if (!activeSeriesId) {

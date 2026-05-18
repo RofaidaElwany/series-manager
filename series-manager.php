@@ -163,24 +163,25 @@ add_action('wp_enqueue_scripts', 'sm_enqueue_front_assets');
 
 /**
  * Append series UI to post content
- */
-function sm_append_series_to_content(string $content)
-{
-    if (! is_singular('post')) {
-        return $content;
-    }
-    if (function_exists('has_block') && has_block('series-manager/series-list', $content)) {
-        return $content;
-    }
+ */ 
+// Note: This is a fallback for non-block themes. If the block is present, it will render itself and this filter won't append anything.
+// function sm_append_series_to_content(string $content)
+// {
+//     if (! is_singular('post')) {
+//         return $content;
+//     }
+//     if (function_exists('has_block') && has_block('series-manager/series-list', $content)) {
+//         return $content;
+//     }
 
-    $series_html = SM_Series_Renderer::render_series();
-    if (! $series_html) {
-        return $content;
-    }
+//     $series_html = SM_Series_Renderer::render_series();
+//     if (! $series_html) {
+//         return $content;
+//     }
 
-    return $content . $series_html;
-}
-add_filter('the_content', 'sm_append_series_to_content', 20);
+//     return $content . $series_html;
+// }
+// add_filter('the_content', 'sm_append_series_to_content', 20);
 
 
 /* =====================================================
