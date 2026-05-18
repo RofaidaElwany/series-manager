@@ -1,42 +1,38 @@
-import { createBlock } from '@wordpress/blocks';
-import { useState, useEffect } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { createBlock } from "@wordpress/blocks";
+import { useState, useEffect } from "@wordpress/element";
+import { useSelect, useDispatch } from "@wordpress/data";
 
-import { SeriesSidebarView } from './SeriesSidebarView';
+import { SeriesSidebarView } from "./SeriesSidebarView";
 
-import { useSeriesPosts } from '../../hooks/useSeriesPosts';
-import { useSeriesTerms } from '../../hooks/useSeriesTerms';
-import { usePostSavingSync } from '../../hooks/usePostSavingSync';
-import { useSeriesPostActions } from '../../hooks/useSeriesPostActions';
+import { useSeriesPosts } from "../../hooks/useSeriesPosts";
+import { useSeriesTerms } from "../../hooks/useSeriesTerms";
+import { usePostSavingSync } from "../../hooks/usePostSavingSync";
+import { useSeriesPostActions } from "../../hooks/useSeriesPostActions";
 
-import { createSeriesTerm } from '../../services/seriesApiExports';
+import { createSeriesTerm } from "../../services/seriesApiExports";
 
 const SeriesSidebarContainer = () => {
-    /* ========================= Editor Data ========================= */
- // Get necessary data from the editor store
-  const {
-    postId,
-    postTitle,
-    postType,
-    currentSeries,
-    blocks,
-  } = useSelect((select) => {
-    const editor = select('core/editor');
-    const blockEditor = select('core/block-editor');
+  /* ========================= Editor Data ========================= */
+  // Get necessary data from the editor store
+  const { postId, postTitle, postType, currentSeries, blocks } = useSelect(
+    (select) => {
+      const editor = select("core/editor");
+      const blockEditor = select("core/block-editor");
 
-    return {
-      postId: editor.getCurrentPostId(),
-      postTitle: editor.getEditedPostAttribute('title'),
-      postType: editor.getCurrentPostType(),
-      currentSeries: editor.getEditedPostAttribute('series') || [],
-      blocks: blockEditor.getBlocks(),
-    };
-  });
+      return {
+        postId: editor.getCurrentPostId(),
+        postTitle: editor.getEditedPostAttribute("title"),
+        postType: editor.getCurrentPostType(),
+        currentSeries: editor.getEditedPostAttribute("series") || [],
+        blocks: blockEditor.getBlocks(),
+      };
+    },
+  );
 
   const normalizeSeriesId = (value) => {
     if (value == null) return null;
 
-    if (typeof value === 'object') {
+    if (typeof value === "object") {
       const candidate = value.id ?? value.term_id ?? value;
       const num = Number(candidate);
       return Number.isNaN(num) ? null : num;
@@ -46,11 +42,9 @@ const SeriesSidebarContainer = () => {
     return Number.isNaN(num) ? null : num;
   };
 
-
   // Active series ID for UI state (e.g., highlighting selected series)
-  const [activeSeriesId, setActiveSeriesId] = useState(null);  
-    // Normalize and filter out invalid series IDs
-
+  const [activeSeriesId, setActiveSeriesId] = useState(null);
+  // Normalize and filter out invalid series IDs
 
   const selectedSeriesIds = currentSeries
     .map(normalizeSeriesId)
@@ -63,15 +57,18 @@ const SeriesSidebarContainer = () => {
     }
   }, [selectedSeriesIds]);
 
-  const { editPost } = useDispatch('core/editor');
-  const { insertBlocks } = useDispatch('core/block-editor');
+  const { editPost } = useDispatch("core/editor");
+  const { insertBlocks, selectBlock } = useDispatch("core/block-editor");
 
   /* ========================= Terms ========================= */
   const { seriesTerms, isResolvingTerms } = useSeriesTerms(postType);
 
-    /* =========================    Posts  ========================= */
-  const { orderedPosts, setOrderedPosts } =
-    useSeriesPosts(activeSeriesId || null, postId, postTitle);
+  /* =========================    Posts  ========================= */
+  const { orderedPosts, setOrderedPosts } = useSeriesPosts(
+    activeSeriesId || null,
+    postId,
+    postTitle,
+  );
 
   // Track original posts for cancel functionality
   const [originalPosts, setOriginalPosts] = useState([]);
@@ -84,26 +81,37 @@ const SeriesSidebarContainer = () => {
   }, [activeSeriesId]);
 
   // Check if there are unsaved changes
-  const hasUnsavedChanges = originalPosts.length > 0 && (
-    originalPosts.length !== orderedPosts.length ||
-    originalPosts.some((post, idx) => post.id !== orderedPosts[idx]?.id)
-  );
+  const hasUnsavedChanges =
+    originalPosts.length > 0 &&
+    (originalPosts.length !== orderedPosts.length ||
+      originalPosts.some((post, idx) => post.id !== orderedPosts[idx]?.id));
 
-    /* =========================    Post Actions (Reorder, Delete)  ========================= */
-  const { handleReorder, handleDelete, saveOrderToDB } =
-    useSeriesPostActions(
-      activeSeriesId,
-      orderedPosts,
-      setOrderedPosts
-    );
-
-    /* =========================    Sync with Post Saving  ========================= */
-  usePostSavingSync(
+  /* =========================    Post Actions (Reorder, Delete)  ========================= */
+  const { handleReorder, handleDelete, saveOrderToDB } = useSeriesPostActions(
     activeSeriesId,
     orderedPosts,
-    saveOrderToDB
+    setOrderedPosts,
   );
 
+  /* =========================    Sync with Post Saving  ========================= */
+  usePostSavingSync(activeSeriesId, orderedPosts, saveOrderToDB);
+
+  /* =========================    Ensure Series Block Exists on Mount  ========================= */
+  useEffect(() => {
+    if (!selectedSeriesIds.length) {
+      return;
+    }
+
+    const hasSeriesBlock = blocks.some(
+      (block) => block.name === "series-manager/series-list",
+    );
+
+    if (!hasSeriesBlock) {
+      const block = createBlock("series-manager/series-list");
+
+      insertBlocks(block);
+    }
+  }, [selectedSeriesIds, blocks]);
   /* =========================    Save and Cancel Handlers  ========================= */
   const handleSave = () => {
     saveOrderToDB(orderedPosts);
@@ -115,16 +123,16 @@ const SeriesSidebarContainer = () => {
   };
 
   /* =========================    Handler(Change series)  ========================= */
- // Ensure the series block exists in the editor when changing series
+  // Ensure the series block exists in the editor when changing series
   const ensureSeriesBlockExists = () => {
     const hasSeriesBlock = blocks.some(
-      (block) => block.name === 'series-manager/series-list'
+      (block) => block.name === "series-manager/series-list",
     );
 
     if (!hasSeriesBlock) {
-      const block = createBlock('series-manager/series-list');
-
+      const block = createBlock("series-manager/series-list");
       insertBlocks(block);
+      selectBlock(block.clientId);
     }
   };
 
@@ -134,13 +142,12 @@ const SeriesSidebarContainer = () => {
     let updated;
     if (selectedSeriesIds.includes(id)) {
       //remove from series
-      updated = selectedSeriesIds.filter(s => s !== id);
+      updated = selectedSeriesIds.filter((s) => s !== id);
 
       // If the removed series was active, clear active selection
       if (activeSeriesId === id) {
         setActiveSeriesId(updated[0] || null);
       }
-
     } else {
       //add to series
       updated = [...selectedSeriesIds, id];
@@ -166,7 +173,7 @@ const SeriesSidebarContainer = () => {
         onChangeSeries(newTerm.id);
       }
     } catch (err) {
-      console.error('Error creating series:', err);
+      console.error("Error creating series:", err);
     }
   };
 
