@@ -1,3 +1,4 @@
+import ServerSideRender from "@wordpress/server-side-render";
 import { InspectorControls } from "@wordpress/block-editor";
 import { PanelBody, RangeControl } from "@wordpress/components";
 import { useSelect } from "@wordpress/data";
@@ -82,7 +83,10 @@ const Edit = ({ attributes, setAttributes }) => {
           />
         </PanelBody>
       </InspectorControls>
-
+      <ServerSideRender
+        block="series-manager/series-list"
+        attributes={attributes}
+      />
     </>
   );
 };

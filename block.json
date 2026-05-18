@@ -2,7 +2,8 @@
   "apiVersion": 3,
   "name": "series-manager/series-list",
   "title": "Series List",
-  "style": "file:./assets/frontend/series-block.css",
+  "style": "file:./build/index.css",
+  "editorStyle": "file:./build/index.css",
   "category": "widgets",
   "supports": {
     "html": false
