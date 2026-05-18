@@ -187,3 +187,16 @@ details summary:focus {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+
+.series-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.series-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 9999px;
+}
+
+.series-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}

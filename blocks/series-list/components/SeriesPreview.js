@@ -3,13 +3,34 @@ import { __, sprintf, _n } from "@wordpress/i18n";
 
 const SeriesPreview = ({ mode, seriesTerms, isResolvingSeriesTerms }) => {
   return (
-    <div className="mt-4 pt-4 border-t border-surface-container-high">
+    <div className="bg-white border border-gray-100 rounded-lg shadow-sm">
 
       {/* Header */}
-      <div className="mb-3">
-        <label className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
-          {__("Series Preview", "series-manager")}
+      <div className="flex items-center justify-between px-3 py-3 border-b border-gray-50">
+        <label className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
+          {__("Serieses", "series-manager")}
         </label>
+         <p className="text-[10px] px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full font-medium">
+                {mode === "top"
+                  ? sprintf(
+                      _n(
+                        "Top %d series ",
+                        "Top %d series ",
+                        seriesTerms.length,
+                        "series-manager"
+                      ),
+                      seriesTerms.length
+                    )
+                  : sprintf(
+                      _n(
+                        "%d series",
+                        "%d series",
+                        seriesTerms.length,
+                        "series-manager"
+                      ),
+                      seriesTerms.length
+                    )}
+              </p>
       </div>
 
       <div className="space-y-3">
@@ -47,65 +68,35 @@ const SeriesPreview = ({ mode, seriesTerms, isResolvingSeriesTerms }) => {
           </div>
         ) : (
           <div className="space-y-3">
-
-            {/* COUNT HEADER */}
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-on-surface">
-                {mode === "top"
-                  ? sprintf(
-                      _n(
-                        "Top %d series by popularity",
-                        "Top %d series by popularity",
-                        seriesTerms.length,
-                        "series-manager"
-                      ),
-                      seriesTerms.length
-                    )
-                  : sprintf(
-                      _n(
-                        "%d series",
-                        "%d series",
-                        seriesTerms.length,
-                        "series-manager"
-                      ),
-                      seriesTerms.length
-                    )}
-              </p>
-
-              <span className="text-xs px-2 py-1 rounded-full bg-primary-container text-on-primary">
-                {mode === "top" ? "Top" : seriesTerms.length}
-              </span>
-            </div>
-
             {/* LIST */}
-            <div className="space-y-2">
+            <div className=" series-scrollbar divide-y divide-gray-50 max-h-64 overflow-y-auto pr-1">
 
-              {seriesTerms.slice(0, 10).map((term, index) => (
+              {seriesTerms.map((term, index) => (
                 <div
                   key={term.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-outline-variant bg-surface-container hover:bg-surface-container-high transition"
+                  className="flex items-center px-3 py-2 text-sm"
                 >
                   {/* NAME */}
-                  <span className="text-sm font-medium text-on-surface">
+                  <span className="flex-1 text-gray-700 font-medium text-x1">
                     {term.name}
                   </span>
 
                   {/* COUNT BADGE */}
-                  <span className="text-xs px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant">
-                    {term.count}
+                  <span className="text-xs px-2 py-1 text-on-surface-variant">
+                    ({term.count})
                   </span>
                 </div>
               ))}
 
               {/* MORE */}
-              {seriesTerms.length > 10 && (
+              {/* {seriesTerms.length > 10 && (
                 <div className="text-xs text-on-surface-variant px-2">
                   {sprintf(
                     __("... and %d more", "series-manager"),
                     seriesTerms.length - 10
                   )}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         )}
