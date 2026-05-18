@@ -24,7 +24,7 @@ class AccordionLayout
                 $current_index  = $item['current_index'];
                 $total_posts    = $item['total_posts'];
 
-                $current_post_id = get_the_ID();
+                $current_post_id = $item['current_post_id'] ?? get_the_ID();
                 ?>
                 <details class="group bg-surface-container-lowest rounded-2xl border border-outline-variant/20 overflow-hidden">
                     <summary class="list-none cursor-pointer p-2">

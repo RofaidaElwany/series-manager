@@ -29,6 +29,8 @@ class SM_Series_Taxonomy
                 'public'            => true,
                 'hierarchical'      => false,
                 'show_in_rest'      => true,
+                'rest_base' => 'series',
+                'rest_controller_class' => 'WP_REST_Terms_Controller',
                 'show_ui'          => true,
                 'show_admin_column' => true,
                 'rewrite'           => ['slug' => 'series'],

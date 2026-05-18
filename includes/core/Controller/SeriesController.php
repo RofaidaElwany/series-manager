@@ -170,13 +170,14 @@ class SeriesController
             wp_send_json_error(['message' => 'Invalid data']);
         }
 
-        $term = get_term($term_id);
+        $term = get_term($term_id, 'series');
         if (!$term || is_wp_error($term)) {
             wp_send_json_error(['message' => 'Invalid term']);
         }
 
         $this->repository->updateOrder($term->term_taxonomy_id, $post_ids);
         $this->repository->persistOrderMeta($term->term_id, $post_ids);
+        wp_update_term_count_now([$term->term_taxonomy_id], 'series');
 
         wp_send_json_success(['message' => 'Order updated successfully']);
     }
@@ -235,7 +236,7 @@ class SeriesController
             return;
         }
 
-        if ($post->post_type !== 'post') {
+        if (! in_array($post->post_type, \Service\SeriesService::getSupportedPostTypes(), true)) {
             return;
         }
 

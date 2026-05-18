@@ -1,5 +1,5 @@
 import { createBlock } from "@wordpress/blocks";
-import { useState, useEffect } from "@wordpress/element";
+import { useState, useEffect, useRef } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 
 import { SeriesSidebarView } from "./SeriesSidebarView";
@@ -72,13 +72,25 @@ const SeriesSidebarContainer = () => {
 
   // Track original posts for cancel functionality
   const [originalPosts, setOriginalPosts] = useState([]);
+  const originalSeriesIdRef = useRef(null);
 
   // Update original posts when series changes or posts are first loaded
   useEffect(() => {
-    if (activeSeriesId && orderedPosts.length > 0) {
+    if (activeSeriesId !== originalSeriesIdRef.current) {
+      originalSeriesIdRef.current = activeSeriesId;
+      setOriginalPosts([]);
+      return;
+    }
+
+    if (activeSeriesId && originalPosts.length === 0 && orderedPosts.length > 0) {
       setOriginalPosts([...orderedPosts]);
     }
-  }, [activeSeriesId]);
+
+    if (!activeSeriesId) {
+      originalSeriesIdRef.current = null;
+      setOriginalPosts([]);
+    }
+  }, [activeSeriesId, orderedPosts, originalPosts.length]);
 
   // Check if there are unsaved changes
   const hasUnsavedChanges =
@@ -113,8 +125,8 @@ const SeriesSidebarContainer = () => {
     }
   }, [selectedSeriesIds, blocks]);
   /* =========================    Save and Cancel Handlers  ========================= */
-  const handleSave = () => {
-    saveOrderToDB(orderedPosts);
+  const handleSave = async () => {
+    await saveOrderToDB(orderedPosts);
     setOriginalPosts([...orderedPosts]);
   };
 
@@ -151,6 +163,7 @@ const SeriesSidebarContainer = () => {
     } else {
       //add to series
       updated = [...selectedSeriesIds, id];
+      setActiveSeriesId(id);
       ensureSeriesBlockExists();
 
       //if no active series, set the newly added one as active

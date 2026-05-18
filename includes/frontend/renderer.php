@@ -83,24 +83,65 @@ class SM_Series_Renderer
             : StandardLayout::class;
     }
 
+    private static function is_editor_preview_request(): bool
+    {
+        return defined('REST_REQUEST') && REST_REQUEST;
+    }
+
+    private static function get_preview_post_id(): int
+    {
+        if (! self::is_editor_preview_request()) {
+            return 0;
+        }
+
+        $post_id = absint($_REQUEST['post_id'] ?? 0);
+        if (! $post_id || ! current_user_can('edit_post', $post_id)) {
+            return 0;
+        }
+
+        return $post_id;
+    }
+
+    private static function get_preview_series_ids(int $post_id): ?array
+    {
+        if (! $post_id || ! self::is_editor_preview_request() || ! array_key_exists('series_ids', $_REQUEST)) {
+            return null;
+        }
+
+        $raw = sanitize_text_field(wp_unslash($_REQUEST['series_ids']));
+        if ($raw === '') {
+            return [];
+        }
+
+        return array_values(array_filter(array_map('absint', explode(',', $raw))));
+    }
+
     /**
      * Render
      */
     public static function render_series($attributes = []): string
     {
-        $post_id = get_the_ID();
+        $preview_post_id = self::get_preview_post_id();
+        $post_id = $preview_post_id ?: get_the_ID();
 
         if (! $post_id) {
             return '';
         }
 
-        $series_data = SeriesDataProvider::getSeriesWithPosts($post_id);
+        $preview_series_ids = self::get_preview_series_ids($preview_post_id);
+        $series_data = SeriesDataProvider::getSeriesWithPosts(
+            $post_id,
+            $preview_series_ids,
+            (bool) $preview_post_id
+        );
 
         if (empty($series_data)) {
             return '';
         }
 
-        $layout_class = self::get_layout_class();
+        $layout_class = count($series_data) > 1
+            ? AccordionLayout::class
+            : StandardLayout::class;
 
         $variant_class = self::get_variant_class();
 

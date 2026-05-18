@@ -27,7 +27,7 @@ class StandardLayout
             $prev_post      = $item['prev_post'];
             $next_post      = $item['next_post'];
 
-            $current_post_id = get_the_ID();
+            $current_post_id = $item['current_post_id'] ?? get_the_ID();
 
 ?>
 

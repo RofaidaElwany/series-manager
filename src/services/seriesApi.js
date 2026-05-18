@@ -30,11 +30,18 @@ export const createSeriesApi = ({
       post_ids: posts.map((p) => p.id).join(','),
     });
 
-    return fetchFn(ajaxurl, {
+    const res = await fetchFn(ajaxurl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: formData.toString(),
     });
+
+    const data = await res.json();
+    if (!data.success) {
+      throw new Error(data.data?.message || 'Failed to update series order');
+    }
+
+    return data.data;
   };
 
   const createSeriesTerm = async (name) => {

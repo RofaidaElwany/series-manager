@@ -8,39 +8,141 @@ if (! defined('ABSPATH')) {
 
 class SeriesDataProvider
 {
-    public static function getSeriesWithPosts(int $post_id): array
+    private static function ensureTermOrderColumn(): bool
     {
-        $terms = wp_get_post_terms($post_id, 'series');
+        global $wpdb;
 
-        if (empty($terms) || is_wp_error($terms)) {
+        $table = $wpdb->term_relationships;
+        $exists = $wpdb->get_results(
+            "SHOW COLUMNS FROM `$table` LIKE 'term_order'"
+        );
+
+        if (! empty($exists)) {
+            return true;
+        }
+
+        $created = $wpdb->query(
+            "ALTER TABLE `$table`
+             ADD COLUMN `term_order` INT(11) NOT NULL DEFAULT 0
+             AFTER `term_taxonomy_id`"
+        );
+
+        return $created !== false;
+    }
+
+    private static function getOrderedPostsForTerm(\WP_Term $term, int $current_post_id = 0, bool $include_current_post = false): array
+    {
+        global $wpdb;
+
+        $post_types = array_values(array_filter(array_map('sanitize_key', (array) SeriesService::getSupportedPostTypes())));
+        if (empty($post_types)) {
+            $post_types = ['post'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($post_types), '%s'));
+        $orderby = self::ensureTermOrderColumn()
+            ? 'tr.term_order ASC, p.ID ASC'
+            : 'p.ID ASC';
+        $status_sql = "p.post_status = 'publish'";
+        $params = array_merge([(int) $term->term_taxonomy_id], $post_types);
+
+        if ($include_current_post && $current_post_id) {
+            $status_sql = "(p.post_status = 'publish' OR p.ID = %d)";
+            $params[] = (int) $current_post_id;
+        }
+
+        $query = $wpdb->prepare(
+            "SELECT p.*
+             FROM {$wpdb->posts} p
+             INNER JOIN {$wpdb->term_relationships} tr
+                ON p.ID = tr.object_id
+             WHERE tr.term_taxonomy_id = %d
+                AND p.post_type IN ($placeholders)
+                AND $status_sql
+             ORDER BY $orderby",
+            $params
+        );
+
+        return $wpdb->get_results($query);
+    }
+
+    private static function getTerms(?array $series_ids, int $post_id): array
+    {
+        if ($series_ids === null) {
+            $terms = wp_get_post_terms($post_id, 'series');
+
+            return is_wp_error($terms) ? [] : $terms;
+        }
+
+        $series_ids = array_values(array_filter(array_map('absint', $series_ids)));
+        if (empty($series_ids)) {
+            return [];
+        }
+
+        $terms = get_terms([
+            'taxonomy'   => 'series',
+            'include'    => $series_ids,
+            'hide_empty' => false,
+        ]);
+
+        if (is_wp_error($terms) || empty($terms)) {
+            return [];
+        }
+
+        usort($terms, function ($a, $b) use ($series_ids) {
+            return array_search((int) $a->term_id, $series_ids, true)
+                <=> array_search((int) $b->term_id, $series_ids, true);
+        });
+
+        return $terms;
+    }
+
+    private static function addCurrentPostForPreview(array $posts, int $post_id): array
+    {
+        if (! $post_id) {
+            return $posts;
+        }
+
+        $post_ids = array_map('intval', wp_list_pluck($posts, 'ID'));
+        if (in_array($post_id, $post_ids, true)) {
+            return $posts;
+        }
+
+        $post = get_post($post_id);
+        if (! $post || $post->post_status === 'trash') {
+            return $posts;
+        }
+
+        $post_types = (array) SeriesService::getSupportedPostTypes();
+        if (! in_array($post->post_type, $post_types, true)) {
+            return $posts;
+        }
+
+        $posts[] = $post;
+
+        return $posts;
+    }
+
+    public static function getSeriesWithPosts(int $post_id, ?array $series_ids = null, bool $include_current_post = false): array
+    {
+        $terms = self::getTerms($series_ids, $post_id);
+
+        if (empty($terms)) {
             return [];
         }
 
         $result = [];
 
         foreach ($terms as $term) {
-            $posts = get_posts([
-                'post_type'   => SeriesService::getSupportedPostTypes(),
-                'numberposts' => -1,
-                'tax_query'   => [
-                    [
-                        'taxonomy' => 'series',
-                        'terms'    => $term->term_id,
-                    ],
-                ],
-                'orderby' => 'date',
-                'order'   => 'ASC',
-            ]);
+            $posts = self::getOrderedPostsForTerm($term, $post_id, $include_current_post);
+
+            if ($include_current_post && $series_ids !== null) {
+                $posts = self::addCurrentPostForPreview($posts, $post_id);
+            }
 
             if (empty($posts)) {
                 continue;
             }
-
-            $current_index = array_search(
-                $post_id,
-                array_map('intval', wp_list_pluck($posts, 'ID')),
-                true
-            );
 
             $post_ids = wp_list_pluck($posts, 'ID');
 
@@ -65,6 +167,7 @@ class SeriesDataProvider
                 'total_posts'   => $total_posts,
                 'prev_post'     => $prev_post,
                 'next_post'     => $next_post,
+                'current_post_id' => $post_id,
             ];
         }
 
