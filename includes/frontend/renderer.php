@@ -30,7 +30,13 @@ class SM_Series_Renderer
     public static function init()
     {
         if (function_exists('register_block_type_from_metadata')) {
-            register_block_type_from_metadata(__DIR__ . '/../../block.json', [
+            $metadata_path = __DIR__ . '/../../build/blocks/series-list/block.json';
+
+            if (! file_exists($metadata_path)) {
+                $metadata_path = __DIR__ . '/../../src/blocks/series-list/block.json';
+            }
+
+            register_block_type_from_metadata($metadata_path, [
                 'render_callback' => [self::class, 'render_series'],
             ]);
         } else {
@@ -94,7 +100,10 @@ class SM_Series_Renderer
             return 0;
         }
 
-        $post_id = absint($_REQUEST['post_id'] ?? 0);
+        $post_id = isset($_REQUEST['post_id'])
+            ? absint($_REQUEST['post_id'])
+            : 0;
+
         if (! $post_id || ! current_user_can('edit_post', $post_id)) {
             return 0;
         }
@@ -104,11 +113,16 @@ class SM_Series_Renderer
 
     private static function get_preview_series_ids(int $post_id): ?array
     {
-        if (! $post_id || ! self::is_editor_preview_request() || ! array_key_exists('series_ids', $_REQUEST)) {
+        if (
+            ! $post_id ||
+            ! self::is_editor_preview_request() ||
+            ! isset($_REQUEST['series_ids'])
+        ) {
             return null;
         }
 
         $raw = sanitize_text_field(wp_unslash($_REQUEST['series_ids']));
+
         if ($raw === '') {
             return [];
         }

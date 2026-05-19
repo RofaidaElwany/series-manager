@@ -1,4 +1,7 @@
+// Register editor plugin/sidebar
 import { registerSeriesPlugin } from "./plugin/register";
-import "../blocks/series-list/index";
+
+// Register blocks
+import "./blocks/series-list/index";
 
 registerSeriesPlugin();
