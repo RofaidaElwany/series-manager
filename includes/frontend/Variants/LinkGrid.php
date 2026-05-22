@@ -8,6 +8,11 @@ if (! defined('ABSPATH')) {
 
 class LinkGrid
 {
+    /**
+     * @param array<int, \WP_Post|object> $posts
+     * @param int $current_post_id
+     * @return string
+     */
     public static function render($posts, $current_post_id)
     {
         ob_start();
@@ -87,9 +92,9 @@ class LinkGrid
                         href="<?php echo esc_url($link_url); ?>"
                         class="group relative overflow-hidden rounded-2xl flex flex-col p-7 border-2 transition-all duration-500 hover:-translate-y-2
 
-                            <?php echo $is_current
+                            <?php echo esc_attr(  $is_current
                                 ? "{$classes['bg']} {$classes['border']} {$classes['shadow']}"
-                                : "bg-white border-gray-200 hover:shadow-xl"; ?>
+                                : "bg-white border-gray-200 hover:shadow-xl" ); ?>
                         ">
 
                         <!-- ACTIVE BADGE -->
@@ -97,7 +102,7 @@ class LinkGrid
 
                             <div class="absolute top-5 right-5 z-20">
 
-                                <div class="inline-flex items-center px-4 py-2 rounded-full <?php echo $classes['badge_bg']; ?> text-white text-sm font-semibold shadow-md">
+                                <div class="inline-flex items-center px-4 py-2 rounded-full <?php echo esc_attr($classes['badge_bg']); ?> text-white text-sm font-semibold shadow-md">
 
                                     Reading Now
 
@@ -120,9 +125,9 @@ class LinkGrid
                                         flex
                                         items-center
                                         justify-center
-                                        <?php echo $classes['icon_bg']; ?>
+                                        <?php echo esc_attr($classes['icon_bg']); ?>
                                     ">
-                                    <span class="material-symbols-outlined  text-[32px] p-1 w-10 h-10 <?php echo $classes['text']; ?>">link</span>
+                                    <span class="material-symbols-outlined  text-[32px] p-1 w-10 h-10 <?php echo esc_attr($classes['text']); ?>">link</span>
                                 </div>
                                 <!-- PART -->
                                 <div
@@ -132,9 +137,9 @@ class LinkGrid
                                         font-semibold
                                         tracking-[-0.01em]
                                         mt-8
-                                        <?php echo $is_current
+                                        <?php echo esc_attr(  $is_current
                                             ? $classes['text']
-                                            : 'text-slate-500'; ?>
+                                            : 'text-slate-500'); ?>
                                     ">
                                     Part <?php echo intval($part_number); ?>
                                 </div>
@@ -159,7 +164,7 @@ class LinkGrid
                                 right-0
                                 h-[5px]
                                 opacity-80
-                                <?php echo $classes['glow']; ?>
+                                <?php echo esc_attr($classes['glow']); ?>
                             ">
                         </div>
 

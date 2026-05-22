@@ -34,24 +34,30 @@ class StandardLayout
             <div class="max-w-6xl mx-auto px-6 mt-20 space-y-8">
 
                 <?php
-                echo SeriesHeader::render(
-                    $term,
-                    $current_index,
-                    $total_posts
+                echo wp_kses_post(
+                    SeriesHeader::render(
+                        $term,
+                        $current_index,
+                        $total_posts
+                    )
                 );
                 ?>
 
                 <?php
-                echo $variant_class::render(
-                    $posts,
-                    $current_post_id
+                echo wp_kses_post(
+                    $variant_class::render(
+                        $posts,
+                        $current_post_id
+                    )
                 );
                 ?>
 
                 <?php
-                echo SeriesNavigation::render(
-                    $prev_post,
-                    $next_post
+                echo wp_kses_post(
+                    SeriesNavigation::render(
+                        $prev_post,
+                        $next_post
+                    )
                 );
                 ?>
 

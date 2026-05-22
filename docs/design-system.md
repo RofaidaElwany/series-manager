@@ -1,5 +1,11 @@
-# Design System Specification: The Architectural Manuscript
+# Series Manager Design System
 
+Version: 1.0.0  
+Last Updated: 2026-05-20  
+Plugin: Series Manager  
+Scope: WordPress Admin UI + Gutenberg Components
+
+---
 ## 1. Overview & Creative North Star
 This design system is built for high-stakes editorial environments where clarity, authority, and sophistication are paramount. Moving beyond the "generic SaaS" aesthetic, we embrace a **Creative North Star: The Digital Curator.** 
 
@@ -10,13 +16,26 @@ The system treats the interface not as a collection of boxes, but as a series of
 ## 2. Colors
 Our palette is a study in tonal restraint. We use a base of "Cool Grays" and "Crisp Whites" to create an expansive, airy feel, punctuated by a deep, authoritative Blue for functional intent.
 
-*   **Primary (#0062a2):** To be used sparingly for high-value actions. This is our "signature."
-*   **Surface Hierarchy:** We utilize the `surface-container` tiers to create architectural depth.
-    *   **Background (#f9f9fa):** The canvas.
-    *   **Surface Container Lowest (#ffffff):** Used for the most "active" or "front-most" elements, like an open editor or an active card.
-*   **The "No-Line" Rule:** To maintain a premium feel, **1px solid borders are prohibited for sectioning.** Boundaries must be defined through background color shifts. For example, a sidebar using `surface-container-low` (#f2f4f5) sitting adjacent to a `surface` background (#f9f9fa) provides a soft, sophisticated transition that feels integrated rather than walled off.
-*   **The Glass & Gradient Rule:** For floating elements (menus, tooltips, or top navigation), use "Glassmorphism." Apply a semi-transparent `surface` color with a `20px` backdrop-blur. 
-*   **Signature Textures:** For primary CTAs, do not use flat color. Use a subtle linear gradient from `primary` (#0062a2) to `primary_dim` (#00568e) at a 135-degree angle to add "soul" and professional polish.
+```css
+:root {
+  --sm-color-primary: #0062a2;
+  --sm-color-primary-dim: #00568e;
+
+  --sm-surface: #f9f9fa;
+  --sm-surface-low: #f2f4f5;
+  --sm-surface-lowest: #ffffff;
+
+  --sm-text-primary: #2f3335;
+  --sm-text-secondary: #5b6062;
+
+  --sm-outline-ghost: rgba(175,178,181,0.15);
+
+  --sm-radius-md: 0.375rem;
+
+  --sm-shadow-ambient:
+    0px 12px 32px rgba(47, 51, 53, 0.06);
+}
+```
 
 ---
 

@@ -13,19 +13,24 @@ class SeriesDataProvider
         global $wpdb;
 
         $table = $wpdb->term_relationships;
+
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is provided by wpdb.
         $exists = $wpdb->get_results(
-            "SHOW COLUMNS FROM `$table` LIKE 'term_order'"
+            $wpdb->prepare("SHOW COLUMNS FROM {$table} LIKE %s", 'term_order')
         );
+        // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         if (! empty($exists)) {
             return true;
         }
 
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- Schema query uses a wpdb table name and no user input.
         $created = $wpdb->query(
-            "ALTER TABLE `$table`
-             ADD COLUMN `term_order` INT(11) NOT NULL DEFAULT 0
-             AFTER `term_taxonomy_id`"
+            "ALTER TABLE {$table}
+             ADD COLUMN term_order INT(11) NOT NULL DEFAULT 0
+             AFTER term_taxonomy_id"
         );
+        // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
         return $created !== false;
     }
@@ -34,15 +39,16 @@ class SeriesDataProvider
     {
         global $wpdb;
 
+        $posts_table = $wpdb->posts;
+        $tr_table    = $wpdb->term_relationships;
+
         $post_types = array_values(array_filter(array_map('sanitize_key', (array) SeriesService::getSupportedPostTypes())));
         if (empty($post_types)) {
             $post_types = ['post'];
         }
 
         $placeholders = implode(',', array_fill(0, count($post_types), '%s'));
-        $orderby = self::ensureTermOrderColumn()
-            ? 'tr.term_order ASC, p.ID ASC'
-            : 'p.ID ASC';
+
         $status_sql = "p.post_status = 'publish'";
         $params = array_merge([(int) $term->term_taxonomy_id], $post_types);
 
@@ -51,19 +57,29 @@ class SeriesDataProvider
             $params[] = (int) $current_post_id;
         }
 
-        $query = $wpdb->prepare(
-            "SELECT p.*
-             FROM {$wpdb->posts} p
-             INNER JOIN {$wpdb->term_relationships} tr
-                ON p.ID = tr.object_id
-             WHERE tr.term_taxonomy_id = %d
-                AND p.post_type IN ($placeholders)
-                AND $status_sql
-             ORDER BY $orderby",
-            $params
-        );
+        $orderby = self::ensureTermOrderColumn()
+            ? "tr.term_order ASC, p.ID ASC"
+            : "p.ID ASC";
 
-        return $wpdb->get_results($query);
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names and SQL fragments are built from sanitized internal values.
+        $posts = $wpdb->get_results(
+            $wpdb->prepare(
+                "
+                SELECT p.*
+                FROM {$posts_table} p
+                INNER JOIN {$tr_table} tr
+                    ON p.ID = tr.object_id
+                WHERE tr.term_taxonomy_id = %d
+                AND p.post_type IN ($placeholders)
+                AND {$status_sql}
+                ORDER BY {$orderby}
+                ",
+                $params
+            )
+        );
+        // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        return $posts;
     }
 
     private static function getTerms(?array $series_ids, int $post_id): array

@@ -1,11 +1,31 @@
 <?php
 
+if (! defined('ABSPATH')) {
+    exit;
+}
+
 class SeriesController
 {
+    /**
+     * @var SeriesRepository
+     */
     private $repository;
+
+    /**
+     * @var \Service\SeriesService
+     */
     private $service;
+
+    /**
+     * @var SeriesFormatter
+     */
     private $formatter;
 
+    /**
+     * @param SeriesRepository $repository
+     * @param \Service\SeriesService $service
+     * @param SeriesFormatter $formatter
+     */
     public function __construct($repository, $service, $formatter)
     {
         $this->repository = $repository;
@@ -32,26 +52,26 @@ class SeriesController
             wp_send_json_error(['message' => 'No permission']);
         }
 
-        $nonce = $_POST['nonce'] ?? '';
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
             wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
-        $post_type = sanitize_key($_POST['post_type'] ?? 'post');
+        $post_type = isset($_POST['post_type']) ? sanitize_key(wp_unslash($_POST['post_type'])) : 'post';
 
         // Get all series terms for this post type, regardless of whether they have posts
         global $wpdb;
         $terms = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT t.term_id, t.name, t.slug, tx.taxonomy,
-                        COUNT(tr.object_id) as post_count
-                 FROM {$wpdb->terms} t
-                 INNER JOIN {$wpdb->term_taxonomy} tx ON t.term_id = tx.term_id
-                 LEFT JOIN {$wpdb->term_relationships} tr ON tx.term_taxonomy_id = tr.term_taxonomy_id
-                 LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID AND p.post_type = %s
-                 WHERE tx.taxonomy = 'series'
-                 GROUP BY t.term_id, t.name, t.slug, tx.taxonomy
-                 ORDER BY t.name ASC",
+                COUNT(tr.object_id) as post_count
+                FROM {$wpdb->terms} t
+                INNER JOIN {$wpdb->term_taxonomy} tx ON t.term_id = tx.term_id
+                LEFT JOIN {$wpdb->term_relationships} tr ON tx.term_taxonomy_id = tr.term_taxonomy_id
+                LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID AND p.post_type = %s
+                WHERE tx.taxonomy = 'series'
+                GROUP BY t.term_id, t.name, t.slug, tx.taxonomy
+                ORDER BY t.name ASC",
                 $post_type
             )
         );
@@ -83,12 +103,12 @@ class SeriesController
             wp_send_json_error(['message' => 'No permission']);
         }
 
-        $nonce = $_POST['nonce'] ?? '';
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
             wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
-        $name = sanitize_text_field($_POST['name'] ?? '');
+        $name = isset($_POST['name']) ? sanitize_text_field(wp_unslash($_POST['name'])) : '';
         if (empty($name)) {
             wp_send_json_error(['message' => 'Series name is required']);
         }
@@ -119,16 +139,12 @@ class SeriesController
             wp_send_json_error(['message' => 'No permission']);
         }
 
-        $nonce = $_POST['nonce'] ?? '';
-
-        error_log('[SeriesController] Received nonce: ' . var_export($nonce, true));
-        error_log('[SeriesController] wp_verify_nonce result: ' . var_export(wp_verify_nonce($nonce, 'sm_series_nonce'), true));
-
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
             wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
-        $term_id = intval($_POST['term_id'] ?? 0);
+        $term_id = isset($_POST['term_id']) ? absint(wp_unslash($_POST['term_id'])) : 0;
 
         if (!$term_id) {
             wp_send_json_error(['message' => 'Invalid term ID']);
@@ -156,13 +172,13 @@ class SeriesController
             wp_send_json_error(['message' => 'No permission']);
         }
 
-        $nonce = $_POST['nonce'] ?? '';
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
             wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
-        $term_id      = intval($_POST['term_id'] ?? 0);
-        $post_ids_str = $_POST['post_ids'] ?? '';
+        $term_id      = isset($_POST['term_id']) ? absint(wp_unslash($_POST['term_id'])) : 0;
+        $post_ids_str = isset($_POST['post_ids']) ? sanitize_text_field(wp_unslash($_POST['post_ids'])) : '';
 
         $post_ids = $this->service->parsePostIds($post_ids_str);
 
@@ -191,13 +207,13 @@ class SeriesController
             wp_send_json_error(['message' => 'No permission']);
         }
 
-        $nonce = $_POST['nonce'] ?? '';
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
             wp_send_json_error(['message' => 'Invalid nonce']);
         }
 
-        $term_id = intval($_POST['term_id'] ?? 0);
-        $post_id = intval($_POST['post_id'] ?? 0);
+        $term_id = isset($_POST['term_id']) ? absint(wp_unslash($_POST['term_id'])) : 0;
+        $post_id = isset($_POST['post_id']) ? absint(wp_unslash($_POST['post_id'])) : 0;
 
         if (!$term_id || !$post_id) {
             wp_send_json_error(['message' => 'Invalid data']);
@@ -230,6 +246,11 @@ class SeriesController
     /* =========================
      * Sync Order On Save
      ========================= */
+    /**
+     * @param int $post_id
+     * @param \WP_Post $post
+     * @param bool $update
+     */
     public function syncPostOrderOnSave($post_id, $post, $update)
     {
         if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {

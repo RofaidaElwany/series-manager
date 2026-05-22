@@ -29,18 +29,22 @@ class AccordionLayout
                 <details class="group bg-surface-container-lowest rounded-2xl border border-outline-variant/20 overflow-hidden">
                     <summary class="list-none cursor-pointer p-2">
                         <?php
-                        echo SeriesHeader::render(
+                        echo wp_kses_post(
+                            SeriesHeader::render(
                             $term,
                             $current_index,
                             $total_posts
+                        )
                         );
                         ?>
                     </summary>
                     <div class="p-6 pt-2">
                         <?php
-                        echo $variant_class::render(
-                            $posts,
-                            $current_post_id
+                        echo wp_kses_post(
+                            $variant_class::render(
+                                $posts,
+                                $current_post_id
+                            )
                         );
                         ?>
                     </div>

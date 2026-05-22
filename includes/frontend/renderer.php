@@ -94,15 +94,32 @@ class SM_Series_Renderer
         return defined('REST_REQUEST') && REST_REQUEST;
     }
 
+    private static function has_valid_preview_nonce(): bool
+    {
+        $nonce = '';
+
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- Reading the nonce value in order to verify it below.
+        if (isset($_REQUEST['_wpnonce'])) {
+            $nonce = sanitize_text_field(wp_unslash($_REQUEST['_wpnonce']));
+        } elseif (isset($_SERVER['HTTP_X_WP_NONCE'])) {
+            $nonce = sanitize_text_field(wp_unslash($_SERVER['HTTP_X_WP_NONCE']));
+        }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+        return (bool) wp_verify_nonce($nonce, 'wp_rest');
+    }
+
     private static function get_preview_post_id(): int
     {
-        if (! self::is_editor_preview_request()) {
+        if (! self::is_editor_preview_request() || ! self::has_valid_preview_nonce()) {
             return 0;
         }
 
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- Editor preview request is gated by has_valid_preview_nonce().
         $post_id = isset($_REQUEST['post_id'])
-            ? absint($_REQUEST['post_id'])
+            ? absint(wp_unslash($_REQUEST['post_id']))
             : 0;
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
         if (! $post_id || ! current_user_can('edit_post', $post_id)) {
             return 0;
@@ -116,12 +133,18 @@ class SM_Series_Renderer
         if (
             ! $post_id ||
             ! self::is_editor_preview_request() ||
-            ! isset($_REQUEST['series_ids'])
+            ! self::has_valid_preview_nonce()
         ) {
             return null;
         }
 
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- Editor preview request is gated by has_valid_preview_nonce().
+        if (! isset($_REQUEST['series_ids'])) {
+            return null;
+        }
+
         $raw = sanitize_text_field(wp_unslash($_REQUEST['series_ids']));
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
         if ($raw === '') {
             return [];

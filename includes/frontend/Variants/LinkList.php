@@ -8,6 +8,11 @@ if (! defined('ABSPATH')) {
 
 class LinkList
 {
+    /**
+     * @param array<int, \WP_Post|object> $posts
+     * @param int $current_post_id
+     * @return string
+     */
     public static function render($posts, $current_post_id)
     {
         ob_start();

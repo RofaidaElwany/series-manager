@@ -57,7 +57,7 @@ SM_Series_Admin::init();
  * - Initialize frontend rendering
  * - Setup MVC structure (Repository, Service, Controller)
  */
-function sm_series_manager_init()
+function series_manager_init()
 {
     // Register taxonomy and its edit screen
     SM_Series_Taxonomy::register();
@@ -81,7 +81,7 @@ function sm_series_manager_init()
 /**
  * Hook into WordPress initialization
  */
-add_action('init', 'sm_series_manager_init');
+add_action('init', 'series_manager_init');
 
 
 
@@ -92,7 +92,7 @@ add_action('init', 'sm_series_manager_init');
 /**
  * Enqueue frontend JS only on series taxonomy pages
  */
-function sm_enqueue_frontend_assets()
+function series_manager_enqueue_frontend_assets()
 {
     if (is_tax('series')) {
         wp_enqueue_script(
@@ -104,13 +104,13 @@ function sm_enqueue_frontend_assets()
         );
     }
 }
-add_action('wp_enqueue_scripts', 'sm_enqueue_frontend_assets');
+add_action('wp_enqueue_scripts', 'series_manager_enqueue_frontend_assets');
 
 
 /**
  * Enqueue accordion JavaScript on single posts
  */
-function sm_enqueue_accordion_assets()
+function series_manager_enqueue_accordion_assets()
 {
     if (is_singular('post')) {
         wp_enqueue_script(
@@ -122,13 +122,13 @@ function sm_enqueue_accordion_assets()
         );
     }
 }
-add_action('wp_enqueue_scripts', 'sm_enqueue_accordion_assets');
+add_action('wp_enqueue_scripts', 'series_manager_enqueue_accordion_assets');
 
 
 /**
  * Enqueue frontend styles (Tailwind + Fonts)
  */
-function sm_enqueue_front_assets()
+function series_manager_enqueue_front_assets()
 {
     // Google Font: Inter
     wp_enqueue_style(
@@ -154,35 +154,7 @@ function sm_enqueue_front_assets()
         filemtime(plugin_dir_path(__FILE__) . 'build/index.css')
     );
 }
-add_action('wp_enqueue_scripts', 'sm_enqueue_front_assets');
-
-
-/* =====================================================
- *  POST CONTENT MODIFICATION (Filter)
- * ===================================================== */
-
-/**
- * Append series UI to post content
- */ 
-// Note: This is a fallback for non-block themes. If the block is present, it will render itself and this filter won't append anything.
-// function sm_append_series_to_content(string $content)
-// {
-//     if (! is_singular('post')) {
-//         return $content;
-//     }
-//     if (function_exists('has_block') && has_block('series-manager/series-list', $content)) {
-//         return $content;
-//     }
-
-//     $series_html = SM_Series_Renderer::render_series();
-//     if (! $series_html) {
-//         return $content;
-//     }
-
-//     return $content . $series_html;
-// }
-// add_filter('the_content', 'sm_append_series_to_content', 20);
-
+add_action('wp_enqueue_scripts', 'series_manager_enqueue_front_assets');
 
 /* =====================================================
  *  BLOCK EDITOR (Gutenberg) ASSETS
@@ -191,7 +163,7 @@ add_action('wp_enqueue_scripts', 'sm_enqueue_front_assets');
 /**
  * Enqueue assets for block editor (JS + CSS + AJAX data)
  */
-function sm_enqueue_post_editor_assets()
+function series_manager_enqueue_post_editor_assets()
 {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
 
@@ -254,8 +226,8 @@ function sm_enqueue_post_editor_assets()
         ]
     );
 }
-add_action('enqueue_block_editor_assets', 'sm_enqueue_post_editor_assets');
-add_action('enqueue_widgets_block_editor_assets', 'sm_enqueue_post_editor_assets');
+add_action('enqueue_block_editor_assets', 'series_manager_enqueue_post_editor_assets');
+add_action('enqueue_widgets_block_editor_assets', 'series_manager_enqueue_post_editor_assets');
 
 /* =====================================================
  * GLOBAL BLOCK ASSETS (Frontend + Editor)
@@ -280,7 +252,7 @@ add_action('enqueue_block_assets', function () {
 /**
  * Enqueue Tailwind CSS for plugin admin pages only
  */
-function sm_enqueue_admin_assets(string $hook): void
+function series_manager_enqueue_admin_assets(string $hook): void
 {
     // Limit to plugin admin pages
     if (! in_array($hook, ['toplevel_page_series-manager', 'series-manager_page_available-custom-post-types', 'series-manager_page_series-layouts'], true)) {
@@ -318,4 +290,4 @@ function sm_enqueue_admin_assets(string $hook): void
         filemtime($css_file_path)
     );
 }
-add_action('admin_enqueue_scripts', 'sm_enqueue_admin_assets');
+add_action('admin_enqueue_scripts', 'series_manager_enqueue_admin_assets');
