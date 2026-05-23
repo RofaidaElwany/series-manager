@@ -1,11 +1,19 @@
+import domReady from "@wordpress/dom-ready";
 import { registerPlugin } from "@wordpress/plugins";
-import { addFilter } from "@wordpress/hooks";
 import { SeriesSidebarContainer } from "../components/seriesSidebar/SeriesSidebarContainer";
-import { useEffect } from "@wordpress/element";
+import { SidebarContainer } from "./sidebar/SidebarContainer";
+
+const removeDefaultSeriesPanel = () => {
+  const editorDispatch = wp?.data?.dispatch("core/editor");
+
+  if (editorDispatch?.removeEditorPanel) {
+    editorDispatch.removeEditorPanel("taxonomy-panel-series");
+  }
+};
 
 export const registerSeriesPlugin = () => {
   /* Remove the default series taxonomy panel from the post editor sidebar * to replace it with our custom SeriesSidebarContainer which provides enhanced functionality. */
-  wp.data.dispatch("core/edit-post").removeEditorPanel("taxonomy-panel-series");
+  domReady(removeDefaultSeriesPanel);
 
   if (!window.smSeriesSidebarRegistered) {
     registerPlugin("sm-series-sidebar", {
@@ -13,5 +21,12 @@ export const registerSeriesPlugin = () => {
     });
 
     window.smSeriesSidebarRegistered = true;
+  }
+
+  if (!window.pluginSidebarRegistered) {
+    registerPlugin("sm-sidebar", {
+      render: SidebarContainer,
+    });
+    window.pluginSidebarRegistered = true;
   }
 };

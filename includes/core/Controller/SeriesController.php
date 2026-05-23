@@ -37,6 +37,7 @@ class SeriesController
         add_action('wp_ajax_sm_create_series_term', [$this, 'ajaxCreateSeriesTerm']);
         add_action('wp_ajax_sm_get_series_posts', [$this, 'ajaxGetSeriesPosts']);
         add_action('wp_ajax_sm_update_series_order', [$this, 'ajaxUpdateOrder']);
+        add_action('wp_ajax_sm_update_series_layout_settings', [$this, 'ajaxUpdateSeriesLayoutSettings']);
         add_action('wp_ajax_sm_remove_post_from_series', [$this, 'ajaxRemovePostFromSeries']);
 
         // Hook
@@ -88,6 +89,7 @@ class SeriesController
                 'slug' => $term->slug,
                 'taxonomy' => $term->taxonomy,
                 'count' => (int) $term->post_count,
+                'layoutPosition' => $this->getLayoutPosition((int) $term->term_id),
             ];
         }, $terms);
 
@@ -125,9 +127,21 @@ class SeriesController
             'slug' => $term->slug,
             'taxonomy' => $term->taxonomy,
             'count' => $term->count,
+            'layoutPosition' => $this->getLayoutPosition((int) $term->term_id),
         ];
 
         wp_send_json_success($response);
+    }
+
+    private function getLayoutPosition(int $term_id): string
+    {
+        $position = get_term_meta($term_id, 'sm_series_layout_position', true);
+
+        if (! in_array($position, ['top', 'bottom'], true)) {
+            $position = get_option('navigation_position', 'bottom');
+        }
+
+        return in_array($position, ['top', 'bottom'], true) ? $position : 'bottom';
     }
 
     /* =========================
@@ -196,6 +210,41 @@ class SeriesController
         wp_update_term_count_now([$term->term_taxonomy_id], 'series');
 
         wp_send_json_success(['message' => 'Order updated successfully']);
+    }
+
+    /* =========================
+     * AJAX: Update Layout Settings
+     ========================= */
+    public function ajaxUpdateSeriesLayoutSettings()
+    {
+        if (! current_user_can('manage_categories')) {
+            wp_send_json_error(['message' => 'No permission']);
+        }
+
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+        if (! wp_verify_nonce($nonce, 'sm_series_nonce')) {
+            wp_send_json_error(['message' => 'Invalid nonce']);
+        }
+
+        $term_id = isset($_POST['term_id']) ? absint(wp_unslash($_POST['term_id'])) : 0;
+        $position = isset($_POST['layout_position']) ? sanitize_text_field(wp_unslash($_POST['layout_position'])) : 'bottom';
+
+        if (! $term_id || ! in_array($position, ['top', 'bottom'], true)) {
+            wp_send_json_error(['message' => 'Invalid layout settings']);
+        }
+
+        $term = get_term($term_id, 'series');
+        if (! $term || is_wp_error($term)) {
+            wp_send_json_error(['message' => 'Invalid term']);
+        }
+
+        update_term_meta($term_id, 'sm_series_layout_position', $position);
+
+        wp_send_json_success([
+            'message' => 'Layout settings updated successfully',
+            'termId' => $term_id,
+            'layoutPosition' => $position,
+        ]);
     }
 
     /* =========================

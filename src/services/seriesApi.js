@@ -69,9 +69,32 @@ export const createSeriesApi = ({
     throw new Error(data.data?.message || 'Failed to create series');
   };
 
+  const updateSeriesLayoutSettings = async (termId, layoutPosition) => {
+    const formData = new URLSearchParams({
+      action: 'sm_update_series_layout_settings',
+      nonce,
+      term_id: termId,
+      layout_position: layoutPosition,
+    });
+
+    const res = await fetchFn(ajaxurl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString(),
+    });
+
+    const data = await res.json();
+    if (!data.success) {
+      throw new Error(data.data?.message || 'Failed to update series layout settings');
+    }
+
+    return data.data;
+  };
+
   return {
     fetchSeriesPosts,
     updateSeriesOrder,
     createSeriesTerm,
+    updateSeriesLayoutSettings,
   };
 };
