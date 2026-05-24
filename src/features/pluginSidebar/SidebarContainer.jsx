@@ -2,7 +2,6 @@ import { SidebarView } from "./SidebarView";
 import { createBlock } from "@wordpress/blocks";
 import { useDispatch, useSelect } from "@wordpress/data";
 import { useCallback, useEffect, useMemo, useRef, useState } from "@wordpress/element";
-
 import { useSeriesTerms } from "../../hooks/useSeriesTerms";
 import { updateSeriesLayoutSettings } from "../../services/seriesApiExports";
 

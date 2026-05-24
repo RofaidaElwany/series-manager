@@ -2,7 +2,7 @@ import { useState } from '@wordpress/element';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { createPortal } from 'react-dom';
-import '../index.css';
+import '../../index.css';
 
 const SortableItem = ({ id, post, onDelete }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);

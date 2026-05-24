@@ -6,7 +6,7 @@ import {
   TextControl
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import '../index.css';
+import '../../index.css';
 
 const SeriesSelector = ({
   selectedSeriesIds=[],

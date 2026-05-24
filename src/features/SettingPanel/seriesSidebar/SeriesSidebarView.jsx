@@ -1,6 +1,5 @@
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { PanelBody } from '@wordpress/components';
-
 import { SeriesSelector } from '../SeriesSelector';
 import { SeriesPostsList } from '../SeriesPostsList';
 

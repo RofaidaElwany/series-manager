@@ -1,15 +1,12 @@
 import { createBlock } from "@wordpress/blocks";
 import { useState, useEffect, useRef } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
-
 import { SeriesSidebarView } from "./SeriesSidebarView";
-
-import { useSeriesPosts } from "../../hooks/useSeriesPosts";
-import { useSeriesTerms } from "../../hooks/useSeriesTerms";
-import { usePostSavingSync } from "../../hooks/usePostSavingSync";
-import { useSeriesPostActions } from "../../hooks/useSeriesPostActions";
-
-import { createSeriesTerm } from "../../services/seriesApiExports";
+import { useSeriesPosts } from "../../../hooks/useSeriesPosts";
+import { useSeriesTerms } from "../../../hooks/useSeriesTerms";
+import { usePostSavingSync } from "../../../hooks/usePostSavingSync";
+import { useSeriesPostActions } from "../../../hooks/useSeriesPostActions";
+import { createSeriesTerm } from "../../../services/seriesApiExports";
 
 const SeriesSidebarContainer = () => {
   /* ========================= Editor Data ========================= */
@@ -31,13 +28,11 @@ const SeriesSidebarContainer = () => {
 
   const normalizeSeriesId = (value) => {
     if (value == null) return null;
-
     if (typeof value === "object") {
       const candidate = value.id ?? value.term_id ?? value;
       const num = Number(candidate);
       return Number.isNaN(num) ? null : num;
     }
-
     const num = Number(value);
     return Number.isNaN(num) ? null : num;
   };
@@ -82,7 +77,11 @@ const SeriesSidebarContainer = () => {
       return;
     }
 
-    if (activeSeriesId && originalPosts.length === 0 && orderedPosts.length > 0) {
+    if (
+      activeSeriesId &&
+      originalPosts.length === 0 &&
+      orderedPosts.length > 0
+    ) {
       setOriginalPosts([...orderedPosts]);
     }
 

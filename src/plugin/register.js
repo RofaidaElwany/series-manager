@@ -1,7 +1,7 @@
 import domReady from "@wordpress/dom-ready";
 import { registerPlugin } from "@wordpress/plugins";
-import { SeriesSidebarContainer } from "../components/seriesSidebar/SeriesSidebarContainer";
-import { SidebarContainer } from "./sidebar/SidebarContainer";
+import { SeriesSidebarContainer } from "../features/SettingPanel/seriesSidebar/SeriesSidebarContainer";
+import { SidebarContainer } from "../features/pluginSidebar/SidebarContainer";
 
 const removeDefaultSeriesPanel = () => {
   const editorDispatch = wp?.data?.dispatch("core/editor");
