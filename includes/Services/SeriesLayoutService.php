@@ -8,13 +8,17 @@ if (! defined('ABSPATH')) {
 
 class SeriesLayoutService
 {
+    private SeriesSettingsService $settingsService;
+
+    public function __construct(SeriesSettingsService $settingsService)
+    {
+        $this->settingsService = $settingsService;
+    }
+
     public function getLayoutPosition(int $term_id): string
     {
-        $position = get_term_meta($term_id, 'sm_series_layout_position', true);
-
-        if (! in_array($position, ['top', 'bottom'], true)) {
-            $position = get_option('navigation_position', 'bottom');
-        }
+        $settings = $this->settingsService->getSettings($term_id);
+        $position = $settings['position'] ?? 'bottom';
 
         return in_array($position, ['top', 'bottom'], true) ? $position : 'bottom';
     }
@@ -27,7 +31,13 @@ class SeriesLayoutService
             return false;
         }
 
-        return (bool) update_term_meta($term_id, 'sm_series_layout_position', $position);
+        return $this->settingsService
+            ->updateSettings(
+                $term_id,
+                [
+                    'position' => $position,
+                ]
+            );
     }
 
     private function normalizePosition(string $position): string

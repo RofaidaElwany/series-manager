@@ -42,16 +42,10 @@ class SeriesAjaxController
         $post_type = isset($_POST['post_type']) ? sanitize_key(wp_unslash($_POST['post_type'])) : 'post';
         $terms = $this->repository->getSeriesTermsForPostType($post_type);
 
-        $formatted_terms = array_map(function ($term) {
-            return [
-                'id' => (int) $term->term_id,
-                'name' => $term->name,
-                'slug' => $term->slug,
-                'taxonomy' => $term->taxonomy,
-                'count' => (int) $term->post_count,
-                'layoutPosition' => $this->layoutService->getLayoutPosition((int) $term->term_id),
-            ];
-        }, $terms);
+        $formatted_terms = $this->formatter->formatTerms(
+            $terms,
+            fn($term_id) => $this->layoutService->getLayoutPosition($term_id)
+        );
 
         wp_send_json_success($formatted_terms);
     }
@@ -78,14 +72,10 @@ class SeriesAjaxController
         }
 
         $term = get_term($result['term_id'], 'series');
-        $response = [
-            'id' => $term->term_id,
-            'name' => $term->name,
-            'slug' => $term->slug,
-            'taxonomy' => $term->taxonomy,
-            'count' => $term->count,
-            'layoutPosition' => $this->layoutService->getLayoutPosition((int) $term->term_id),
-        ];
+        $response = $this->formatter->formatTerm(
+            $term,
+            fn($term_id) => $this->layoutService->getLayoutPosition($term_id)
+        );
 
         wp_send_json_success($response);
     }
