@@ -4,16 +4,16 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-use Service\SeriesLayoutService;
+
 
 class SeriesAjaxController
 {
     private SeriesRepository $repository;
     private \Service\SeriesService $service;
     private SeriesFormatter $formatter;
-    private SeriesLayoutService $layoutService;
+    private \Service\SeriesLayoutService $layoutService;
 
-    public function __construct(SeriesRepository $repository, \Service\SeriesService $service, SeriesFormatter $formatter, SeriesLayoutService $layoutService)
+    public function __construct(SeriesRepository $repository, \Service\SeriesService $service, SeriesFormatter $formatter, \Service\SeriesLayoutService $layoutService)
     {
         $this->repository = $repository;
         $this->service = $service;
