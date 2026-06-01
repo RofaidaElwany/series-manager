@@ -112,6 +112,98 @@ class SeriesRepository
         );
     }
 
+    public function getSeriesTermsForPostType(string $post_type): array
+    {
+        $post_type = sanitize_key($post_type);
+
+        $terms = $this->wpdb->get_results(
+            $this->wpdb->prepare(
+                "SELECT t.term_id, t.name, t.slug, tx.taxonomy,
+                    COUNT(tr.object_id) AS post_count
+                FROM {$this->wpdb->terms} t
+                INNER JOIN {$this->wpdb->term_taxonomy} tx ON t.term_id = tx.term_id
+                LEFT JOIN {$this->wpdb->term_relationships} tr ON tx.term_taxonomy_id = tr.term_taxonomy_id
+                LEFT JOIN {$this->wpdb->posts} p ON tr.object_id = p.ID AND p.post_type = %s
+                WHERE tx.taxonomy = 'series'
+                GROUP BY t.term_id, t.name, t.slug, tx.taxonomy
+                ORDER BY t.name ASC",
+                $post_type
+            )
+        );
+
+        return is_array($terms) ? $terms : [];
+    }
+
+    public function getSeriesTermsForPost(int $post_id, ?array $series_ids = null): array
+    {
+        if ($series_ids === null) {
+            $terms = wp_get_post_terms($post_id, 'series');
+            return is_wp_error($terms) ? [] : $terms;
+        }
+
+        $series_ids = array_values(array_filter(array_map('absint', $series_ids)));
+        if (empty($series_ids)) {
+            return [];
+        }
+
+        $terms = get_terms([
+            'taxonomy'   => 'series',
+            'include'    => $series_ids,
+            'hide_empty' => false,
+        ]);
+
+        if (is_wp_error($terms) || empty($terms)) {
+            return [];
+        }
+
+        usort($terms, function ($a, $b) use ($series_ids) {
+            return array_search((int) $a->term_id, $series_ids, true)
+                <=> array_search((int) $b->term_id, $series_ids, true);
+        });
+
+        return $terms;
+    }
+
+    public function getTermTaxonomyId(int $term_id): ?int
+    {
+        $term_taxonomy_id = $this->wpdb->get_var(
+            $this->wpdb->prepare(
+                "SELECT term_taxonomy_id FROM {$this->wpdb->term_taxonomy} WHERE term_id = %d",
+                $term_id
+            )
+        );
+
+        return $term_taxonomy_id ? (int) $term_taxonomy_id : null;
+    }
+
+    public function getOrderedPostIds(int $term_taxonomy_id): array
+    {
+        $this->ensureTermOrderColumn();
+
+        $post_ids = $this->wpdb->get_col(
+            $this->wpdb->prepare(
+                "SELECT object_id FROM {$this->wpdb->term_relationships}
+                 WHERE term_taxonomy_id = %d
+                 ORDER BY term_order ASC, object_id ASC",
+                $term_taxonomy_id
+            )
+        );
+
+        return array_map('intval', $post_ids ?: []);
+    }
+
+    public function removePostFromSeries(int $term_taxonomy_id, int $post_id): void
+    {
+        $this->wpdb->delete(
+            $this->wpdb->term_relationships,
+            [
+                'term_taxonomy_id' => $term_taxonomy_id,
+                'object_id'        => $post_id,
+            ],
+            ['%d', '%d']
+        );
+    }
+
     public function getPostIdsByTerm(int $term_id): ?string
     {
         $post_ids = get_term_meta($term_id, 'series_post_ids', true);

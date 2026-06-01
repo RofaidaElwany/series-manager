@@ -22,11 +22,7 @@ if (! defined('ABSPATH')) {
 require_once plugin_dir_path(__FILE__) . '/vendor/autoload.php';
 
 // Core architecture files
-require_once plugin_dir_path(__FILE__) . '/includes/core/Repository/SeriesRepository.php';
-require_once plugin_dir_path(__FILE__) . '/includes/core/Helpers/SeriesFormatter.php';
-require_once plugin_dir_path(__FILE__) . '/includes/core/Controller/SeriesController.php';
-require_once plugin_dir_path(__FILE__) . '/includes/core/Service/SeriesService.php';
-require_once plugin_dir_path(__FILE__) . '/includes/core/Service/SeriesDataProvider.php';
+require_once plugin_dir_path(__FILE__) . '/includes/Core/Plugin.php';
 
 // Taxonomy logic
 require_once plugin_dir_path(__FILE__) . '/includes/taxonomy/class-series-taxonomy.php';
@@ -37,8 +33,6 @@ require_once plugin_dir_path(__FILE__) . '/includes/frontend/renderer.php';
 
 // Admin panel
 require_once plugin_dir_path(__FILE__) . '/includes/Admin/Admin.php';
-
-use Service\SeriesService;
 
 /* =====================================================
  *  Admin Initialization
@@ -59,23 +53,15 @@ SM_Series_Admin::init();
  */
 function series_manager_init()
 {
-    // Register taxonomy and its edit screen
+    // Register taxonomy and its edit screens
     SM_Series_Taxonomy::register();
     SM_Series_Taxonomy_Edit::register();
 
     // Initialize frontend block rendering
     SM_Series_Renderer::init();
 
-    // Setup database access
-    global $wpdb;
-
-    // Initialize core architecture
-    $repository = new SeriesRepository($wpdb);
-    $service    = new SeriesService();
-    $formatter  = new SeriesFormatter();
-
-    // Initialize controller (connect everything)
-    new SeriesController($repository, $service, $formatter);
+    // Boot core plugin composition root
+    SM_Series_Plugin::init();
 }
 
 /**
@@ -174,7 +160,7 @@ function series_manager_enqueue_post_editor_assets()
 
     // Restrict to supported post types
     if ($screen && $screen->post_type) {
-        $service   = new SeriesService();
+        $service   = new \Service\SeriesService();
         $supported = $service->getSupportedPostTypes();
 
         if (! in_array($screen->post_type, $supported, true)) {

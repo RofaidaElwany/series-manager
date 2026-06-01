@@ -4,7 +4,8 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/../core/Service/SeriesDataProvider.php';
+require_once __DIR__ . '/../Repositories/SeriesRepository.php';
+require_once __DIR__ . '/../Services/SeriesNavigationService.php';
 
 require_once __DIR__ . '/Layouts/StandardLayout.php';
 require_once __DIR__ . '/Layouts/AccordionLayout.php';
@@ -17,13 +18,10 @@ require_once __DIR__ . '/Variants/LinkGrid.php';
 use Layouts\StandardLayout;
 use Layouts\AccordionLayout;
 
-
 use Variants\MediaList;
 use Variants\LinkList;
 use Variants\MediaGrid;
 use Variants\LinkGrid;
-
-use Service\SeriesDataProvider;
 
 class SM_Series_Renderer
 {
@@ -166,7 +164,11 @@ class SM_Series_Renderer
         }
 
         $preview_series_ids = self::get_preview_series_ids($preview_post_id);
-        $series_data = SeriesDataProvider::getSeriesWithPosts(
+        global $wpdb;
+
+        $repository = new \SeriesRepository($wpdb);
+        $navigation_service = new \Service\SeriesNavigationService($repository);
+        $series_data = $navigation_service->getSeriesWithPosts(
             $post_id,
             $preview_series_ids,
             (bool) $preview_post_id

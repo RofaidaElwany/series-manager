@@ -4,11 +4,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/../core/Service/SeriesService.php';
+require_once __DIR__ . '/../Services/SeriesService.php';
 
 use Admin\Pages\DashboardPage;
 use Admin\Pages\CPTpage;
 use Admin\Pages\Layouts;
+
 class SM_Series_Admin
 {
     public static function init()
@@ -50,6 +51,4 @@ class SM_Series_Admin
             [Layouts::class, 'render']
         );
     }
-
-    
 }
