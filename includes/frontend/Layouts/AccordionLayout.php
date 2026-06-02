@@ -10,7 +10,14 @@ if (! defined('ABSPATH')) {
 
 class AccordionLayout
 {
-    public static function render(array $data, string $variant_class): string
+    /**
+     * Render the accordion layout with optional per-term variant classes.
+     *
+     * @param array $data
+     * @param string|array<int,string> $variant_class String class name or map of term IDs to class names.
+     * @return string
+     */
+    public static function render(array $data, $variant_class): string
     {
         ob_start();
 
@@ -31,17 +38,21 @@ class AccordionLayout
                         <?php
                         echo wp_kses_post(
                             SeriesHeader::render(
-                            $term,
-                            $current_index,
-                            $total_posts
-                        )
+                                $term,
+                                $current_index,
+                                $total_posts
+                            )
                         );
                         ?>
                     </summary>
                     <div class="p-6 pt-2">
                         <?php
+                        $item_variant_class = is_array($variant_class)
+                            ? ($variant_class[$term->term_id] ?? \Variants\LinkList::class)
+                            : $variant_class;
+
                         echo wp_kses_post(
-                            $variant_class::render(
+                            $item_variant_class::render(
                                 $posts,
                                 $current_post_id
                             )
@@ -50,10 +61,10 @@ class AccordionLayout
                     </div>
                 </details>
             <?php endforeach; ?>
-                
+
         </div>
 
-    <?php
+<?php
 
         return ob_get_clean();
     }

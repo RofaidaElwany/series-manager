@@ -12,6 +12,7 @@ class SeriesSettingsService
     {
         return [
             'position' => 'bottom',
+            'layout' => 'list',
         ];
     }
 
@@ -33,10 +34,30 @@ class SeriesSettingsService
         );
     }
 
-    public function updateSettings(
-        int $termId,
-        array $settings
-    ): bool {
+    public function sanitizeSettings(array $settings): array
+    {
+        $sanitized = [];
+
+        foreach ($settings as $key => $value) {
+            if (is_array($value)) {
+                $sanitized[$key] = $this->sanitizeSettings($value);
+                continue;
+            }
+
+            if (is_bool($value) || is_int($value) || is_float($value)) {
+                $sanitized[$key] = $value;
+                continue;
+            }
+
+            $sanitized[$key] = sanitize_text_field((string) $value);
+        }
+
+        return $sanitized;
+    }
+
+    public function updateSettings(int $termId, array $settings): bool
+    {
+        $settings = $this->sanitizeSettings($settings);
         $current = $this->getSettings($termId);
 
         $settings = array_merge(

@@ -15,5 +15,5 @@ export const updateSeriesOrder = (...args) =>
 export const createSeriesTerm = (...args) =>
   getApi().createSeriesTerm(...args);
 
-export const updateSeriesLayoutSettings = (...args) =>
-  getApi().updateSeriesLayoutSettings(...args);
+export const updateSeriesSettings = (...args) =>
+  getApi().updateSeriesSettings(...args);

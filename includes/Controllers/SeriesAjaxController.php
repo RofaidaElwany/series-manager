@@ -11,20 +11,21 @@ class SeriesAjaxController
     private SeriesRepository $repository;
     private \Service\SeriesService $service;
     private SeriesFormatter $formatter;
-    private \Service\SeriesLayoutService $layoutService;
 
-    public function __construct(SeriesRepository $repository, \Service\SeriesService $service, SeriesFormatter $formatter, \Service\SeriesLayoutService $layoutService)
+    private \Service\SeriesSettingsService $settingsService;
+
+    public function __construct(SeriesRepository $repository, \Service\SeriesService $service, SeriesFormatter $formatter, \Service\SeriesSettingsService $settingsService)
     {
         $this->repository = $repository;
         $this->service = $service;
         $this->formatter = $formatter;
-        $this->layoutService = $layoutService;
+        $this->settingsService = $settingsService;
 
         add_action('wp_ajax_sm_get_series_terms', [$this, 'ajaxGetSeriesTerms']);
         add_action('wp_ajax_sm_create_series_term', [$this, 'ajaxCreateSeriesTerm']);
         add_action('wp_ajax_sm_get_series_posts', [$this, 'ajaxGetSeriesPosts']);
         add_action('wp_ajax_sm_update_series_order', [$this, 'ajaxUpdateOrder']);
-        add_action('wp_ajax_sm_update_series_layout_settings', [$this, 'ajaxUpdateSeriesLayoutSettings']);
+        add_action('wp_ajax_sm_update_series_settings', [$this, 'ajaxUpdateSeriesSettings']);
         add_action('wp_ajax_sm_remove_post_from_series', [$this, 'ajaxRemovePostFromSeries']);
     }
 
@@ -42,9 +43,14 @@ class SeriesAjaxController
         $post_type = isset($_POST['post_type']) ? sanitize_key(wp_unslash($_POST['post_type'])) : 'post';
         $terms = $this->repository->getSeriesTermsForPostType($post_type);
 
+        $term_settings = [];
+        foreach ($terms as $term) {
+            $term_settings[$term->term_id] = $this->settingsService->getSettings($term->term_id);
+        }
+
         $formatted_terms = $this->formatter->formatTerms(
             $terms,
-            fn($term_id) => $this->layoutService->getLayoutPosition($term_id)
+            $term_settings
         );
 
         wp_send_json_success($formatted_terms);
@@ -74,7 +80,7 @@ class SeriesAjaxController
         $term = get_term($result['term_id'], 'series');
         $response = $this->formatter->formatTerm(
             $term,
-            fn($term_id) => $this->layoutService->getLayoutPosition($term_id)
+            $this->settingsService->getSettings($term->term_id)
         );
 
         wp_send_json_success($response);
@@ -138,7 +144,7 @@ class SeriesAjaxController
         wp_send_json_success(['message' => 'Order updated successfully']);
     }
 
-    public function ajaxUpdateSeriesLayoutSettings()
+    public function ajaxUpdateSeriesSettings()
     {
         if (! current_user_can('manage_categories')) {
             wp_send_json_error(['message' => 'No permission']);
@@ -150,10 +156,11 @@ class SeriesAjaxController
         }
 
         $term_id = isset($_POST['term_id']) ? absint(wp_unslash($_POST['term_id'])) : 0;
-        $position = isset($_POST['layout_position']) ? sanitize_text_field(wp_unslash($_POST['layout_position'])) : 'bottom';
+        $settings_json = isset($_POST['settings']) ? wp_unslash($_POST['settings']) : '';
+        $settings = json_decode($settings_json, true);
 
-        if (! $term_id || ! in_array($position, ['top', 'bottom'], true)) {
-            wp_send_json_error(['message' => 'Invalid layout settings']);
+        if (! $term_id || ! is_string($settings_json) || ! is_array($settings) || json_last_error() !== JSON_ERROR_NONE) {
+            wp_send_json_error(['message' => 'Invalid settings']);
         }
 
         $term = get_term($term_id, 'series');
@@ -161,14 +168,14 @@ class SeriesAjaxController
             wp_send_json_error(['message' => 'Invalid term']);
         }
 
-        if (! $this->layoutService->saveLayoutPosition($term_id, $position)) {
-            wp_send_json_error(['message' => 'Unable to save layout settings']);
+        if (! $this->settingsService->updateSettings($term_id, $settings)) {
+            wp_send_json_error(['message' => 'Unable to save series settings']);
         }
 
         wp_send_json_success([
-            'message' => 'Layout settings updated successfully',
+            'message' => 'Series settings updated successfully',
             'termId' => $term_id,
-            'layoutPosition' => $position,
+            'settings' => $this->settingsService->getSettings($term_id),
         ]);
     }
 

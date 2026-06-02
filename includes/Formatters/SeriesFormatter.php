@@ -10,19 +10,19 @@ class SeriesFormatter
      * Format series terms for API response.
      *
      * @param array $terms Array of WP_Term objects
-     * @param callable $layoutResolver Callback to resolve layout position: fn($term_id) => string
+     * @param array $termSettings Array of term settings indexed by term ID
      * @return array Formatted terms
      */
-    public function formatTerms(array $terms, callable $layoutResolver): array
+    public function formatTerms(array $terms, array $termSettings): array
     {
-        return array_map(function ($term) use ($layoutResolver) {
+        return array_map(function ($term) use ($termSettings) {
             return [
                 'id' => (int) $term->term_id,
                 'name' => $term->name,
                 'slug' => $term->slug,
                 'taxonomy' => $term->taxonomy,
                 'count' => (int) $term->post_count,
-                'layoutPosition' => $layoutResolver((int) $term->term_id),
+                'settings' => $termSettings[$term->term_id] ?? [],
             ];
         }, $terms);
     }
@@ -49,10 +49,10 @@ class SeriesFormatter
      * Format a single series term for API response.
      *
      * @param object $term WP_Term object
-     * @param callable $layoutResolver Callback to resolve layout position
+     * @param array $termSettings Array of term settings indexed by term ID
      * @return array Formatted term
      */
-    public function formatTerm(object $term, callable $layoutResolver): array
+    public function formatTerm(object $term, array $termSettings): array
     {
         return [
             'id' => $term->term_id,
@@ -60,7 +60,7 @@ class SeriesFormatter
             'slug' => $term->slug,
             'taxonomy' => $term->taxonomy,
             'count' => $term->count ?? 0,
-            'layoutPosition' => $layoutResolver((int) $term->term_id),
+            'settings' => $termSettings[$term->term_id] ?? [],
         ];
     }
 }

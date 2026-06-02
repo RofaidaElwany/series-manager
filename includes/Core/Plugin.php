@@ -25,9 +25,6 @@ class SM_Series_Plugin
         // 2. Settings Service - Dependency for layout service
         $settingsService = new \Service\SeriesSettingsService();
 
-        // 3. Layout Service - Business logic for layout positions
-        $layoutService = new \Service\SeriesLayoutService($settingsService);
-
         // 4. Series Service - Business logic for series operations
         $service = new \Service\SeriesService();
 
@@ -35,7 +32,7 @@ class SM_Series_Plugin
         $formatter = new SeriesFormatter();
 
         // 6. Controller - Thin request handler that delegates to services
-        new SeriesAjaxController($repository, $service, $formatter, $layoutService);
+        new SeriesAjaxController($repository, $service, $formatter, $settingsService);
 
         // Register hooks
         $hook_loader = new HookLoader();
