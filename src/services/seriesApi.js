@@ -1,21 +1,15 @@
-export const createSeriesApi = ({
-  ajaxurl,
-  nonce,
-  fetchFn,
-  wpData,
-}) => {
-
+export const createSeriesApi = ({ ajaxurl, nonce, fetchFn, wpData }) => {
   //fetchSeriesPosts, updateSeriesOrder, createSeriesTerm
   const fetchSeriesPosts = async (termId) => {
     const formData = new URLSearchParams({
-      action: 'sm_get_series_posts',
+      action: "sm_get_series_posts",
       nonce,
       term_id: termId,
     });
 
     const res = await fetchFn(ajaxurl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString(),
     });
 
@@ -24,21 +18,21 @@ export const createSeriesApi = ({
 
   const updateSeriesOrder = async (termId, posts) => {
     const formData = new URLSearchParams({
-      action: 'sm_update_series_order',
+      action: "sm_update_series_order",
       nonce,
       term_id: termId,
-      post_ids: posts.map((p) => p.id).join(','),
+      post_ids: posts.map((p) => p.id).join(","),
     });
 
     const res = await fetchFn(ajaxurl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString(),
     });
 
     const data = await res.json();
     if (!data.success) {
-      throw new Error(data.data?.message || 'Failed to update series order');
+      throw new Error(data.data?.message || "Failed to update series order");
     }
 
     return data.data;
@@ -46,14 +40,14 @@ export const createSeriesApi = ({
 
   const createSeriesTerm = async (name) => {
     const formData = new URLSearchParams({
-      action: 'sm_create_series_term',
+      action: "sm_create_series_term",
       nonce,
       name: name.name || name,
     });
 
     const res = await fetchFn(ajaxurl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString(),
     });
 
@@ -66,26 +60,26 @@ export const createSeriesApi = ({
         taxonomy: data.data.taxonomy,
       };
     }
-    throw new Error(data.data?.message || 'Failed to create series');
+    throw new Error(data.data?.message || "Failed to create series");
   };
 
-  const updateSeriesLayoutSettings = async (termId, layoutPosition) => {
+  const updateSeriesSettings = async (termId, settings) => {
     const formData = new URLSearchParams({
-      action: 'sm_update_series_layout_settings',
+      action: "sm_update_series_settings",
       nonce,
       term_id: termId,
-      layout_position: layoutPosition,
+      settings: JSON.stringify(settings),
     });
 
     const res = await fetchFn(ajaxurl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString(),
     });
 
     const data = await res.json();
     if (!data.success) {
-      throw new Error(data.data?.message || 'Failed to update series layout settings');
+      throw new Error(data.data?.message || "Failed to update series settings");
     }
 
     return data.data;
@@ -95,6 +89,6 @@ export const createSeriesApi = ({
     fetchSeriesPosts,
     updateSeriesOrder,
     createSeriesTerm,
-    updateSeriesLayoutSettings,
+    updateSeriesSettings,
   };
 };

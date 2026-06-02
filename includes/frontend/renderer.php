@@ -6,6 +6,7 @@ if (! defined('ABSPATH')) {
 
 require_once __DIR__ . '/../Repositories/SeriesRepository.php';
 require_once __DIR__ . '/../Services/SeriesNavigationService.php';
+require_once __DIR__ . '/../Services/SeriesSettingsService.php';
 
 require_once __DIR__ . '/Layouts/StandardLayout.php';
 require_once __DIR__ . '/Layouts/AccordionLayout.php';
@@ -45,11 +46,13 @@ class SM_Series_Renderer
     }
 
     /**
-     * Get selected content variant
+     * Get selected content variant for a term.
      */
-    public static function get_variant_class(): string
+    public static function get_variant_class_for_term(object $term): string
     {
-        $variant = get_option('content_variant', 'link-list');
+        $settingsService = new \Service\SeriesSettingsService();
+        $settings = $settingsService->getSettings($term->term_id);
+        $variant = $settings['layout'] ?? get_option('content_variant', 'link-list');
 
         $map = [
             'media-list' => MediaList::class,
@@ -182,11 +185,14 @@ class SM_Series_Renderer
             ? AccordionLayout::class
             : StandardLayout::class;
 
-        $variant_class = self::get_variant_class();
+        $variant_classes = [];
+        foreach ($series_data as $item) {
+            $variant_classes[$item['term']->term_id] = self::get_variant_class_for_term($item['term']);
+        }
 
         return $layout_class::render(
             $series_data,
-            $variant_class
+            $variant_classes
         );
     }
 }

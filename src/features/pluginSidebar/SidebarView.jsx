@@ -1,5 +1,5 @@
 import { PluginSidebar } from "@wordpress/editor";
-import { Notice, PanelBody, RadioControl, Spinner } from "@wordpress/components";
+import { Notice, PanelBody, RadioControl, SelectControl, Spinner } from "@wordpress/components";
 import { __, sprintf } from "@wordpress/i18n";
 
 export function SidebarView({
@@ -8,7 +8,9 @@ export function SidebarView({
   savingTermId,
   error,
   getPosition,
+  getVariant,
   onChangeLayoutPosition,
+  onChangeLayoutVariant,
 }) {
   return (
     <PluginSidebar
@@ -46,6 +48,24 @@ export function SidebarView({
                   onChangeLayoutPosition(series.id, position)
                 }
               />
+
+              <SelectControl
+                label={sprintf(
+                  __("Display variant for %s", "series-manager"),
+                  series.name,
+                )}
+                value={getVariant(series)}
+                options={[
+                  { label: __("Link list", "series-manager"), value: "link-list" },
+                  { label: __("Media list", "series-manager"), value: "media-list" },
+                  { label: __("Link grid", "series-manager"), value: "link-grid" },
+                  { label: __("Media grid", "series-manager"), value: "media-grid" },
+                ]}
+                onChange={(layout) =>
+                  onChangeLayoutVariant(series.id, layout)
+                }
+              />
+
               {savingTermId === series.id && (
                 <span className="sm-series-layout-saving">
                   {__("Saving...", "series-manager")}
