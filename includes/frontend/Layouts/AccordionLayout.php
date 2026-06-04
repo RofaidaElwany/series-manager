@@ -22,7 +22,7 @@ class AccordionLayout
         ob_start();
 
 ?>
-        <div class="max-w-5xl mx-auto px-6 mt-20 space-y-8">
+        <div class="max-w-5xl mx-auto px-6 mt-20 space-y-80" style="padding-bottom:5rem;>
 
             <?php foreach ($data as $item): ?>
                 <?php

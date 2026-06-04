@@ -14,7 +14,7 @@ module.exports = {
     "bg-orange-500",
     "bg-indigo-500",
     "bg-red-500",
-    
+
     "bg-blue-600",
     "bg-purple-600",
     "bg-green-600",
@@ -51,6 +51,7 @@ module.exports = {
     "shadow-[0_20px_60px_rgba(249,115,22,0.3)]",
     "shadow-[0_20px_60px_rgba(99,102,241,0.3)]",
   ],
+  safelist: ["pb-20"],
   theme: {
     extend: {
       colors: {

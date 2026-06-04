@@ -42,7 +42,7 @@ class StandardLayout
 
 ?>
 
-            <div class="max-w-6xl mx-auto px-6 mt-20 space-y-8">
+            <div class="max-w-6xl mx-auto px-6 mt-20 pb-20 mb-20 space-y-8" style="padding-bottom:5rem;">
 
                 <?php
                 echo wp_kses_post(
