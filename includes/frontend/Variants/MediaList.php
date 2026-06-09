@@ -91,7 +91,7 @@ class MediaList
 
                         <div class="flex-1">
 
-                            <h4 class="text-title-md font-medium text-on-surface group-hover:text-primary transition-colors">
+                            <h4 class="text-title-lg font-medium text-on-surface group-hover:text-primary transition-colors">
                                 <?php echo esc_html($p->post_title); ?>
                             </h4>
                             <span class="text-label-md text-on-surface-variant">

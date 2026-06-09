@@ -7,6 +7,12 @@
     "start": "wp-scripts start",
     "test": "wp-scripts test-unit-js"
   },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/node_modules/@wordpress/jest-preset-default/scripts/style-mock.js"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

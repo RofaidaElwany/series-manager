@@ -205,6 +205,8 @@ details summary:focus {
 .sm-series-layout-setting {
   border: 1px solid #dcdcde;
   border-radius: 12px;
+  margin: -6px;
+  padding: 12px;
 }
 .sm-layout-selector__grid {
   display: grid;
@@ -332,27 +334,32 @@ details summary:focus {
 .sm-layout-selector__label {
   color: #111111;
   font-weight: 700;
-  margin-bottom: 9px;
+  margin-bottom: 14px;
   font-size: 12px;
   text-transform: uppercase;
 }
 
 .sm-series-layout-setting .components-toggle-group-control__item {
-  background: #f6f7f7;
-  border-color: #dcdcde;
-  color: #394047;
+  background: #f9fafb;
+  border: 2px solid #d1d5db;
+  color: #374151;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .sm-series-layout-setting
   .components-toggle-group-control__item[aria-pressed="true"],
 .sm-series-layout-setting .components-toggle-group-control__item.is-pressed {
-  background: #eff7ff;
-  border-color: #2271b1;
-  color: #2271b1;
+  background: #dbeafe;
+  border-color: #3b82f6;
+  color: #1e40af;
 }
 
 .sm-series-layout-setting .components-toggle-group-control__item:hover {
-  border-color: #2271b1;
+  border-color: #3b82f6;
+  background: #f0f9ff;
 }
 
 .sm-preview__line {
@@ -371,10 +378,42 @@ details summary:focus {
 .sm-position-toggle::before {
   height: calc(100% - 4px) !important;
   top: 2px !important;
+  border: none !important;
 }
 
 .sm-position-toggle
   .components-toggle-group-control-option-base[aria-checked="true"] {
-  background: #3858e9;
-  color: #fff;
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #1e40af;
+  border-radius: 8px;
+}
+.components-base-control__field .css-6lx9ut {
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+.css-6lx9ut:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.sm-series-tabs .components-tab-panel__tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.sm-series-tabs .components-tab-panel__tabs-item {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.sm-series-tabs .components-tab-panel__tabs-item.is-active {
+  border-bottom: 2px solid #007cba;
+  color: #007cba;
 }

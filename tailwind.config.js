@@ -55,7 +55,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#0062a2",
+        primary: "rgb(0 98 162 / <alpha-value>)",
         "primary-dim": "#00568e",
         "primary-container": "#75b8fd",
         background: "#f9f9fa",
@@ -115,7 +115,6 @@ module.exports = {
         xl: "0.75rem",
         "2xl": "1rem",
         "3xl": "1.5rem",
-        
       },
       boxShadow: {
         soft: "0 10px 40px rgba(15,23,42,0.06)",

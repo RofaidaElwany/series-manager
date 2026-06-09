@@ -1,7 +1,7 @@
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { PanelBody } from '@wordpress/components';
-import { SeriesSelector } from '../SeriesSelector';
-import { SeriesPostsList } from '../SeriesPostsList';
+import { SeriesSelector } from './components/SeriesSelector';
+import { SeriesPostsList } from './components/SeriesPostsList';
 
 const SeriesSidebarView = ({
   selectedSeriesIds=[],

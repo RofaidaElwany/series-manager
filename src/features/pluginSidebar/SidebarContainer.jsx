@@ -37,6 +37,7 @@ export function SidebarContainer() {
    */
   const [layoutPositions, setLayoutPositions] = useState({});
   const [layoutVariants, setLayoutVariants] = useState({});
+  const [layoutStyles, setLayoutStyles] = useState({});
   const [savingTermId, setSavingTermId] = useState(null);
   const [error, setError] = useState("");
 
@@ -105,6 +106,13 @@ export function SidebarContainer() {
 
   const getVariant = (term) =>
     layoutVariants[term.id] || term.settings.layout || "link-list";
+
+  const getStyleSetting = (term, key) => {
+    if (layoutStyles[term.id] && layoutStyles[term.id][key] !== undefined) {
+      return layoutStyles[term.id][key];
+    }
+    return term.settings?.style?.[key] || "";
+  };
 
   /**
    * Determine the final block position.
@@ -291,6 +299,43 @@ export function SidebarContainer() {
     }
   };
 
+  // save changes to style settings
+  const onChangeStyleSetting = async (termId, key, value) => {
+    setError("");
+    
+    setLayoutStyles((current) => {
+      const currentTermStyle = current[termId] || {};
+      return {
+        ...current,
+        [termId]: {
+          ...currentTermStyle,
+          [key]: value,
+        },
+      };
+    });
+
+    setSavingTermId(termId);
+
+    // Get the current term's style settings to merge with the new value
+    const currentTerm = selectedSeries.find(t => t.id === termId);
+    const existingStyle = currentTerm?.settings?.style || {};
+    const updatedStyle = {
+      ...existingStyle,
+      ...(layoutStyles[termId] || {}),
+      [key]: value
+    };
+
+    try {
+      // Update the series settings with the new style
+      await updateSeriesSettings(termId, { style: updatedStyle });
+      refreshSeriesPreview();
+    } catch (err) {
+      setError(err.message || "Failed to update style settings");
+    } finally {
+      setSavingTermId(null);
+    }
+  };
+
   /**
    * Render the sidebar view.
    */
@@ -304,6 +349,8 @@ export function SidebarContainer() {
       getVariant={getVariant}
       onChangeLayoutPosition={onChangeLayoutPosition}
       onChangeLayoutVariant={onChangeLayoutVariant}
+      getStyleSetting={getStyleSetting}
+      onChangeStyleSetting={onChangeStyleSetting}
     />
   );
 }

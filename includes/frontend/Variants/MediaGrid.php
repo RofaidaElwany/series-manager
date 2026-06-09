@@ -40,7 +40,7 @@ class MediaGrid
                             $avatar_img_url = $matches[1];
                         }
                     }
-
+                    $placeholder_img_url = plugins_url('assets/img/placeholder.jpg', dirname(__DIR__, 3) . '/series-manager.php');
                     $part_number = $index + 1;
 
                     $title_plain = trim(wp_strip_all_tags((string) $p->post_title));
@@ -68,25 +68,18 @@ class MediaGrid
                             </div>
                         <?php endif; ?>
                         <!-- IMAGE -->
-                        <div class="aspect-[4/3] overflow-hidden rounded-2xl
-                            <?php echo $is_current ? 'bg-[#e9f1ff]' : 'bg-[#f4ede8]'; ?>">
+                        <div class="aspect-[4/3] overflow-hidden rounded-2xl <?php echo $is_current ? 'bg-[#e9f1ff]' : 'bg-[#f4ede8]'; ?>">
                             <?php if ($avatar_img_url): ?>
                                 <img
                                     src="<?php echo esc_url($avatar_img_url); ?>"
                                     alt="<?php echo esc_attr($p->post_title); ?>"
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <?php else: ?>
-                                <div
-                                    class="w-full h-64 bg-primary/10 rounded-3xl flex items-center justify-center border border-primary/20">
-                                    <svg
-                                        class="w-3 h-36 text-primary"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm11 2a1 1 0 110 2 1 1 0 010-2zM4 15l4-4 3 3 4-5 3 6H4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
+                                <div class="w-full h-full bg-blue-50 rounded-2xl border-2 border-dashed border-blue-300 overflow-hidden">
+                                    <img
+                                        src="<?php echo esc_url($placeholder_img_url); ?>"
+                                        alt="No image available"
+                                        class="w-full h-full object-cover">
                                 </div>
                             <?php endif; ?>
                         </div>

@@ -15,7 +15,7 @@ from '@dnd-kit/sortable';
 import { useState } from '@wordpress/element';
 import { SortableItem  }from './SortableItem';
 import { DragOverlayItem } from './DragOverlayItem';
-import '../../index.css';
+import '../../../index.css';
 
 
 const SeriesPostsList = ({

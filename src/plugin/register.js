@@ -1,6 +1,6 @@
 import domReady from "@wordpress/dom-ready";
 import { registerPlugin } from "@wordpress/plugins";
-import { SeriesSidebarContainer } from "../features/SettingPanel/seriesSidebar/SeriesSidebarContainer";
+import { SeriesSidebarContainer } from "../features/SettingPanel/SeriesSidebarContainer";
 import { SidebarContainer } from "../features/pluginSidebar/SidebarContainer";
 
 const removeDefaultSeriesPanel = () => {

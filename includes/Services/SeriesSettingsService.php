@@ -65,6 +65,13 @@ class SeriesSettingsService
             $settings
         );
 
+        // If the merged settings are identical to current, treat as success
+        // because WordPress' update_term_meta() returns false when no change
+        // was necessary which would otherwise be interpreted as a failure.
+        if ($settings === $current) {
+            return true;
+        }
+
         return (bool) update_term_meta(
             $termId,
             'sm_series_settings',
