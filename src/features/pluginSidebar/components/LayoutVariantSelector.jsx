@@ -43,13 +43,16 @@ export function LayoutVariantSelector({
             className={`sm-layout-card ${
               value === option.value ? "is-selected" : ""
             }`}
+            aria-pressed={value === option.value}
             onClick={() => onChange(option.value)}
           >
             <span className="sm-layout-card__indicator" />
-            <div className="sm-layout-card__title">
-              {option.label}
-            </div>
             <LayoutPreview type={option.value} />
+            <div className="sm-layout-card__content">
+              <div className="sm-layout-card__title">
+                {option.label}
+              </div>
+            </div>
           </button>
         ))}
       </div>

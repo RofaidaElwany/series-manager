@@ -1,5 +1,5 @@
 import { PluginSidebar } from "@wordpress/editor";
-import { Notice, PanelBody, Spinner,TabPanel } from "@wordpress/components";
+import { Notice, PanelBody, Spinner, TabPanel } from "@wordpress/components";
 import { __} from "@wordpress/i18n";
 import { PositionTab } from "./components/tabs/PositionTab";
 import { LayoutTab } from "./components/tabs/LayoutTab";

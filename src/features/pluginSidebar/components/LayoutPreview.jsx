@@ -39,8 +39,11 @@ export function LayoutPreview({ type }) {
               <div className="sm-preview__media-icon">
                 <Icon icon={media} />
               </div>
+              <div className="sm-preview__lines">
+                <div className="sm-preview__line_1" />
+                <div className="sm-preview__line_2" />
+              </div>
 
-              <div className="sm-preview__line" />
             </div>
           ))}
         </div>
@@ -55,7 +58,10 @@ export function LayoutPreview({ type }) {
                 <Icon icon={link} />
               </div>
 
-              <div className="sm-preview__line" />
+              <div className="sm-preview__lines">
+                <div className="sm-preview__line_1" />
+                <div className="sm-preview__line_2" />
+              </div>
             </div>
           ))}
         </div>

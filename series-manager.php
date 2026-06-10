@@ -198,7 +198,7 @@ function series_manager_enqueue_post_editor_assets()
             'sm-series-post-editor',
             plugins_url('build/index.css', __FILE__),
             [],
-            $asset_file['version'] ?? filemtime($css_file_path)
+            filemtime($css_file_path)
         );
     }
 

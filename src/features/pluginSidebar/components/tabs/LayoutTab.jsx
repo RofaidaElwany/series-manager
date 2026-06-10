@@ -6,7 +6,7 @@ export function LayoutTab({ series, getVariant, onChangeLayoutVariant }) {
     <div className="sm-tab-content-layout">
       <LayoutVariantSelector
         label={sprintf(
-          __("Display variant for %s", "series-manager"),
+          __("Display variant for series: [%s]", "series-manager"),
           series.name
         )}
         value={getVariant(series)}
