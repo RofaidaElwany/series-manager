@@ -153,12 +153,12 @@ function series_manager_enqueue_post_editor_assets()
 {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
 
-    // Limit to specific editor screens
+    // Limit to specific editor screens when a screen object is available.
     if ($screen && ! in_array($screen->base, ['post', 'site-editor', 'widgets', 'customize'], true)) {
         return;
     }
 
-    // Restrict to supported post types
+    // Restrict to supported post types only when a screen object is available.
     if ($screen && $screen->post_type) {
         $service   = new \Service\SeriesService();
         $supported = $service->getSupportedPostTypes();
@@ -214,6 +214,20 @@ function series_manager_enqueue_post_editor_assets()
 }
 add_action('enqueue_block_editor_assets', 'series_manager_enqueue_post_editor_assets');
 add_action('enqueue_widgets_block_editor_assets', 'series_manager_enqueue_post_editor_assets');
+
+function series_manager_enqueue_block_styles()
+{
+    $css_file_path = plugin_dir_path(__FILE__) . 'build/index.css';
+    if (file_exists($css_file_path)) {
+        wp_enqueue_style(
+            'sm-series-block-styles',
+            plugins_url('build/index.css', __FILE__),
+            [],
+            filemtime($css_file_path)
+        );
+    }
+}
+add_action('enqueue_block_assets', 'series_manager_enqueue_block_styles');
 
 /* =====================================================
  * GLOBAL BLOCK ASSETS (Frontend + Editor)
