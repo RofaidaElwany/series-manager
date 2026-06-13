@@ -2,16 +2,21 @@
   "apiVersion": 3,
   "name": "series-manager/series-list",
   "title": "Series List",
-  "style": "file:../../index.css",
-  "editorStyle": "file:../../index.css",
   "category": "widgets",
   "supports": {
-    "html": false
+    "html": false,
+    "align": ["wide", "full"]
   },
   "icon": "list-view",
   "description": "Display series based on different modes.",
   "editorScript": "file:../../index.js",
+  "style": "file:../../index.css",
+  "editorStyle": "file:../../index.css",
   "attributes": {
+    "align": {
+      "type": "string",
+      "default": "wide"
+    },
     "mode": {
       "type": "string",
       "default": "all"

@@ -10,6 +10,7 @@ import {
 } from "@wordpress/element";
 import { useSeriesTerms } from "../../hooks/useSeriesTerms";
 import { updateSeriesSettings } from "../../services/seriesApiExports";
+import { normalizeStyleUpdates } from "./components/tabs/styleSettings";
 
 export function SidebarContainer() {
   /**
@@ -37,6 +38,8 @@ export function SidebarContainer() {
    */
   const [layoutPositions, setLayoutPositions] = useState({});
   const [layoutVariants, setLayoutVariants] = useState({});
+  const [layoutStyles, setLayoutStyles] = useState({});
+  const layoutStylesRef = useRef({});
   const [savingTermId, setSavingTermId] = useState(null);
   const [error, setError] = useState("");
 
@@ -106,6 +109,60 @@ export function SidebarContainer() {
   const getVariant = (term) =>
     layoutVariants[term.id] || term.settings.layout || "link-list";
 
+  const getStyleSetting = (term, key) => {
+    if (layoutStyles[term.id] && layoutStyles[term.id][key] !== undefined) {
+      return layoutStyles[term.id][key];
+    }
+
+    if (term.settings?.style?.[key] !== undefined) {
+      return term.settings.style[key];
+    }
+
+    if (key === "padding" || key === "margin" || key === "border") {
+      return undefined;
+    }
+
+    return "";
+  };
+
+  const onChangeStyleSettings = async (termId, updates) => {
+    setError("");
+
+    const cleanedUpdates = normalizeStyleUpdates(updates);
+    const currentTerm = selectedSeries.find((t) => t.id === termId);
+    const existingStyle = currentTerm?.settings?.style || {};
+
+    const updatedStyle = {
+      ...existingStyle,
+      ...(layoutStylesRef.current[termId] || {}),
+      ...cleanedUpdates,
+    };
+
+    Object.entries(cleanedUpdates).forEach(([key, value]) => {
+      if (value === undefined) {
+        delete updatedStyle[key];
+      }
+    });
+
+    layoutStylesRef.current[termId] = updatedStyle;
+
+    setLayoutStyles((current) => ({
+      ...current,
+      [termId]: { ...updatedStyle },
+    }));
+
+    setSavingTermId(termId);
+
+    try {
+      await updateSeriesSettings(termId, { style: updatedStyle });
+      refreshSeriesPreview();
+    } catch (err) {
+      setError(err.message || "Failed to update style settings");
+    } finally {
+      setSavingTermId(null);
+    }
+  };
+
   /**
    * Determine the final block position.
    * If any selected series is set to "top",
@@ -142,7 +199,7 @@ export function SidebarContainer() {
        */
       if (seriesBlockIndex === -1) {
         insertBlocks(
-          createBlock("series-manager/series-list"),
+          createBlock("series-manager/series-list", { align: "wide" }),
           targetIndex,
         );
         return;
@@ -291,6 +348,43 @@ export function SidebarContainer() {
     }
   };
 
+  const onChangeStyleSetting = async (termId, key, value) => {
+    await onChangeStyleSettings(termId, { [key]: value });
+  };
+
+  const onResetStyleSettings = async (termId) => {
+    setError("");
+
+    layoutStylesRef.current[termId] = {
+      titleColor: "",
+      headerBackgroundColor: "",
+      buttonColor: "",
+    };
+
+    setLayoutStyles((current) => ({
+      ...current,
+      [termId]: {
+        titleColor: "",
+        headerBackgroundColor: "",
+        buttonColor: "",
+        padding: undefined,
+        margin: undefined,
+        border: undefined,
+      },
+    }));
+
+    setSavingTermId(termId);
+
+    try {
+      await updateSeriesSettings(termId, { style: {} });
+      refreshSeriesPreview();
+    } catch (err) {
+      setError(err.message || "Failed to reset style settings");
+    } finally {
+      setSavingTermId(null);
+    }
+  };
+
   /**
    * Render the sidebar view.
    */
@@ -304,6 +398,10 @@ export function SidebarContainer() {
       getVariant={getVariant}
       onChangeLayoutPosition={onChangeLayoutPosition}
       onChangeLayoutVariant={onChangeLayoutVariant}
+      getStyleSetting={getStyleSetting}
+      onChangeStyleSetting={onChangeStyleSetting}
+      onChangeStyleSettings={onChangeStyleSettings}
+      onResetStyleSettings={onResetStyleSettings}
     />
   );
 }

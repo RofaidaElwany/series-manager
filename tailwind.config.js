@@ -14,7 +14,7 @@ module.exports = {
     "bg-orange-500",
     "bg-indigo-500",
     "bg-red-500",
-    
+
     "bg-blue-600",
     "bg-purple-600",
     "bg-green-600",
@@ -51,10 +51,11 @@ module.exports = {
     "shadow-[0_20px_60px_rgba(249,115,22,0.3)]",
     "shadow-[0_20px_60px_rgba(99,102,241,0.3)]",
   ],
+  safelist: ["pb-20"],
   theme: {
     extend: {
       colors: {
-        primary: "#0062a2",
+        primary: "rgb(0 98 162 / <alpha-value>)",
         "primary-dim": "#00568e",
         "primary-container": "#75b8fd",
         background: "#f9f9fa",
@@ -112,6 +113,8 @@ module.exports = {
       borderRadius: {
         lg: "0.5rem",
         xl: "0.75rem",
+        "2xl": "1rem",
+        "3xl": "1.5rem",
       },
       boxShadow: {
         soft: "0 10px 40px rgba(15,23,42,0.06)",

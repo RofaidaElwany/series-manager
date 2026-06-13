@@ -1,7 +1,10 @@
 import { PluginSidebar } from "@wordpress/editor";
-import { Notice, PanelBody, RadioControl, SelectControl, Spinner } from "@wordpress/components";
-import { __, sprintf } from "@wordpress/i18n";
-
+import { Notice, PanelBody, Spinner, TabPanel } from "@wordpress/components";
+import { __} from "@wordpress/i18n";
+import { PositionTab } from "./components/tabs/PositionTab";
+import { LayoutTab } from "./components/tabs/LayoutTab";
+import { StyleTab } from "./components/tabs/StyleTab";
+import "../../index.css";
 export function SidebarView({
   selectedSeries,
   isLoading,
@@ -9,8 +12,12 @@ export function SidebarView({
   error,
   getPosition,
   getVariant,
+  getStyleSetting,
   onChangeLayoutPosition,
   onChangeLayoutVariant,
+  onChangeStyleSetting,
+  onChangeStyleSettings,
+  onResetStyleSettings,
 }) {
   return (
     <PluginSidebar
@@ -18,7 +25,7 @@ export function SidebarView({
       title={__("Series Settings", "series-manager")}
       icon="admin-generic"
     >
-      <PanelBody title={__("Layout Position", "series-manager")} initialOpen={true}>
+      <PanelBody title={__("Series Settings", "series-manager")} initialOpen={true}>
         {isLoading && <Spinner />}
 
         {!isLoading && selectedSeries.length === 0 && (
@@ -33,45 +40,75 @@ export function SidebarView({
 
         {!isLoading &&
           selectedSeries.map((series) => (
-            <div className="sm-series-layout-setting" key={series.id}>
-              <RadioControl
-                label={sprintf(
-                  __("Display position for %s", "series-manager"),
-                  series.name,
-                )}
-                selected={getPosition(series)}
-                options={[
-                  { label: __("Top of post", "series-manager"), value: "top" },
-                  { label: __("Bottom of post", "series-manager"), value: "bottom" },
+            <div className="sm-series-layout-setting shadow-xl mb-6 p-3 border rounded" key={series.id}>
+              <h4 className="sm-series-title font-bold mb-3">{series.name}</h4>
+                <TabPanel
+                className="sm-series-tabs"
+                activeClass="is-active"
+                tabs={[
+                  {
+                    name: "position",
+                    title: __("Position", "series-manager"),
+                    className: "sm-tab-position",
+                  },
+                  {
+                    name: "layout",
+                    title: __("Layout", "series-manager"),
+                    className: "sm-tab-layout",
+                  },
+                  {
+                    name: "style",
+                    title: __("Style", "series-manager"),
+                    className: "sm-tab-style",
+                  },
                 ]}
-                onChange={(position) =>
-                  onChangeLayoutPosition(series.id, position)
-                }
-              />
-
-              <SelectControl
-                label={sprintf(
-                  __("Display variant for %s", "series-manager"),
-                  series.name,
-                )}
-                value={getVariant(series)}
-                options={[
-                  { label: __("Link list", "series-manager"), value: "link-list" },
-                  { label: __("Media list", "series-manager"), value: "media-list" },
-                  { label: __("Link grid", "series-manager"), value: "link-grid" },
-                  { label: __("Media grid", "series-manager"), value: "media-grid" },
-                ]}
-                onChange={(layout) =>
-                  onChangeLayoutVariant(series.id, layout)
-                }
-              />
-
+              >
+                {(tab) => {
+                  if (tab.name === "position") {
+                    return (
+                      <PositionTab
+                        series={series}
+                        getPosition={getPosition}
+                        onChangeLayoutPosition={onChangeLayoutPosition}
+                      />
+                    );
+                  }
+                  if (tab.name === "layout") {
+                    return (
+                      <LayoutTab
+                        series={series}
+                        getVariant={getVariant}
+                        onChangeLayoutVariant={onChangeLayoutVariant}
+                      />
+                    );
+                  }
+                  if (tab.name === "style") {
+                    return (
+                      <StyleTab
+                        series={series}
+                        savingTermId={savingTermId}
+                        getStyleSetting={getStyleSetting}
+                        onChangeStyleSetting={onChangeStyleSetting}
+                        onChangeStyleSettings={onChangeStyleSettings}
+                        onResetStyleSettings={onResetStyleSettings}
+                      />
+                    );
+                  }
+                  return null;
+                }}
+              </TabPanel>
               {savingTermId === series.id && (
-                <span className="sm-series-layout-saving">
-                  {__("Saving...", "series-manager")}
-                </span>
+                <div className="sm-series-layout-saving mt-2 text-sm text-gray-500">
+                  <Spinner /> {__("Saving...", "series-manager")}
+                </div>
               )}
             </div>
+
+              // {savingTermId === series.id && (
+              //   <span className="sm-series-layout-saving">
+              //     {__("Saving...", "series-manager")}
+              //   </span>
+              // )}
           ))}
       </PanelBody>
     </PluginSidebar>
