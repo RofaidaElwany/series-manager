@@ -4,9 +4,11 @@ namespace Layouts;
 
 require_once __DIR__ . '/../Components/SeriesHeader.php';
 require_once __DIR__ . '/../Components/SeriesNavigation.php';
+require_once __DIR__ . '/../Helpers/SeriesStyleHelper.php';
 
 use Components\SeriesHeader;
 use Components\SeriesNavigation;
+use Helpers\SeriesStyleHelper;
 
 
 if (! defined('ABSPATH')) {
@@ -39,35 +41,39 @@ class StandardLayout
             $item_variant_class = is_array($variant_class)
                 ? ($variant_class[$term->term_id] ?? \Variants\LinkList::class)
                 : $variant_class;
+            $style = SeriesStyleHelper::getForTerm((int) $term->term_id);
 
 ?>
 
-            <div class="max-w-6xl mx-auto px-6 mt-20 pb-20 mb-20 space-y-8" style="padding-bottom:5rem;">
+            <div class="sm-series-layout space-y-8"<?php echo SeriesStyleHelper::layoutContainerStyle($style); ?>>
 
                 <?php
-                echo wp_kses_post(
+                echo SeriesStyleHelper::ksesWithStyles(
                     SeriesHeader::render(
                         $term,
                         $current_index,
-                        $total_posts
+                        $total_posts,
+                        $style
                     )
                 );
                 ?>
 
                 <?php
-                echo wp_kses_post(
+                echo SeriesStyleHelper::ksesWithStyles(
                     $item_variant_class::render(
                         $posts,
-                        $current_post_id
+                        $current_post_id,
+                        $style
                     )
                 );
                 ?>
 
                 <?php
-                echo wp_kses_post(
+                echo SeriesStyleHelper::ksesWithStyles(
                     SeriesNavigation::render(
                         $prev_post,
-                        $next_post
+                        $next_post,
+                        $style
                     )
                 );
                 ?>

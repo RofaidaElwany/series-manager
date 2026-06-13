@@ -201,6 +201,74 @@ details summary:focus {
   background: transparent;
 }
 
+/* Series layout width — shared between editor preview and frontend view */
+:root {
+  --sm-series-layout-max-width: var(--wp--style--global--wide-size, 72rem);
+}
+
+.wp-block-series-manager-series-list.alignwide,
+.wp-block-series-manager-series-list.alignfull,
+.wp-block-series-manager-series-list.sm-series-editor-root,
+.entry-content .wp-block-series-manager-series-list,
+.wp-block-post-content .wp-block-series-manager-series-list,
+.editor-styles-wrapper .wp-block-series-manager-series-list,
+.is-root-container .wp-block-series-manager-series-list,
+.block-editor-block-list__layout .wp-block-series-manager-series-list {
+  box-sizing: border-box;
+  width: min(var(--sm-series-layout-max-width), 100%);
+  max-width: min(var(--sm-series-layout-max-width), 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wp-block-series-manager-series-list.alignfull {
+  width: 100%;
+  max-width: 100%;
+}
+
+.wp-block-series-manager-series-list.alignfull .sm-series-layout,
+.wp-block-series-manager-series-list.alignfull .sm-series-accordion {
+  width: min(var(--sm-series-layout-max-width), 100%);
+  max-width: min(var(--sm-series-layout-max-width), 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Nested SSR wrapper inside the editor block root */
+.wp-block-series-manager-series-list .wp-block-series-manager-series-list,
+.sm-series-editor-root .wp-block-series-manager-series-list {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.sm-series-block {
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 70%;
+  box-sizing: border-box;
+}
+
+.sm-series-layout,
+.sm-series-accordion {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.sm-series-layout-item {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sm-series-variant {
+  width: 100%;
+}
+
 /* plugin sidebar layout variant styles */
 .sm-series-layout-setting {
   border: 1px solid #dcdcde;
@@ -444,6 +512,22 @@ details summary:focus {
 .sm-series-tabs .components-tab-panel__tabs-item.is-active {
   border-bottom: 2px solid #007cba;
   color: #007cba;
+}
+
+.sm-style-reset-button {
+  color: white !important;
+  margin-left: 18px;
+  margin-top: 12px;
+  width: 60%;
+  justify-content: center;
+  background-color: #007cba !important;
+  border: 2px solid;
+  border-radius: 9px;
+}
+
+.sm-series-dimensions-panel,
+.sm-series-border-panel {
+  margin-top: 16px;
 }
 
 .css-1abtnze {

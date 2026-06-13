@@ -229,6 +229,21 @@ function series_manager_enqueue_block_styles()
 }
 add_action('enqueue_block_assets', 'series_manager_enqueue_block_styles');
 
+/**
+ * Shared layout width fallback when the theme does not expose global wide size.
+ */
+function series_manager_enqueue_layout_width_fallback()
+{
+    $css = ':root{--sm-series-layout-max-width:var(--wp--style--global--wide-size,72rem);}';
+
+    wp_add_inline_style('sm-series-block-styles', $css);
+    wp_add_inline_style('sm-series-frontend', $css);
+    wp_add_inline_style('sm-series-post-editor', $css);
+}
+add_action('enqueue_block_assets', 'series_manager_enqueue_layout_width_fallback', 20);
+add_action('wp_enqueue_scripts', 'series_manager_enqueue_layout_width_fallback', 20);
+add_action('enqueue_block_editor_assets', 'series_manager_enqueue_layout_width_fallback', 20);
+
 /* =====================================================
  * GLOBAL BLOCK ASSETS (Frontend + Editor)
  * ===================================================== */

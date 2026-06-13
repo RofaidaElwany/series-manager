@@ -43,6 +43,32 @@ class SM_Series_Renderer
                 'render_callback' => [self::class, 'render_series'],
             ]);
         }
+
+        add_filter('render_block', [self::class, 'ensure_block_alignment_class'], 10, 2);
+    }
+
+    /**
+     * Ensure published blocks use the same wide alignment as the editor preview.
+     */
+    public static function ensure_block_alignment_class(string $content, array $block): string
+    {
+        if (($block['blockName'] ?? '') !== 'series-manager/series-list' || $content === '') {
+            return $content;
+        }
+
+        if (
+            str_contains($content, 'alignwide') ||
+            str_contains($content, 'alignfull')
+        ) {
+            return $content;
+        }
+
+        return (string) preg_replace(
+            '/class="([^"]*wp-block-series-manager-series-list[^"]*)"/',
+            'class="$1 alignwide"',
+            $content,
+            1
+        );
     }
 
     /**
@@ -190,9 +216,12 @@ class SM_Series_Renderer
             $variant_classes[$item['term']->term_id] = self::get_variant_class_for_term($item['term']);
         }
 
-        return $layout_class::render(
-            $series_data,
-            $variant_classes
+        return sprintf(
+            '<div class="sm-series-block">%s</div>',
+            $layout_class::render(
+                $series_data,
+                $variant_classes
+            )
         );
     }
 }

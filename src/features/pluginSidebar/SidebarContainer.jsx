@@ -10,6 +10,7 @@ import {
 } from "@wordpress/element";
 import { useSeriesTerms } from "../../hooks/useSeriesTerms";
 import { updateSeriesSettings } from "../../services/seriesApiExports";
+import { normalizeStyleUpdates } from "./components/tabs/styleSettings";
 
 export function SidebarContainer() {
   /**
@@ -38,6 +39,7 @@ export function SidebarContainer() {
   const [layoutPositions, setLayoutPositions] = useState({});
   const [layoutVariants, setLayoutVariants] = useState({});
   const [layoutStyles, setLayoutStyles] = useState({});
+  const layoutStylesRef = useRef({});
   const [savingTermId, setSavingTermId] = useState(null);
   const [error, setError] = useState("");
 
@@ -111,7 +113,54 @@ export function SidebarContainer() {
     if (layoutStyles[term.id] && layoutStyles[term.id][key] !== undefined) {
       return layoutStyles[term.id][key];
     }
-    return term.settings?.style?.[key] || "";
+
+    if (term.settings?.style?.[key] !== undefined) {
+      return term.settings.style[key];
+    }
+
+    if (key === "padding" || key === "margin" || key === "border") {
+      return undefined;
+    }
+
+    return "";
+  };
+
+  const onChangeStyleSettings = async (termId, updates) => {
+    setError("");
+
+    const cleanedUpdates = normalizeStyleUpdates(updates);
+    const currentTerm = selectedSeries.find((t) => t.id === termId);
+    const existingStyle = currentTerm?.settings?.style || {};
+
+    const updatedStyle = {
+      ...existingStyle,
+      ...(layoutStylesRef.current[termId] || {}),
+      ...cleanedUpdates,
+    };
+
+    Object.entries(cleanedUpdates).forEach(([key, value]) => {
+      if (value === undefined) {
+        delete updatedStyle[key];
+      }
+    });
+
+    layoutStylesRef.current[termId] = updatedStyle;
+
+    setLayoutStyles((current) => ({
+      ...current,
+      [termId]: { ...updatedStyle },
+    }));
+
+    setSavingTermId(termId);
+
+    try {
+      await updateSeriesSettings(termId, { style: updatedStyle });
+      refreshSeriesPreview();
+    } catch (err) {
+      setError(err.message || "Failed to update style settings");
+    } finally {
+      setSavingTermId(null);
+    }
   };
 
   /**
@@ -150,7 +199,7 @@ export function SidebarContainer() {
        */
       if (seriesBlockIndex === -1) {
         insertBlocks(
-          createBlock("series-manager/series-list"),
+          createBlock("series-manager/series-list", { align: "wide" }),
           targetIndex,
         );
         return;
@@ -299,38 +348,38 @@ export function SidebarContainer() {
     }
   };
 
-  // save changes to style settings
   const onChangeStyleSetting = async (termId, key, value) => {
+    await onChangeStyleSettings(termId, { [key]: value });
+  };
+
+  const onResetStyleSettings = async (termId) => {
     setError("");
-    
-    setLayoutStyles((current) => {
-      const currentTermStyle = current[termId] || {};
-      return {
-        ...current,
-        [termId]: {
-          ...currentTermStyle,
-          [key]: value,
-        },
-      };
-    });
+
+    layoutStylesRef.current[termId] = {
+      titleColor: "",
+      headerBackgroundColor: "",
+      buttonColor: "",
+    };
+
+    setLayoutStyles((current) => ({
+      ...current,
+      [termId]: {
+        titleColor: "",
+        headerBackgroundColor: "",
+        buttonColor: "",
+        padding: undefined,
+        margin: undefined,
+        border: undefined,
+      },
+    }));
 
     setSavingTermId(termId);
 
-    // Get the current term's style settings to merge with the new value
-    const currentTerm = selectedSeries.find(t => t.id === termId);
-    const existingStyle = currentTerm?.settings?.style || {};
-    const updatedStyle = {
-      ...existingStyle,
-      ...(layoutStyles[termId] || {}),
-      [key]: value
-    };
-
     try {
-      // Update the series settings with the new style
-      await updateSeriesSettings(termId, { style: updatedStyle });
+      await updateSeriesSettings(termId, { style: {} });
       refreshSeriesPreview();
     } catch (err) {
-      setError(err.message || "Failed to update style settings");
+      setError(err.message || "Failed to reset style settings");
     } finally {
       setSavingTermId(null);
     }
@@ -351,6 +400,8 @@ export function SidebarContainer() {
       onChangeLayoutVariant={onChangeLayoutVariant}
       getStyleSetting={getStyleSetting}
       onChangeStyleSetting={onChangeStyleSetting}
+      onChangeStyleSettings={onChangeStyleSettings}
+      onResetStyleSettings={onResetStyleSettings}
     />
   );
 }

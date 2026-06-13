@@ -1,5 +1,5 @@
 import ServerSideRender from "@wordpress/server-side-render";
-import { InspectorControls } from "@wordpress/block-editor";
+import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import { PanelBody, RangeControl } from "@wordpress/components";
 import { useSelect } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
@@ -26,6 +26,9 @@ const normalizeSeriesId = (value) => {
 const Edit = ({ attributes, setAttributes }) => {
   const { mode, limit, userId } = attributes;
   const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
+  const blockProps = useBlockProps({
+    className: "sm-series-editor-root",
+  });
 
   const { postId, selectedSeriesIds } = useSelect((select) => {
     const editor = select("core/editor");
@@ -36,6 +39,12 @@ const Edit = ({ attributes, setAttributes }) => {
       selectedSeriesIds: currentSeries.map(normalizeSeriesId).filter(Boolean),
     };
   }, []);
+
+  useEffect(() => {
+    if (!attributes.align) {
+      setAttributes({ align: "wide" });
+    }
+  }, [attributes.align, setAttributes]);
 
   useEffect(() => {
     const refreshPreview = () => {
@@ -122,15 +131,20 @@ const Edit = ({ attributes, setAttributes }) => {
           />
         </PanelBody>
       </InspectorControls>
-      <ServerSideRender
-        block="series-manager/series-list"
-        attributes={attributes}
-        urlQueryArgs={{
-          post_id: postId,
-          series_ids: selectedSeriesIds.join(","),
-          preview_key: previewRefreshKey,
-        }}
-      />
+      <div {...blockProps}>
+        <ServerSideRender
+          block="series-manager/series-list"
+          attributes={attributes}
+          urlQueryArgs={{
+            post_id: postId,
+            series_ids: selectedSeriesIds.join(","),
+            preview_key: previewRefreshKey,
+          }}
+          EmptyResponsePlaceholder={() => (
+            <p>{__("Select a series for this post to preview the layout.", "series-manager")}</p>
+          )}
+        />
+      </div>
     </>
   );
 };

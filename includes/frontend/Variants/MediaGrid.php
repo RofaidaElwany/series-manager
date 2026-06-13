@@ -2,6 +2,8 @@
 
 namespace Variants;
 
+use Helpers\SeriesStyleHelper;
+
 if (! defined('ABSPATH')) {
     exit;
 }
@@ -11,14 +13,15 @@ class MediaGrid
     /**
      * @param array<int, \WP_Post|object> $posts
      * @param int $current_post_id
+     * @param array<string, string> $style
      * @return string
      */
-    public static function render($posts, $current_post_id)
+    public static function render($posts, $current_post_id, array $style = [])
     {
         ob_start();
 ?>
         <!-- SECTION -->
-        <section class="max-w-7xl mx-auto px-6 bg-background font-body">
+        <section class="sm-series-variant w-full bg-background font-body">
 
             <!-- GRID -->
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
@@ -49,6 +52,25 @@ class MediaGrid
                             ? mb_strtoupper(mb_substr($title_plain, 0, 1, 'UTF-8'), 'UTF-8')
                             : strtoupper(substr($title_plain, 0, 1)))
                         : '?';
+
+                    $currentCardStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'background-color' => $style['headerBackgroundColor'] ?? null,
+                            'border-color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
+
+                    $currentBadgeStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'background-color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
+
+                    $currentAccentStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
                     ?>
 
                     <!-- CARD -->
@@ -57,12 +79,12 @@ class MediaGrid
                         class="group relative overflow-hidden p-5 rounded-2xl border-2 
                         <?php echo $is_current
                             ? 'bg-[#f3f7ff]  border-primary shadow-[0_10px_50px_rgba(0,98,162,0.12)] hover:shadow-[0_20px_70px_rgba(0,98,162,0.18)]'
-                            : 'bg-white border-gray-200 hover:shadow-[0_20px_60px_rgba(15,23,42,0.10)]'; ?>">
+                            : 'bg-white border-gray-200 hover:shadow-[0_20px_60px_rgba(15,23,42,0.10)]'; ?>"<?php echo $currentCardStyle; ?>>
 
                         <!-- BADGE (ACTIVE ONLY) -->
                         <?php if ($is_current): ?>
                             <div class="absolute top-5 right-5 z-20">
-                                <div class="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md">
+                                <div class="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md"<?php echo $currentBadgeStyle; ?>>
                                     Reading Now
                                 </div>
                             </div>
@@ -85,7 +107,7 @@ class MediaGrid
                         </div>
                         <!-- CONTENT -->
                         <div class="p-7">
-                            <div class="text-primary text-[15px] font-semibold mb-3">
+                            <div class="text-primary text-[15px] font-semibold mb-3"<?php echo $currentAccentStyle; ?>>
                                 Part <?php echo intval($part_number); ?>
                             </div>
                             <h3 class="text-[2rem] leading-tight font-display font-semibold text-on-surface tracking-[-0.03em]">

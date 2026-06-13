@@ -2,6 +2,8 @@
 
 namespace Variants;
 
+use Helpers\SeriesStyleHelper;
+
 if (! defined('ABSPATH')) {
     exit;
 }
@@ -11,10 +13,25 @@ class MediaList
     /**
      * @param array<int, \WP_Post|object> $posts
      * @param int $current_post_id
+     * @param array<string, string> $style
      * @return string
      */
-    public static function render($posts, $current_post_id)
+    public static function render($posts, $current_post_id, array $style = [])
     {
+        $selectedRowStyle = SeriesStyleHelper::inlineStyle([
+            'background-color' => $style['headerBackgroundColor'] ?? null,
+            'border-left-color' => $style['buttonColor'] ?? null,
+        ]);
+
+        $accentStyle = SeriesStyleHelper::inlineStyle([
+            'color' => $style['buttonColor'] ?? null,
+        ]);
+
+        $accentBgStyle = SeriesStyleHelper::inlineStyle([
+            'background-color' => SeriesStyleHelper::withOpacity($style['buttonColor'] ?? null, 0.2),
+            'color' => $style['buttonColor'] ?? null,
+        ]);
+
         ob_start();
 ?>
         <!-- Posts List -->
@@ -47,7 +64,7 @@ class MediaList
                 ?>
 
                 <?php if ($is_current): ?>
-                    <div class="flex items-center gap-4 p-2 rounded-xl bg-primary/10 border-l-4 border-primary shadow-sm">
+                    <div class="flex items-center gap-4 p-2 rounded-xl bg-primary/10 border-l-4 border-primary shadow-sm"<?php echo $selectedRowStyle; ?>>
 
                         <?php if ($avatar_img_url): ?>
                             <img
@@ -55,21 +72,21 @@ class MediaList
                                 alt="<?php echo esc_attr($p->post_title); ?>"
                                 class="w-20 h-20 rounded-xl object-cover ring-2 ring-primary/20">
                         <?php else: ?>
-                            <div class="w-20 h-20 rounded-xl bg-primary/20 flex items-center justify-center text-primary text-title-lg font-bold">
+                            <div class="w-20 h-20 rounded-xl bg-primary/20 flex items-center justify-center text-primary text-title-lg font-bold"<?php echo $accentBgStyle; ?>>
                                 <?php echo esc_html($initial); ?>
                             </div>
                         <?php endif; ?>
 
                         <div class="flex-1">
-                            <h4 class="text-title-md font-semibold text-primary-dim">
+                            <h4 class="text-title-md font-semibold text-primary-dim"<?php echo $accentStyle; ?>>
                                 <?php echo esc_html($p->post_title); ?>
                             </h4>
-                            <span class="text-label-md text-primary font-semibold">
+                            <span class="text-label-md text-primary font-semibold"<?php echo $accentStyle; ?>>
                                 Part <?php echo intval(array_search($p, $posts) + 1); ?> • Reading Now
                             </span>
                         </div>
 
-                        <span class="material-symbols-outlined text-primary text-3xl">
+                        <span class="material-symbols-outlined text-primary text-3xl"<?php echo $accentStyle; ?>>
                             check_circle
                         </span>
                     </div>

@@ -2,6 +2,8 @@
 
 namespace Variants;
 
+use Helpers\SeriesStyleHelper;
+
 if (! defined('ABSPATH')) {
     exit;
 }
@@ -11,9 +13,10 @@ class LinkGrid
     /**
      * @param array<int, \WP_Post|object> $posts
      * @param int $current_post_id
+     * @param array<string, string> $style
      * @return string
      */
-    public static function render($posts, $current_post_id)
+    public static function render($posts, $current_post_id, array $style = [])
     {
         ob_start();
 
@@ -69,7 +72,7 @@ class LinkGrid
 ?>
 
         <!-- SECTION -->
-        <section class="max-w-7xl mx-auto font-body">
+        <section class="sm-series-variant w-full font-body">
 
             <!-- GRID -->
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
@@ -85,6 +88,38 @@ class LinkGrid
                     $classes = $color_classes[$index % count($color_classes)];
 
                     $part_number = $index + 1;
+
+                    $currentCardStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'background-color' => $style['headerBackgroundColor'] ?? null,
+                            'border-color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
+
+                    $currentBadgeStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'background-color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
+
+                    $currentAccentStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
+
+                    $currentIconBgStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'background-color' => SeriesStyleHelper::withOpacity($style['buttonColor'] ?? null, 0.15),
+                            'color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
+
+                    $currentGlowStyle = $is_current
+                        ? SeriesStyleHelper::inlineStyle([
+                            'background-color' => $style['buttonColor'] ?? null,
+                        ])
+                        : '';
                     ?>
 
                     <!-- CARD -->
@@ -95,14 +130,14 @@ class LinkGrid
                             <?php echo esc_attr(  $is_current
                                 ? "{$classes['bg']} {$classes['border']} {$classes['shadow']}"
                                 : "bg-white border-gray-200 hover:shadow-xl" ); ?>
-                        ">
+                        "<?php echo $currentCardStyle; ?>>
 
                         <!-- ACTIVE BADGE -->
                         <?php if ($is_current): ?>
 
                             <div class="absolute top-5 right-5 z-20">
 
-                                <div class="inline-flex items-center px-4 py-2 rounded-full <?php echo esc_attr($classes['badge_bg']); ?> text-white text-sm font-semibold shadow-md">
+                                <div class="inline-flex items-center px-4 py-2 rounded-full <?php echo esc_attr($classes['badge_bg']); ?> text-white text-sm font-semibold shadow-md"<?php echo $currentBadgeStyle; ?>>
 
                                     Reading Now
 
@@ -126,8 +161,8 @@ class LinkGrid
                                         items-center
                                         justify-center
                                         <?php echo esc_attr($classes['icon_bg']); ?>
-                                    ">
-                                    <span class="material-symbols-outlined  text-[32px] p-1 w-10 h-10 <?php echo esc_attr($classes['text']); ?>">link</span>
+                                    "<?php echo $currentIconBgStyle; ?>>
+                                    <span class="material-symbols-outlined  text-[32px] p-1 w-10 h-10 <?php echo esc_attr($classes['text']); ?>"<?php echo $currentAccentStyle; ?>>link</span>
                                 </div>
                                 <!-- PART -->
                                 <div
@@ -140,7 +175,7 @@ class LinkGrid
                                         <?php echo esc_attr(  $is_current
                                             ? $classes['text']
                                             : 'text-slate-500'); ?>
-                                    ">
+                                    "<?php echo $currentAccentStyle; ?>>
                                     Part <?php echo intval($part_number); ?>
                                 </div>
                             </div>
@@ -165,7 +200,7 @@ class LinkGrid
                                 h-[5px]
                                 opacity-80
                                 <?php echo esc_attr($classes['glow']); ?>
-                            ">
+                            "<?php echo $currentGlowStyle; ?>>
                         </div>
 
                     </a>

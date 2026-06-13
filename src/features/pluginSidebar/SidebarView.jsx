@@ -16,6 +16,8 @@ export function SidebarView({
   onChangeLayoutPosition,
   onChangeLayoutVariant,
   onChangeStyleSetting,
+  onChangeStyleSettings,
+  onResetStyleSettings,
 }) {
   return (
     <PluginSidebar
@@ -84,8 +86,11 @@ export function SidebarView({
                     return (
                       <StyleTab
                         series={series}
+                        savingTermId={savingTermId}
                         getStyleSetting={getStyleSetting}
                         onChangeStyleSetting={onChangeStyleSetting}
+                        onChangeStyleSettings={onChangeStyleSettings}
+                        onResetStyleSettings={onResetStyleSettings}
                       />
                     );
                   }

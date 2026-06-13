@@ -4,12 +4,19 @@
   "title": "Series List",
   "category": "widgets",
   "supports": {
-    "html": false
+    "html": false,
+    "align": ["wide", "full"]
   },
   "icon": "list-view",
   "description": "Display series based on different modes.",
   "editorScript": "file:../../index.js",
+  "style": "file:../../index.css",
+  "editorStyle": "file:../../index.css",
   "attributes": {
+    "align": {
+      "type": "string",
+      "default": "wide"
+    },
     "mode": {
       "type": "string",
       "default": "all"
