@@ -82,7 +82,7 @@ class LinkGrid
                     <?php
                     $is_current = ($p->ID == $current_post_id);
 
-                    $link_url = get_permalink($p);
+                    $link_url = get_permalink((int) $p->ID);
 
                     // 🎨 Rotate Colors
                     $classes = $color_classes[$index % count($color_classes)];

@@ -30,7 +30,7 @@ class MediaGrid
                     <?php
                     $is_current = ($p->ID == $current_post_id);
 
-                    $link_url = get_permalink($p);
+                    $link_url = get_permalink((int) $p->ID);
 
                     $avatar_img_url = '';
 
@@ -43,7 +43,7 @@ class MediaGrid
                             $avatar_img_url = $matches[1];
                         }
                     }
-                    $placeholder_img_url = plugins_url('assets/img/placeholder.jpg', dirname(__DIR__, 3) . '/series-manager.php');
+                    $placeholder_img_url = plugins_url('assets\img\1.jpg', dirname(__DIR__, 3) . '/series-manager.php');
                     $part_number = $index + 1;
 
                     $title_plain = trim(wp_strip_all_tags((string) $p->post_title));
@@ -79,12 +79,12 @@ class MediaGrid
                         class="group relative overflow-hidden p-5 rounded-2xl border-2 
                         <?php echo $is_current
                             ? 'bg-[#f3f7ff]  border-primary shadow-[0_10px_50px_rgba(0,98,162,0.12)] hover:shadow-[0_20px_70px_rgba(0,98,162,0.18)]'
-                            : 'bg-white border-gray-200 hover:shadow-[0_20px_60px_rgba(15,23,42,0.10)]'; ?>"<?php echo $currentCardStyle; ?>>
+                            : 'bg-white border-gray-200 hover:shadow-[0_20px_60px_rgba(15,23,42,0.10)]'; ?>" <?php echo $currentCardStyle; ?>>
 
                         <!-- BADGE (ACTIVE ONLY) -->
                         <?php if ($is_current): ?>
                             <div class="absolute top-5 right-5 z-20">
-                                <div class="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md"<?php echo $currentBadgeStyle; ?>>
+                                <div class="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md" <?php echo $currentBadgeStyle; ?>>
                                     Reading Now
                                 </div>
                             </div>
@@ -107,7 +107,7 @@ class MediaGrid
                         </div>
                         <!-- CONTENT -->
                         <div class="p-7">
-                            <div class="text-primary text-[15px] font-semibold mb-3"<?php echo $currentAccentStyle; ?>>
+                            <div class="text-primary text-[15px] font-semibold mb-3" <?php echo $currentAccentStyle; ?>>
                                 Part <?php echo intval($part_number); ?>
                             </div>
                             <h3 class="text-[2rem] leading-tight font-display font-semibold text-on-surface tracking-[-0.03em]">

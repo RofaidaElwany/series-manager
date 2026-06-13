@@ -203,7 +203,7 @@ details summary:focus {
 
 /* Series layout width — shared between editor preview and frontend view */
 :root {
-  --sm-series-layout-max-width: var(--wp--style--global--content-size, 650px);
+  --sm-series-layout-max-width: var(--wp--style--global--content-size, 1200px);
 }
 
 .wp-block-series-manager-series-list.alignwide,

@@ -26,7 +26,7 @@ class SeriesNavigation
 
             <!-- Previous -->
             <?php if ($prev_post): ?>
-                <a href="<?php echo esc_url(get_permalink($prev_post)); ?>"
+                <a href="<?php echo esc_url(get_permalink((int) $prev_post->ID)); ?>"
                     class="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-all active:scale-95 shadow-sm"<?php echo $buttonStyle; ?>>
 
                     <span class="material-symbols-outlined">arrow_back</span>
@@ -43,7 +43,7 @@ class SeriesNavigation
 
             <!-- Next -->
             <?php if ($next_post): ?>
-                <a href="<?php echo esc_url(get_permalink($next_post)); ?>"
+                <a href="<?php echo esc_url(get_permalink((int) $next_post->ID)); ?>"
                     class="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-all active:scale-95 shadow-sm"<?php echo $buttonStyle; ?>>
 
                     <span class="text-label-lg font-medium">

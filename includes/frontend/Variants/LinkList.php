@@ -39,7 +39,7 @@ class LinkList
             <?php foreach ($posts as $p): ?>
                 <?php
                 $is_current = ($p->ID == $current_post_id);
-                $link_url = get_permalink($p);
+                $link_url = get_permalink((int) $p->ID);
                 $title_for_avatar = trim((string) $p->post_title);
                 $initial = strtoupper(substr($title_for_avatar, 0, 1));
                 $avatar_img_url = '';
@@ -60,7 +60,8 @@ class LinkList
                 ?>
 
                 <?php if ($is_current): ?>
-                    <div class="relative flex items-center gap-4 bg-primary/10 px-6 py-4 border-l-4 border-primary"<?php echo $selectedRowStyle; ?>>
+                    <a href="<?php echo esc_url($link_url); ?>"
+                        class="relative flex items-center gap-4 bg-primary/10 px-6 py-4 border-l-4 border-primary"<?php echo $selectedRowStyle; ?>>
 
                         <div class="flex items-center justify-center rounded-lg text-on-surface w-10 h-10 overflow-hidden">
                             <div class="flex items-center justify-center rounded-lg text-primary w-10 h-10"<?php echo $accentStyle; ?>>
@@ -74,7 +75,7 @@ class LinkList
                         <div class="flex items-center justify-center rounded-lg bg-primary/20 text-primary w-10 h-10"<?php echo $accentBgStyle; ?>>
                             <span class="material-symbols-outlined text-2xl">check_circle</span>
                         </div>
-                    </div>
+                    </a>
                 <?php else: ?>
                     <!-- OTHER POSTS -->
                     <a href="<?php echo esc_url($link_url); ?>"

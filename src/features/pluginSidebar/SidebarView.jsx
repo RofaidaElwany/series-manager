@@ -41,7 +41,7 @@ export function SidebarView({
         {!isLoading &&
           selectedSeries.map((series) => (
             <div className="sm-series-layout-setting shadow-xl mb-6 p-3 border rounded" key={series.id}>
-              <h4 className="sm-series-title font-bold mb-3">{series.name}</h4>
+              <h4 className="sm-series-title font-bold mb-3">series: {series.name}</h4>
                 <TabPanel
                 className="sm-series-tabs"
                 activeClass="is-active"
