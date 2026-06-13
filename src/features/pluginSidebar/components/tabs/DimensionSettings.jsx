@@ -32,6 +32,11 @@ export function DimensionSettings({
   const padding = getStyleSetting(series, "padding") || DEFAULT_SPACING;
   const margin = getStyleSetting(series, "margin") || DEFAULT_SPACING;
   const border = getStyleSetting(series, "border");
+  const toolsPanelDropdownMenuProps = {
+    popoverProps: {
+      placement: "left-start",
+    },
+  };
 
   return (
     <>
@@ -45,6 +50,7 @@ export function DimensionSettings({
             margin: undefined,
           })
         }
+        dropdownMenuProps={toolsPanelDropdownMenuProps}
       >
         <ToolsPanelItem
           className="block-editor-tools-panel-color-gradient-settings__item"
@@ -53,7 +59,7 @@ export function DimensionSettings({
           onDeselect={() =>
             onChangeStyleSettings(series.id, { padding: undefined })
           }
-          isShownByDefault={true}
+          isShownByDefault={false}
           panelId={dimensionsPanelId}
         >
           <SpacingSizesControl
@@ -72,7 +78,7 @@ export function DimensionSettings({
           onDeselect={() =>
             onChangeStyleSettings(series.id, { margin: undefined })
           }
-          isShownByDefault={true}
+          isShownByDefault={false}
           panelId={dimensionsPanelId}
         >
           <SpacingSizesControl
@@ -92,6 +98,7 @@ export function DimensionSettings({
         resetAll={() =>
           onChangeStyleSettings(series.id, { border: undefined })
         }
+        dropdownMenuProps={toolsPanelDropdownMenuProps}
       >
         <ToolsPanelItem
           className="block-editor-tools-panel-color-gradient-settings__item"
@@ -100,7 +107,7 @@ export function DimensionSettings({
           onDeselect={() =>
             onChangeStyleSettings(series.id, { border: undefined })
           }
-          isShownByDefault={true}
+          isShownByDefault={false}
           panelId={borderPanelId}
         >
           <BorderControl

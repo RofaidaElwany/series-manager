@@ -46,6 +46,8 @@ export function StyleTab({
         __experimentalIsRenderedInSidebar
       />
 
+      
+
       <DimensionSettings
         series={series}
         getStyleSetting={getStyleSetting}

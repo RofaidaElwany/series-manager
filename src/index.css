@@ -203,7 +203,7 @@ details summary:focus {
 
 /* Series layout width — shared between editor preview and frontend view */
 :root {
-  --sm-series-layout-max-width: var(--wp--style--global--wide-size, 72rem);
+  --sm-series-layout-max-width: var(--wp--style--global--content-size, 650px);
 }
 
 .wp-block-series-manager-series-list.alignwide,
@@ -244,10 +244,10 @@ details summary:focus {
 }
 
 .sm-series-block {
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 70%;
+  width: min(var(--sm-series-layout-max-width), 100%);
+  max-width: min(var(--sm-series-layout-max-width), 100%);
+  margin-left: auto;
+  margin-right: auto;
   box-sizing: border-box;
 }
 
@@ -527,7 +527,29 @@ details summary:focus {
 
 .sm-series-dimensions-panel,
 .sm-series-border-panel {
-  margin-top: 16px;
+  margin: 0;
+  border-top: 1px solid #ddd;
+  border-bottom: 0;
+}
+
+.sm-series-border-panel {
+  border-bottom: 1px solid #ddd;
+}
+
+.sm-tab-content-style .components-tools-panel-header {
+  min-height: 48px;
+  padding: 0 16px;
+}
+
+.sm-tab-content-style .components-tools-panel-header__title {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.sm-tab-content-style .components-tools-panel-header .components-dropdown-menu__toggle {
+  min-width: 32px;
+  padding: 0;
+  justify-content: center;
 }
 
 .css-1abtnze {

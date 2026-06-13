@@ -230,11 +230,11 @@ function series_manager_enqueue_block_styles()
 add_action('enqueue_block_assets', 'series_manager_enqueue_block_styles');
 
 /**
- * Shared layout width fallback when the theme does not expose global wide size.
+ * Shared layout width fallback when the theme does not expose global content size.
  */
 function series_manager_enqueue_layout_width_fallback()
 {
-    $css = ':root{--sm-series-layout-max-width:var(--wp--style--global--wide-size,72rem);}';
+    $css = ':root{--sm-series-layout-max-width:var(--wp--style--global--content-size,650px);}';
 
     wp_add_inline_style('sm-series-block-styles', $css);
     wp_add_inline_style('sm-series-frontend', $css);
