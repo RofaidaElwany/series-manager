@@ -40,7 +40,7 @@ class MediaList
                 <?php
                 $is_current = ($p->ID == $current_post_id);
 
-                $link_url = get_permalink($p);
+                $link_url = get_permalink((int) $p->ID);
 
                 $title_for_avatar = trim((string) $p->post_title);
                 $initial = strtoupper(substr($title_for_avatar, 0, 1));
@@ -64,7 +64,8 @@ class MediaList
                 ?>
 
                 <?php if ($is_current): ?>
-                    <div class="flex items-center gap-4 p-2 rounded-xl bg-primary/10 border-l-4 border-primary shadow-sm"<?php echo $selectedRowStyle; ?>>
+                    <a href="<?php echo esc_url($link_url); ?>"
+                        class="flex items-center gap-4 p-2 rounded-xl bg-primary/10 border-l-4 border-primary shadow-sm"<?php echo $selectedRowStyle; ?>>
 
                         <?php if ($avatar_img_url): ?>
                             <img
@@ -89,7 +90,7 @@ class MediaList
                         <span class="material-symbols-outlined text-primary text-3xl"<?php echo $accentStyle; ?>>
                             check_circle
                         </span>
-                    </div>
+                    </a>
                 <?php else: ?>
                     <!-- OTHER POSTS -->
                     <a href="<?php echo esc_url($link_url); ?>"
