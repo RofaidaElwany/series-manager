@@ -2,7 +2,7 @@ import { __experimentalPanelColorGradientSettings as PanelColorGradientSettings 
 import { Button } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import { DimensionSettings } from "./DimensionSettings";
-import { hasCustomStyles } from "./styleSettings";
+import { hasCustomStyles } from "../utils/styleSettings";
 
 export function StyleTab({
   series,

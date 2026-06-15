@@ -11,7 +11,7 @@ import {
   DEFAULT_SPACING,
   hasBorderValue,
   hasSpacingValue,
-} from "./styleSettings";
+} from "../utils/styleSettings";
 
 export function DimensionSettings({
   series,
@@ -23,12 +23,10 @@ export function DimensionSettings({
     "sm-series-dimensions",
   );
   const borderPanelId = useInstanceId(DimensionSettings, "sm-series-border");
-
   const colors = useSelect(
     (select) => select("core/block-editor").getSettings()?.colors ?? [],
     [],
   );
-
   const padding = getStyleSetting(series, "padding") || DEFAULT_SPACING;
   const margin = getStyleSetting(series, "margin") || DEFAULT_SPACING;
   const border = getStyleSetting(series, "border");
@@ -37,7 +35,6 @@ export function DimensionSettings({
       placement: "left-start",
     },
   };
-
   return (
     <>
       <ToolsPanel
@@ -70,7 +67,6 @@ export function DimensionSettings({
             }
           />
         </ToolsPanelItem>
-
         <ToolsPanelItem
           className="block-editor-tools-panel-color-gradient-settings__item"
           hasValue={() => hasSpacingValue(margin)}
@@ -90,7 +86,6 @@ export function DimensionSettings({
           />
         </ToolsPanelItem>
       </ToolsPanel>
-
       <ToolsPanel
         className="sm-series-border-panel"
         label={__("Border", "series-manager")}
