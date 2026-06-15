@@ -10,7 +10,7 @@ import {
 } from "@wordpress/element";
 import { useSeriesTerms } from "../../hooks/useSeriesTerms";
 import { updateSeriesSettings } from "../../services/seriesApiExports";
-import { normalizeStyleUpdates } from "./components/tabs/styleSettings";
+import { normalizeStyleUpdates } from "./components/utils/styleSettings";
 
 export function SidebarContainer() {
   /**
