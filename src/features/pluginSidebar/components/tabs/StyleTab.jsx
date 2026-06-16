@@ -3,6 +3,7 @@ import {
         __experimentalSpacingSizesControl as SpacingSizesControl
         } from "@wordpress/block-editor";
 import {
+        PanelBody,
         Button,
         __experimentalBorderControl as BorderControl,
         __experimentalToolsPanel as ToolsPanel,
@@ -43,92 +44,50 @@ export function DimensionSettings({
   };
   return (
     <>
-      <ToolsPanel
-        className="sm-series-dimensions-panel"
-        label={__("Dimensions", "series-manager")}
-        panelId={dimensionsPanelId}
-        resetAll={() =>
-          onChangeStyleSettings(series.id, {
-            padding: undefined,
-            margin: undefined,
-          })
-        }
-        dropdownMenuProps={toolsPanelDropdownMenuProps}
+      <PanelBody
+          title={__("Border", "series-manager")}
+          initialOpen={false}
       >
-        <ToolsPanelItem
-          className="block-editor-tools-panel-color-gradient-settings__item"
-          hasValue={() => hasSpacingValue(padding)}
-          label={__("Padding", "series-manager")}
-          onDeselect={() =>
-            onChangeStyleSettings(series.id, { padding: undefined })
+        <BorderControl
+          __next40pxDefaultSize={true}
+          colors={colors}
+          label={__("Border", "series-manager")}
+          onChange={(next) =>
+            onChangeStyleSettings(series.id, { border: next })
           }
-          isShownByDefault={false}
-          panelId={dimensionsPanelId}
-        >
-          <SpacingSizesControl
+          value={border}
+          withSlider={true}
+          __experimentalIsRenderedInSidebar={true}
+        />
+      </PanelBody>
+      <div className="sm-series-dimensions"> 
+          <PanelBody 
+              className="sm-series-dimensions-panel"
+              title={__("Dimensions", "series-manager")}
+              initialOpen={false}
+          >
+            <SpacingSizesControl
+            className="sm-series-dimensions-spacing"
             label={__("Padding", "series-manager")}
             values={padding}
             onChange={(next) =>
               onChangeStyleSettings(series.id, { padding: next })
             }
           />
-        </ToolsPanelItem>
-        <ToolsPanelItem
-          className="block-editor-tools-panel-color-gradient-settings__item"
-          hasValue={() => hasSpacingValue(margin)}
-          label={__("Margin", "series-manager")}
-          onDeselect={() =>
-            onChangeStyleSettings(series.id, { margin: undefined })
-          }
-          isShownByDefault={false}
-          panelId={dimensionsPanelId}
-        >
-          <SpacingSizesControl
+
+            <SpacingSizesControl
+            className="sm-series-dimensions-spacing"
             label={__("Margin", "series-manager")}
             values={margin}
             onChange={(next) =>
               onChangeStyleSettings(series.id, { margin: next })
             }
           />
-        </ToolsPanelItem>
-      </ToolsPanel>
-      <ToolsPanel
-        className="sm-series-border-panel"
-        label={__("Border", "series-manager")}
-        panelId={borderPanelId}
-        resetAll={() =>
-          onChangeStyleSettings(series.id, { border: undefined })
-        }
-        dropdownMenuProps={toolsPanelDropdownMenuProps}
-      >
-        <ToolsPanelItem
-          className="block-editor-tools-panel-color-gradient-settings__item"
-          hasValue={() => hasBorderValue(border)}
-          label={__("Border", "series-manager")}
-          onDeselect={() =>
-            onChangeStyleSettings(series.id, { border: undefined })
-          }
-          isShownByDefault={false}
-          panelId={borderPanelId}
-        >
-          <BorderControl
-            __next40pxDefaultSize={true}
-            colors={colors}
-            label={__("Border", "series-manager")}
-            onChange={(next) =>
-              onChangeStyleSettings(series.id, { border: next })
-            }
-            value={border}
-            withSlider={true}
-            __experimentalIsRenderedInSidebar={true}
-          />
-        </ToolsPanelItem>
-      </ToolsPanel>
+          </PanelBody>
+      </div>  
     </>
   );
 }
-
-
 export function StyleTab({
   series,
   savingTermId,

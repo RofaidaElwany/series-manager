@@ -191,17 +191,6 @@ function series_manager_enqueue_post_editor_assets()
         true
     );
 
-    // Enqueue CSS if exists
-    $css_file_path = plugin_dir_path(__FILE__) . 'build/index.css';
-    if (file_exists($css_file_path)) {
-        wp_enqueue_style(
-            'sm-series-post-editor',
-            plugins_url('build/index.css', __FILE__),
-            [],
-            filemtime($css_file_path)
-        );
-    }
-
     // Pass AJAX data to JS
     wp_localize_script(
         $script_handle,
@@ -238,7 +227,6 @@ function series_manager_enqueue_layout_width_fallback()
 
     wp_add_inline_style('sm-series-block-styles', $css);
     wp_add_inline_style('sm-series-frontend', $css);
-    wp_add_inline_style('sm-series-post-editor', $css);
 }
 add_action('enqueue_block_assets', 'series_manager_enqueue_layout_width_fallback', 20);
 add_action('wp_enqueue_scripts', 'series_manager_enqueue_layout_width_fallback', 20);

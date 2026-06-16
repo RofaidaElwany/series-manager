@@ -24,7 +24,7 @@ class MediaGrid
         <section class="sm-series-variant w-full bg-background font-body">
 
             <!-- GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10">
+            <div class="grid grid-cols-1 md:grid-cols-2  gap-8 mt-10">
 
                 <?php foreach ($posts as $index => $p): ?>
                     <?php
@@ -76,10 +76,10 @@ class MediaGrid
                     <!-- CARD -->
                     <a
                         href="<?php echo esc_url($link_url); ?>"
-                        class="group relative overflow-hidden p-5 rounded-2xl border-2 
+                        class=" sm-media-grid-card group
                         <?php echo $is_current
-                            ? 'bg-[#f3f7ff]  border-primary shadow-[0_10px_50px_rgba(0,98,162,0.12)] hover:shadow-[0_20px_70px_rgba(0,98,162,0.18)]'
-                            : 'bg-white border-gray-200 hover:shadow-[0_20px_60px_rgba(15,23,42,0.10)]'; ?>" <?php echo $currentCardStyle; ?>>
+                            ? 'bg-[#f3f7ff]  shadow-[0_10px_50px_rgba(0,98,162,0.12)] hover:shadow-[0_20px_70px_rgba(0,98,162,0.18)]'
+                            : 'bg-white hover:shadow-[0_20px_60px_rgba(15,23,42,0.10)]'; ?>" <?php echo $currentCardStyle; ?>>
 
                         <!-- BADGE (ACTIVE ONLY) -->
                         <?php if ($is_current): ?>
@@ -97,7 +97,7 @@ class MediaGrid
                                     alt="<?php echo esc_attr($p->post_title); ?>"
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <?php else: ?>
-                                <div class="w-full h-full bg-blue-50 rounded-2xl border-2 border-dashed border-blue-300 overflow-hidden">
+                                <div class="w-full h-full bg-blue-50 rounded-2xl border-2  overflow-hidden">
                                     <img
                                         src="<?php echo esc_url($placeholder_img_url); ?>"
                                         alt="No image available"
@@ -106,11 +106,11 @@ class MediaGrid
                             <?php endif; ?>
                         </div>
                         <!-- CONTENT -->
-                        <div class="p-7">
-                            <div class="text-primary text-[15px] font-semibold mb-3" <?php echo $currentAccentStyle; ?>>
+                        <div class="p-2">
+                            <div class="text-primary font-semibold mb-3" <?php echo $currentAccentStyle; ?>>
                                 Part <?php echo intval($part_number); ?>
                             </div>
-                            <h3 class="text-[2rem] leading-tight font-display font-semibold text-on-surface tracking-[-0.03em]">
+                            <h3 class="font-bold text-black group-hover:text-primary transition-colors">
                                 <?php echo esc_html($p->post_title); ?>
                             </h3>
                         </div>

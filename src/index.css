@@ -269,6 +269,15 @@ details summary:focus {
   width: 100%;
 }
 
+.sm-media-grid-card{
+   position: relative;
+   overflow: hidden; 
+   padding: 4px;
+   border-radius: 8px;
+   border: 2px solid transparent; 
+} 
+
+
 /* plugin sidebar layout variant styles */
 .sm-series-layout-setting {
   border: 1px solid #dcdcde;
@@ -427,14 +436,13 @@ details summary:focus {
   border-color: #3b82f6;
   background: #f0f9ff;
 }
-.sm-preview__lines{
+.sm-preview__lines {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
 .sm-preview__line_1 {
-
   height: 4px;
   background: #dcdcde;
   border-radius: 999px;
@@ -452,13 +460,13 @@ details summary:focus {
   min-width: 120px;
 }
 
-.sm-position-toggle .css-1abtnze{
+.sm-position-toggle .css-1abtnze {
   min-width: 100px;
 }
 
-.components-base-control__field .sm-position-toggle  {
-    border: 1px solid #dcdcde;
-    border-radius: 8px;
+.components-base-control__field .sm-position-toggle {
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
 }
 
 .sm-position-toggle:focus-within {
@@ -468,7 +476,7 @@ details summary:focus {
 }
 
 .sm-position-toggle:hover {
-  border-color: transparent !important; 
+  border-color: transparent !important;
 }
 
 .sm-position-toggle::before {
@@ -525,15 +533,12 @@ details summary:focus {
   border-radius: 9px;
 }
 
-.sm-series-dimensions-panel,
-.sm-series-border-panel {
-  margin: 0;
-  border-top: 1px solid #ddd;
-  border-bottom: 0;
+.sm-series-dimensions h4 {
+  padding: 12px 0;
 }
-
-.sm-series-border-panel {
-  border-bottom: 1px solid #ddd;
+.sm-series-dimensions .sm-series-dimensions-panel .sm-series-dimensions-spacing {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 8px;
 }
 
 .sm-tab-content-style .components-tools-panel-header {
@@ -546,7 +551,9 @@ details summary:focus {
   font-weight: 400;
 }
 
-.sm-tab-content-style .components-tools-panel-header .components-dropdown-menu__toggle {
+.sm-tab-content-style
+  .components-tools-panel-header
+  .components-dropdown-menu__toggle {
   min-width: 32px;
   padding: 0;
   justify-content: center;
@@ -555,4 +562,3 @@ details summary:focus {
 .css-1abtnze {
   min-width: 100px;
 }
-
