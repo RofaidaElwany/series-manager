@@ -90,7 +90,7 @@ class MediaGrid
                             </div>
                         <?php endif; ?>
                         <!-- IMAGE -->
-                        <div class="aspect-[4/3] overflow-hidden rounded-2xl <?php echo $is_current ? 'bg-[#e9f1ff]' : 'bg-[#f4ede8]'; ?>">
+                        <div class="sm-media-grid-card-img  <?php echo $is_current ? 'bg-[#e9f1ff]' : 'bg-[#f4ede8]'; ?>">
                             <?php if ($avatar_img_url): ?>
                                 <img
                                     src="<?php echo esc_url($avatar_img_url); ?>"

@@ -41,12 +41,6 @@ const Edit = ({ attributes, setAttributes }) => {
   }, []);
 
   useEffect(() => {
-    if (!attributes.align) {
-      setAttributes({ align: "wide" });
-    }
-  }, [attributes.align, setAttributes]);
-
-  useEffect(() => {
     const refreshPreview = () => {
       setPreviewRefreshKey((key) => key + 1);
     };

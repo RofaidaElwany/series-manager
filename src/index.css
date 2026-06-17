@@ -203,11 +203,11 @@ details summary:focus {
 
 /* Series layout width — shared between editor preview and frontend view */
 :root {
-  --sm-series-layout-max-width: var(--wp--style--global--content-size, 1200px);
+  --sm-series-layout-content-width: var( --wp--style--global--content-size, 620px);
+  --sm-series-layout-wide-width: var(--wp--style--global--wide-size, 1100px);
 }
 
-.wp-block-series-manager-series-list.alignwide,
-.wp-block-series-manager-series-list.alignfull,
+/* "None" alignment: content width, applies to editor + frontend ancestor contexts */
 .wp-block-series-manager-series-list.sm-series-editor-root,
 .entry-content .wp-block-series-manager-series-list,
 .wp-block-post-content .wp-block-series-manager-series-list,
@@ -215,23 +215,25 @@ details summary:focus {
 .is-root-container .wp-block-series-manager-series-list,
 .block-editor-block-list__layout .wp-block-series-manager-series-list {
   box-sizing: border-box;
-  width: min(var(--sm-series-layout-max-width), 100%);
-  max-width: min(var(--sm-series-layout-max-width), 100%);
+  width: min(var(--sm-series-layout-content-width), 100%);
+  max-width: min(var(--sm-series-layout-content-width), 100%);
   margin-left: auto;
   margin-right: auto;
 }
 
+/* Wide width: must stay AFTER the rule above so it wins on equal specificity */
+.wp-block-series-manager-series-list.alignwide {
+  box-sizing: border-box;
+  width: min(var(--sm-series-layout-wide-width), 100%);
+  max-width: min(var(--sm-series-layout-wide-width), 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Full width: unconstrained */
 .wp-block-series-manager-series-list.alignfull {
   width: 100%;
   max-width: 100%;
-}
-
-.wp-block-series-manager-series-list.alignfull .sm-series-layout,
-.wp-block-series-manager-series-list.alignfull .sm-series-accordion {
-  width: min(var(--sm-series-layout-max-width), 100%);
-  max-width: min(var(--sm-series-layout-max-width), 100%);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Nested SSR wrapper inside the editor block root */
@@ -244,10 +246,8 @@ details summary:focus {
 }
 
 .sm-series-block {
-  width: min(var(--sm-series-layout-max-width), 100%);
-  max-width: min(var(--sm-series-layout-max-width), 100%);
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
@@ -269,14 +269,20 @@ details summary:focus {
   width: 100%;
 }
 
-.sm-media-grid-card{
-   position: relative;
-   overflow: hidden; 
-   padding: 4px;
-   border-radius: 8px;
-   border: 2px solid transparent; 
-} 
+.sm-media-grid-card {
+  position: relative;
+  overflow: hidden;
+  padding: 4px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
 
+.sm-media-grid-card .sm-media-grid-card-img {
+  height: 170px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin: 4px;
+}
 
 /* plugin sidebar layout variant styles */
 .sm-series-layout-setting {
@@ -536,7 +542,9 @@ details summary:focus {
 .sm-series-dimensions h4 {
   padding: 12px 0;
 }
-.sm-series-dimensions .sm-series-dimensions-panel .sm-series-dimensions-spacing {
+.sm-series-dimensions
+  .sm-series-dimensions-panel
+  .sm-series-dimensions-spacing {
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 8px;
 }

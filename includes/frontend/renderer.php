@@ -215,13 +215,15 @@ class SM_Series_Renderer
         foreach ($series_data as $item) {
             $variant_classes[$item['term']->term_id] = self::get_variant_class_for_term($item['term']);
         }
+        $wrapper_attributes = get_block_wrapper_attributes([
+            'class' => 'sm-series-block',
+        ]);
 
         return sprintf(
-            '<div class="sm-series-block">%s</div>',
-            $layout_class::render(
-                $series_data,
-                $variant_classes
-            )
+            '<div %s">%s</div>',
+            $wrapper_attributes,
+            $layout_class::render($series_data, $variant_classes)
+
         );
     }
 }
