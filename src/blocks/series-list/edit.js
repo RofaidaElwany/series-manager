@@ -8,21 +8,6 @@ import ModeSelector from "./components/ModeSelector";
 import UserSelector from "./components/UserSelector";
 import SeriesPreview from "./components/SeriesPreview";
 
-const normalizeSeriesId = (value) => {
-  if (value == null) {
-    return null;
-  }
-
-  if (typeof value === "object") {
-    const candidate = value.id ?? value.term_id ?? value;
-    const num = Number(candidate);
-    return Number.isNaN(num) ? null : num;
-  }
-
-  const num = Number(value);
-  return Number.isNaN(num) ? null : num;
-};
-
 const Edit = ({ attributes, setAttributes }) => {
   const { mode, limit, userId } = attributes;
   const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
@@ -30,15 +15,10 @@ const Edit = ({ attributes, setAttributes }) => {
     className: "sm-series-editor-root",
   });
 
-  const { postId, selectedSeriesIds } = useSelect((select) => {
-    const editor = select("core/editor");
-    const currentSeries = editor.getEditedPostAttribute("series") || [];
-
-    return {
-      postId: editor.getCurrentPostId(),
-      selectedSeriesIds: currentSeries.map(normalizeSeriesId).filter(Boolean),
-    };
-  }, []);
+  const postId = useSelect(
+    (select) => select("core/editor").getCurrentPostId(),
+    [],
+  );
 
   useEffect(() => {
     const refreshPreview = () => {
@@ -131,12 +111,8 @@ const Edit = ({ attributes, setAttributes }) => {
           attributes={attributes}
           urlQueryArgs={{
             post_id: postId,
-            series_ids: selectedSeriesIds.join(","),
             preview_key: previewRefreshKey,
           }}
-          EmptyResponsePlaceholder={() => (
-            <p>{__("Select a series for this post to preview the layout.", "series-manager")}</p>
-          )}
         />
       </div>
     </>

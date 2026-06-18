@@ -39,6 +39,8 @@ class LinkList
             <?php foreach ($posts as $p): ?>
                 <?php
                 $is_current = ($p->ID == $current_post_id);
+                $part_number = $p + 1;
+
                 $link_url = get_permalink((int) $p->ID);
                 $title_for_avatar = trim((string) $p->post_title);
                 $initial = strtoupper(substr($title_for_avatar, 0, 1));
@@ -57,22 +59,32 @@ class LinkList
                         $avatar_img_url = $matches[1];
                     }
                 }
+                $currentAccentStyle = $is_current
+                    ? SeriesStyleHelper::inlineStyle([
+                        'color' => $style['buttonColor'] ?? null,
+                    ])
+                    : '';
                 ?>
 
                 <?php if ($is_current): ?>
                     <a href="<?php echo esc_url($link_url); ?>"
-                        class="relative flex items-center gap-4 bg-primary/10 px-6 py-4 border-l-4 border-primary"<?php echo $selectedRowStyle; ?>>
+                        class="relative flex items-center gap-4 bg-primary/10 px-6 py-4 border-l-4 border-primary" <?php echo $selectedRowStyle; ?>>
 
                         <div class="flex items-center justify-center rounded-lg text-on-surface w-10 h-10 overflow-hidden">
-                            <div class="flex items-center justify-center rounded-lg text-primary w-10 h-10"<?php echo $accentStyle; ?>>
+                            <div class="flex items-center justify-center rounded-lg text-primary w-10 h-10" <?php echo $accentStyle; ?>>
                                 <span class="material-symbols-outlined text-2xl">link</span>
                             </div>
                         </div>
-                        <p class="text-on-surface font-medium flex-1 truncate">
-                            <?php echo esc_html($p->post_title); ?>
-                        </p>
+                        <div class="p-2 flex-1 truncate">
+                            <div class="text-primary font-semibold mb-3" <?php echo $currentAccentStyle; ?>>
+                                Part <?php echo intval($part_number); ?>
+                            </div>
+                            <h3 class="font-bold text-black group-hover:text-primary transition-colors">
+                                <?php echo esc_html($p->post_title); ?>
+                            </h3>
+                        </div>
 
-                        <div class="flex items-center justify-center rounded-lg bg-primary/20 text-primary w-10 h-10"<?php echo $accentBgStyle; ?>>
+                        <div class="flex items-center justify-center rounded-lg bg-primary/20 text-primary w-10 h-10" <?php echo $accentBgStyle; ?>>
                             <span class="material-symbols-outlined text-2xl">check_circle</span>
                         </div>
                     </a>

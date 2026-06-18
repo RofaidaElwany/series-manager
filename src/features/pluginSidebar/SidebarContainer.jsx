@@ -27,11 +27,6 @@ export function SidebarContainer() {
     };
   }, []);
 
-  /**
-   * Block editor actions.
-   */
-  const { insertBlocks, moveBlocksToPosition, removeBlocks } =
-    useDispatch("core/block-editor");
 
   /**
    * Local component state.
@@ -42,11 +37,6 @@ export function SidebarContainer() {
   const layoutStylesRef = useRef({});
   const [savingTermId, setSavingTermId] = useState(null);
   const [error, setError] = useState("");
-
-  /**
-   * Store the last applied placement to avoid unnecessary updates.
-   */
-  const lastAppliedPlacementRef = useRef("");
 
   /**
    * Convert series values into numeric IDs.
@@ -163,118 +153,6 @@ export function SidebarContainer() {
     }
   };
 
-  /**
-   * Determine the final block position.
-   * If any selected series is set to "top",
-   * the block will be placed at the top.
-   */
-  const resolvePosition = useCallback(
-    (positions = layoutPositions) =>
-      selectedSeries.some(
-        (term) => (positions[term.id] || term.settings.position) === "top",
-      )
-        ? "top"
-        : "bottom",
-    [layoutPositions, selectedSeries],
-  );
-
-  /**
-   * Insert or move the series block
-   * to its correct position.
-   */
-  const placeSeriesBlock = useCallback(
-    (position) => {
-      const seriesBlocks = blocks.filter(
-        (block) => block.name === "series-manager/series-list",
-      );
-
-      const seriesBlockIndex = blocks.findIndex(
-        (block) => block.clientId === seriesBlocks[0]?.clientId,
-      );
-
-      const targetIndex = position === "top" ? 0 : blocks.length;
-
-      /**
-       * Insert the block if it does not exist.
-       */
-      if (seriesBlockIndex === -1) {
-        insertBlocks(
-          createBlock("series-manager/series-list", { align: "wide" }),
-          targetIndex,
-        );
-        return;
-      }
-
-      /**
-       * Remove duplicate series blocks.
-       */
-      if (seriesBlocks.length > 1) {
-        removeBlocks(
-          seriesBlocks.slice(1).map((block) => block.clientId),
-        );
-        return;
-      }
-
-      /**
-       * Skip if the block is already in the correct position.
-       */
-      const isAtTarget =
-        position === "top"
-          ? seriesBlockIndex === 0
-          : seriesBlockIndex === blocks.length - 1;
-
-      if (isAtTarget) {
-        return;
-      }
-
-      /**
-       * Move the block to the desired position.
-       */
-      moveBlocksToPosition(
-        [blocks[seriesBlockIndex].clientId],
-        "",
-        "",
-        targetIndex,
-      );
-    },
-    [blocks, insertBlocks, moveBlocksToPosition, removeBlocks],
-  );
-
-  /**
-   * Keep the series block synchronized
-   * with the selected series settings.
-   */
-  useEffect(() => {
-    if (isResolvingTerms || selectedSeries.length === 0) {
-      lastAppliedPlacementRef.current = "";
-      return;
-    }
-
-    const position = resolvePosition();
-
-    const seriesBlockIndex = blocks.findIndex(
-      (block) => block.name === "series-manager/series-list",
-    );
-
-    const placementKey = `${position}:${seriesBlockIndex}:${blocks.length}`;
-
-    /**
-     * Prevent duplicate updates.
-     */
-    if (lastAppliedPlacementRef.current === placementKey) {
-      return;
-    }
-
-    lastAppliedPlacementRef.current = placementKey;
-
-    placeSeriesBlock(position);
-  }, [
-    blocks,
-    isResolvingTerms,
-    placeSeriesBlock,
-    resolvePosition,
-    selectedSeries.length,
-  ]);
 
   /**
    * Handle layout position changes.
@@ -296,11 +174,6 @@ export function SidebarContainer() {
       ...current,
       [termId]: position,
     }));
-
-    /**
-     * Immediately update block placement.
-     */
-    placeSeriesBlock(resolvePosition(nextLayoutPositions));
 
     setSavingTermId(termId);
 

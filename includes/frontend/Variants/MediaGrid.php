@@ -33,6 +33,9 @@ class MediaGrid
                     $link_url = get_permalink((int) $p->ID);
 
                     $avatar_img_url = '';
+                    if (empty($p) || empty($p->ID)) {
+                        continue;
+                    }
 
                     if (has_post_thumbnail($p->ID)) {
                         $avatar_img_url = get_the_post_thumbnail_url($p->ID, 'large');

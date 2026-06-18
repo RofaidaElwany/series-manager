@@ -25,14 +25,14 @@
   .sm-series-card a {
     @apply text-inherit no-underline;
   }
-
   /* Material Symbols icon sizing */
   .material-symbols-outlined {
     font-variation-settings:
       "FILL" 0,
       "wght" 400,
       "GRAD" 0,
-      "opsz" 24;
+      "opsz" 48;
+    font-size: 40px !important;
   }
 
   .components-button.is-primary:disabled {
@@ -51,13 +51,6 @@
   }
   .neumorphic-pressed-accent {
     box-shadow: var(--nm-pressed-accent);
-  }
-  .material-symbols-outlined {
-    font-variation-settings:
-      "FILL" 0,
-      "wght" 400,
-      "GRAD" 0,
-      "opsz" 24;
   }
 }
 
@@ -203,7 +196,10 @@ details summary:focus {
 
 /* Series layout width — shared between editor preview and frontend view */
 :root {
-  --sm-series-layout-content-width: var( --wp--style--global--content-size, 620px);
+  --sm-series-layout-content-width: var(
+    --wp--style--global--content-size,
+    620px
+  );
   --sm-series-layout-wide-width: var(--wp--style--global--wide-size, 1100px);
 }
 
