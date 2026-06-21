@@ -1,4 +1,4 @@
-import { createBlock } from "@wordpress/blocks";
+// import { createBlock } from "@wordpress/blocks";
 import { useState, useEffect, useRef } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { SeriesSidebarView } from "./SeriesSidebarView";
@@ -53,14 +53,14 @@ const SeriesSidebarContainer = () => {
   }, [selectedSeriesIds]);
 
   const { editPost } = useDispatch("core/editor");
-  const { insertBlocks, selectBlock } = useDispatch("core/block-editor");
+  // const { insertBlocks, selectBlock } = useDispatch("core/block-editor");
 
   /* ========================= Terms ========================= */
   const { seriesTerms, isResolvingTerms } = useSeriesTerms(postType);
 
   /* =========================    Posts  ========================= */
   const { orderedPosts, setOrderedPosts } = useSeriesPosts(
-    activeSeriesId || null,
+    activeSeriesId ?? null,
     postId,
     postTitle,
   );
@@ -108,21 +108,21 @@ const SeriesSidebarContainer = () => {
   usePostSavingSync(activeSeriesId, orderedPosts, saveOrderToDB);
 
   /* =========================    Ensure Series Block Exists on Mount  ========================= */
-  useEffect(() => {
-    if (!selectedSeriesIds.length) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!selectedSeriesIds.length) {
+  //     return;
+  //   }
 
-    const hasSeriesBlock = blocks.some(
-      (block) => block.name === "series-manager/series-list",
-    );
+  //   const hasSeriesBlock = blocks.some(
+  //     (block) => block.name === "series-manager/series-list",
+  //   );
 
-    if (!hasSeriesBlock) {
-      const block = createBlock("series-manager/series-list");
+  //   if (!hasSeriesBlock) {
+  //     const block = createBlock("series-manager/series-list");
 
-      insertBlocks(block);
-    }
-  }, [selectedSeriesIds, blocks]);
+  //     insertBlocks(block);
+  //   }
+  // }, [selectedSeriesIds, blocks]);
   /* =========================    Save and Cancel Handlers  ========================= */
   const handleSave = async () => {
     await saveOrderToDB(orderedPosts);
@@ -135,17 +135,17 @@ const SeriesSidebarContainer = () => {
 
   /* =========================    Handler(Change series)  ========================= */
   // Ensure the series block exists in the editor when changing series
-  const ensureSeriesBlockExists = () => {
-    const hasSeriesBlock = blocks.some(
-      (block) => block.name === "series-manager/series-list",
-    );
+  // const ensureSeriesBlockExists = () => {
+  //   const hasSeriesBlock = blocks.some(
+  //     (block) => block.name === "series-manager/series-list",
+  //   );
 
-    if (!hasSeriesBlock) {
-      const block = createBlock("series-manager/series-list");
-      insertBlocks(block);
-      selectBlock(block.clientId);
-    }
-  };
+  //   if (!hasSeriesBlock) {
+  //     const block = createBlock("series-manager/series-list");
+  //     insertBlocks(block);
+  //     selectBlock(block.clientId);
+  //   }
+  // };
 
   const onChangeSeries = (seriesId) => {
     const id = Number(seriesId);
@@ -163,7 +163,7 @@ const SeriesSidebarContainer = () => {
       //add to series
       updated = [...selectedSeriesIds, id];
       setActiveSeriesId(id);
-      ensureSeriesBlockExists();
+      // ensureSeriesBlockExists();
 
       //if no active series, set the newly added one as active
       if (!activeSeriesId) {

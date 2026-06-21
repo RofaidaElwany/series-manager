@@ -36,11 +36,10 @@ class LinkList
 ?>
         <!-- Posts List -->
         <div class="flex flex-col py-2">
-            <?php foreach ($posts as $p): ?>
+            <?php foreach ($posts as $index => $p): ?>
                 <?php
                 $is_current = ($p->ID == $current_post_id);
-                $part_number = $p + 1;
-
+                $part_number = $index + 1;
                 $link_url = get_permalink((int) $p->ID);
                 $title_for_avatar = trim((string) $p->post_title);
                 $initial = strtoupper(substr($title_for_avatar, 0, 1));

@@ -38,8 +38,10 @@ require_once plugin_dir_path(__FILE__) . '/includes/Admin/Admin.php';
  *  Admin Initialization
  * ===================================================== */
 
-// Initialize admin UI (menus, pages, etc.)
-SM_Series_Admin::init();
+// ✅ Move inside a hook — never call at file load time
+add_action('admin_menu', function () {
+    SM_Series_Admin::init();
+});
 
 /* =====================================================
  *  Plugin Initialization (Core Logic)

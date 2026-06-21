@@ -122,7 +122,7 @@ class SM_Series_Renderer
     }
 
 
-    
+
 
     private static function get_preview_post_id(): int
     {
@@ -162,6 +162,16 @@ class SM_Series_Renderer
         $series_data = $navigation_service->getSeriesWithPosts(
             $post_id
         );
+
+        // Editor preview: show placeholder instead of empty string
+        if (empty($series_data)) {
+            if (self::is_editor_preview_request()) {
+                return '<div class="sm-series-block sm-series-empty-preview" style="padding:1em;border:1px dashed #ccc;color:#888;">'
+                    . __('Series block: save the post to see your series here.', 'series-manager')
+                    . '</div>';
+            }
+            return '';
+        }
 
         if (empty($series_data)) {
             return '';

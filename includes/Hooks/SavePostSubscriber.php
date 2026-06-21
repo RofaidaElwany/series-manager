@@ -48,30 +48,28 @@ class SavePostSubscriber
             }
 
             $order_str = get_term_meta($term_id, 'sm_series_order', true);
-            if ($order_str) {
-                $post_ids = $this->service->parsePostIds($order_str);
-                $index = array_search($post_id, $post_ids, true);
 
-                if ($index === false) {
+            if ($order_str) {
+                // Meta order exists — ensure this post is in it
+                $post_ids = $this->service->parsePostIds($order_str);
+
+                if (! in_array($post_id, $post_ids, true)) {
                     $post_ids[] = $post_id;
-                    $this->repository->updateOrder($term_taxonomy_id, $post_ids);
-                    $this->repository->persistOrderMeta((int) $term_id, $post_ids);
-                    continue;
                 }
 
                 $this->repository->updateOrder($term_taxonomy_id, $post_ids);
+                $this->repository->persistOrderMeta((int) $term_id, $post_ids);
                 continue;
             }
 
+            // No meta order — check DB table
             $existing_post_ids = $this->repository->getOrderedPostIds($term_taxonomy_id);
-            if (empty($existing_post_ids)) {
-                continue;
-            }
 
             if (! in_array($post_id, $existing_post_ids, true)) {
-                $existing_post_ids[] = $post_id;
+                $existing_post_ids[] = $post_id; // add current post
             }
 
+            // Write even if this is the first post (was: skip if empty)
             $this->repository->updateOrder($term_taxonomy_id, $existing_post_ids);
             $this->repository->persistOrderMeta((int) $term_id, $existing_post_ids);
         }
