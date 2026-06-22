@@ -4,9 +4,8 @@
   "title": "Series List",
   "category": "widgets",
   "supports": {
-    "html": false,
-    "align": ["wide", "full"]
-  },
+    "html": false
+    },
   "icon": "list-view",
   "description": "Display series based on different modes.",
   "editorScript": "file:../../index.js",

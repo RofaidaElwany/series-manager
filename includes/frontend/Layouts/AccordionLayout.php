@@ -42,14 +42,11 @@ class AccordionLayout
 
      */
 
-    public static function render(array $data, $variant_class): string
+    public static function render(array $data, $variant_class, string $align = ''): string
 
     {
 
         ob_start();
-
-
-
 ?>
 
         <div class="sm-series-accordion space-y-8"<?php echo SeriesStyleHelper::layoutContainerStyle([]); ?>>
@@ -112,18 +109,12 @@ class AccordionLayout
 
                             : $variant_class;
 
-
-
                         echo SeriesStyleHelper::ksesWithStyles(
-
                             $item_variant_class::render(
-
                                 $posts,
-
                                 $current_post_id,
-
-                                $style
-
+                                $style,
+                                $align,
                             )
 
                         );

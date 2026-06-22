@@ -194,16 +194,14 @@ details summary:focus {
   background: transparent;
 }
 
-/* Series layout width — shared between editor preview and frontend view */
-:root {
-  --sm-series-layout-content-width: var(
-    --wp--style--global--content-size,
-    620px
-  );
-  --sm-series-layout-wide-width: var(--wp--style--global--wide-size, 1100px);
+.wp-block-series-manager-series-list.alignwide,
+.entry-content .wp-block-series-manager-series-list,
+.wp-block-post-content .wp-block-series-manager-series-list {
+  width: var(--wp--style--global--wide-size, 1100px) !important;
+  max-width: var(--wp--style--global--wide-size, 1100px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
-
-/* "None" alignment: content width, applies to editor + frontend ancestor contexts */
 .wp-block-series-manager-series-list.sm-series-editor-root,
 .entry-content .wp-block-series-manager-series-list,
 .wp-block-post-content .wp-block-series-manager-series-list,
@@ -211,25 +209,10 @@ details summary:focus {
 .is-root-container .wp-block-series-manager-series-list,
 .block-editor-block-list__layout .wp-block-series-manager-series-list {
   box-sizing: border-box;
-  width: min(var(--sm-series-layout-content-width), 100%);
-  max-width: min(var(--sm-series-layout-content-width), 100%);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Wide width: must stay AFTER the rule above so it wins on equal specificity */
-.wp-block-series-manager-series-list.alignwide {
-  box-sizing: border-box;
-  width: min(var(--sm-series-layout-wide-width), 100%) !important;
-  max-width: min(var(--sm-series-layout-wide-width), 100%) !important;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Full width: unconstrained */
-.wp-block-series-manager-series-list.alignfull {
-  width: 100%;
-  max-width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* Nested SSR wrapper inside the editor block root */
@@ -246,7 +229,11 @@ details summary:focus {
   max-width: 100%;
   box-sizing: border-box;
 }
-
+/* Prevent floated images from bleeding into the series block */
+.wp-block-series-manager-series-list,
+.sm-series-block {
+  clear: both;
+}
 .sm-series-layout,
 .sm-series-accordion {
   width: 100%;
@@ -265,8 +252,57 @@ details summary:focus {
   width: 100%;
 }
 
+.sm-link-grid__card:hover .sm-link-grid__title {
+  color: var(--sm-hover-color);
+}
+
+/* ── LinkGrid variant ─────────────────────────────────── */
+
+/* Mobile first: 1 col base */
+.sm-link-grid__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem; /* tighter on mobile */
+  margin-top: 1.5rem;
+}
+
+/* sm: still 1 col, wider gap */
+@media (min-width: 640px) {
+  .sm-link-grid__grid {
+    gap: 1.5rem;
+  }
+}
+
+/* md: 2 cols */
+@media (min-width: 768px) {
+  .sm-link-grid__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* lg: 3 cols */
+@media (min-width: 1024px) {
+  .sm-link-grid__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+}
+
+.sm-link-grid__card:hover .sm-link-grid__title,
+.sm-media-grid-card:hover .sm-media-grid__title {
+  color: var(--sm-hover-color);
+}
+.sm-link-grid__card:hover {
+  box-shadow: 0 8px 40px var(--sm-hover-color, #0066d9) !important;
+  transform: translateY(-2px);
+}
+
+/* ── MediaGrid variant ─────────────────────────────────── */
 .sm-media-grid-card {
   position: relative;
+  display: block;
   overflow: hidden;
   padding: 4px;
   border-radius: 8px;
@@ -274,11 +310,59 @@ details summary:focus {
 }
 
 .sm-media-grid-card .sm-media-grid-card-img {
-  height: 170px;
+  height: 140px;
   overflow: hidden;
   border-radius: 8px;
   margin: 4px;
 }
+
+@media (min-width: 768px) {
+  .sm-media-grid-card .sm-media-grid-card-img {
+    height: 170px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sm-media-grid-card .sm-media-grid-card-img {
+    height: 200px;
+  }
+}
+
+.sm-media-grid-card--default {
+  background: #ffffff;
+  transition: box-shadow 0.3s ease;
+}
+
+.sm-media-grid-card--current {
+  background: #f3f7ff;
+  box-shadow: 0 10px 50px
+    color-mix(in srgb, var(--sm-hover-color) 12%, transparent);
+}
+
+.sm-media-grid-card--default:hover {
+  box-shadow: 0 20px 60px
+    color-mix(in srgb, var(--sm-hover-color) 15%, transparent);
+}
+
+.sm-media-grid-card--current:hover {
+  box-shadow: 0 20px 70px
+    color-mix(in srgb, var(--sm-hover-color) 18%, transparent);
+}
+
+/* ── MediaList variant ─────────────────────────────────── */
+
+/* MediaList hover title color */
+.sm-media-list__item:hover .sm-media-list__title {
+  color: var(--sm-hover-color);
+}
+
+/* Divider between rows */
+.sm-media-list__item + .sm-media-list__item,
+.sm-media-list__item + a,
+a + .sm-media-list__item {
+  border-top: 1px solid #f1f5f9;
+}
+
 
 /* plugin sidebar layout variant styles */
 .sm-series-layout-setting {

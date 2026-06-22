@@ -159,20 +159,16 @@ class SM_Series_Renderer
         foreach ($series_data as $item) {
             $variant_classes[$item['term']->term_id] = self::get_variant_class_for_term($item['term']);
         }
-        $align = $attributes['align'] ?? '';
 
-        $align_class = $align ? 'align' . $align : '';
-
-        $class = 'sm-series-block' . ($align_class ? ' ' . $align_class : '');
 
         $wrapper_attributes = get_block_wrapper_attributes([
-            'class' => $class,
+            'class' => 'sm-series-block alignwide',
         ]);
 
         return sprintf(
             '<div %s>%s</div>',
             $wrapper_attributes,
-            $layout_class::render($series_data, $variant_classes)
+            $layout_class::render($series_data, $variant_classes) 
 
         );
     }

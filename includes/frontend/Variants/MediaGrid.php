@@ -18,31 +18,31 @@ class MediaGrid
      */
     public static function render($posts, $current_post_id, array $style = [])
     {
+
         ob_start();
 ?>
         <!-- SECTION -->
         <section class="sm-series-variant w-full bg-background font-body">
 
             <!-- GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-2  gap-8 mt-10">
-
+            <div class="grid grid-cols-1 gap-4 mt-6
+                        sm:gap-6
+                        md:grid-cols-2 md:gap-8
+                        lg:grid-cols-3 lg:mt-10">
                 <?php foreach ($posts as $index => $p): ?>
                     <?php
+                    $button_color = esc_attr($style['buttonColor'] ?? '#0066d9');
                     $is_current = ($p->ID == $current_post_id);
-
                     $link_url = get_permalink((int) $p->ID);
-
+                    $post_obj = get_post($p->ID);
                     $avatar_img_url = '';
-                    if (empty($p) || empty($p->ID)) {
-                        continue;
+                    $thumb_id = get_post_thumbnail_id($p->ID);
+                    if ($thumb_id) {
+                        $avatar_img_url = wp_get_attachment_image_url((int) $thumb_id, 'large');
                     }
 
-                    if (has_post_thumbnail($p->ID)) {
-                        $avatar_img_url = get_the_post_thumbnail_url($p->ID, 'large');
-                    }
-
-                    if (! $avatar_img_url && ! empty($p->post_content)) {
-                        if (preg_match('/<img[^>]+src=[\'"]([^\'"]+)[\'"]/i', $p->post_content, $matches)) {
+                    if (! $avatar_img_url && $post_obj && ! empty($post_obj->post_content)) {
+                        if (preg_match('/<img[^>]+src=[\'"]([^\'"]+)[\'"]/i', $post_obj->post_content, $matches)) {
                             $avatar_img_url = $matches[1];
                         }
                     }
@@ -69,20 +69,16 @@ class MediaGrid
                         ])
                         : '';
 
-                    $currentAccentStyle = $is_current
-                        ? SeriesStyleHelper::inlineStyle([
-                            'color' => $style['buttonColor'] ?? null,
-                        ])
-                        : '';
                     ?>
 
                     <!-- CARD -->
                     <a
                         href="<?php echo esc_url($link_url); ?>"
-                        class=" sm-media-grid-card group
-                        <?php echo $is_current
-                            ? 'bg-[#f3f7ff]  shadow-[0_10px_50px_rgba(0,98,162,0.12)] hover:shadow-[0_20px_70px_rgba(0,98,162,0.18)]'
-                            : 'bg-white hover:shadow-[0_20px_60px_rgba(15,23,42,0.10)]'; ?>" <?php echo $currentCardStyle; ?>>
+                        style="--sm-hover-color: <?php echo $button_color; ?>;
+                                border: 1px solid <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>;
+                                border-radius: 1rem;"
+                        class="sm-media-grid-card group <?php echo $is_current ? 'sm-media-grid-card--current' : 'sm-media-grid-card--default'; ?>"
+                        <?php echo $currentCardStyle; ?>>
 
                         <!-- BADGE (ACTIVE ONLY) -->
                         <?php if ($is_current): ?>
@@ -109,13 +105,16 @@ class MediaGrid
                             <?php endif; ?>
                         </div>
                         <!-- CONTENT -->
-                        <div class="p-2">
-                            <div class="text-primary font-semibold mb-3" <?php echo $currentAccentStyle; ?>>
-                                Part <?php echo intval($part_number); ?>
-                            </div>
-                            <h3 class="font-bold text-black group-hover:text-primary transition-colors">
+                        <div class="p-2 md:p-3">
+                            <h3 class="sm-media-grid__title text-xl md:text-3xl font-bold text-slate-900 transition-colors">
                                 <?php echo esc_html($p->post_title); ?>
                             </h3>
+                            <div class="w-16 md:w-20 h-1 rounded-full mt-3 md:mt-4 mb-3 md:mb-5"
+                                style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>">
+                            </div>
+                            <span class="text-base font-semibold" ...>
+                                Part <?php echo intval($part_number); ?>
+                            </span>
                         </div>
                     </a>
                 <?php endforeach; ?>

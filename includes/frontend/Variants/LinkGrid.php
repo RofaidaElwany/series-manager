@@ -20,99 +20,58 @@ class LinkGrid
     {
         ob_start();
 ?>
-
-        <!-- SECTION -->
-        <section class="sm-series-variant w-full font-body">
-            <!-- GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-2  gap-8 mt-10">
+        <section class="sm-series-variant sm-link-grid">
+            <div class="sm-link-grid__grid">
                 <?php foreach ($posts as $index => $p): ?>
                     <?php
-                    $is_current = ($p->ID == $current_post_id);
-                    $link_url = get_permalink((int) $p->ID);
-                    $currentAccentStyle = $is_current
-                        ? SeriesStyleHelper::inlineStyle([
-                            'color' => $style['buttonColor'] ?? null,
-                        ])
-                        : '';
+                    $button_color = esc_attr($style['buttonColor'] ?? '#0066d9');
+                    $is_current  = ($p->ID == $current_post_id);
+                    $link_url    = get_permalink((int) $p->ID);
                     $part_number = $index + 1;
                     ?>
-                    <!-- CARD -->
-                    <a
-                        href="<?php echo esc_url($link_url); ?>"
-                        class="
-        relative
-        group
-        flex
-        items-start
-        gap-6
-        p-8
-        rounded-3xl
-        border
-        transition-all
-        duration-300
-        overflow-hidden
-        min-h-[220px]
-        <?php echo $is_current
-                        ? 'bg-[#f5f8ff] border-[#dbe7ff] shadow-lg'
-                        : 'bg-white border-slate-200 hover:shadow-lg'; ?>
-    ">
+                    <a href="<?php echo esc_url($link_url); ?>"
+                        style="--sm-hover-color: <?php echo $button_color; ?>;
+                                border: 1px solid <?php echo $button_color; ?>;
+                                border-radius: 1rem;
+                                box-shadow: 0 4px 24px <?php echo SeriesStyleHelper::withOpacity($style['buttonColor'] ?? '#0066d9', 0.12); ?>, 0 1px 4px <?php echo SeriesStyleHelper::withOpacity($style['buttonColor'] ?? '#0066d9', 0.08); ?>;"
+                        class="sm-link-grid__card <?php echo $is_current ? 'sm-link-grid__card--current' : 'sm-link-grid__card--default'; ?> 
+                                group relative flex items-start gap-4 p-5 
+                                md:gap-6 md:p-8 
+                                md:rounded-3xl 
+                                transition-all duration-300 overflow-hidden">
                         <?php if ($is_current): ?>
                             <div class="absolute top-6 right-6">
-                                <span
-                                    class="px-5 py-2 rounded-full text-white text-sm font-semibold"
+                                <span class="px-5 py-2 rounded-full text-white text-sm font-semibold"
                                     style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>">
                                     Reading Now
                                 </span>
                             </div>
                         <?php endif; ?>
-
                         <!-- ICON -->
-                        <div
-                            class="
-            w-24
-            h-24
-            shrink-0
-            rounded-3xl
-            bg-slate-50
-            flex
-            items-center
-            justify-center
-        ">
-                            <span
-                                class="material-symbols-outlined text-48px"
-                                style="color: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>">
+                        <div class="sm-link-grid__icon w-16 h-16 md:w-24 md:h-24 shrink-0 rounded-2xl md:rounded-3xl bg-slate-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined"
+                                style="color: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>; font-size: 32px;">
                                 link
                             </span>
                         </div>
 
                         <!-- CONTENT -->
-                        <div class="flex flex-col pt-2">
-
-                            <!-- TITLE -->
-                            <h3
-                                class="
-                text-3xl
-                font-bold
-                text-slate-900
-                group-hover:text-primary
-                transition-colors
-            ">
+                        <div class="flex flex-col pt-1 md:pt-2">
+                            <h3 class="sm-link-grid__title text-xl md:text-3xl font-bold text-slate-900 transition-colors">
                                 <?php echo esc_html($p->post_title); ?>
                             </h3>
-                            <!-- SMALL ACCENT LINE -->
-                            <div
-                                class="w-20 h-1 rounded-full mt-4 mb-5"
-                                style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>"></div>
-                            <!-- PART NUMBER -->
-                            <span
-                                class="text-xl font-medium"
-                                style="<?php echo $is_current ? 'color:' . esc_attr($style['buttonColor'] ?? '#0066d9') . ';' : ''; ?>"> Part <?php echo intval($part_number); ?>
+                            <div class="w-16 md:w-20 h-1 rounded-full mt-3 md:mt-4 mb-3 md:mb-5"
+                                style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>">
+                            </div>
+                            <span class="text-base font-semibold" ...>
+                                Part <?php echo intval($part_number); ?>
                             </span>
                         </div>
+
                         <!-- BOTTOM ACCENT -->
-                        <div
-                            class="absolute left-0 bottom-0 w-full h-1"
-                            style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>"></div>
+                        <div class="absolute left-0 bottom-0 w-full h-1"
+                            style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>">
+                        </div>
 
                     </a>
                 <?php endforeach; ?>

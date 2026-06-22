@@ -24,7 +24,7 @@ class StandardLayout
      * @param string|array<int,string> $variant_class String class name or map of term IDs to class names.
      * @return string
      */
-    public static function render(array $data, $variant_class): string
+    public static function render(array $data, $variant_class, string $align = ''): string
     {
         ob_start();
 
@@ -63,7 +63,8 @@ class StandardLayout
                     $item_variant_class::render(
                         $posts,
                         $current_post_id,
-                        $style
+                        $style, 
+                        $align,
                     )
                 );
                 ?>

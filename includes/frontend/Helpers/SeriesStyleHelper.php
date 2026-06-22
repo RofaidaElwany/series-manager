@@ -121,6 +121,9 @@ class SeriesStyleHelper
         return self::resolveStyleCSSValue($value);
     }
 
+    /**
+     * @param string|null $value
+     */
     public static function resolveStyleCSSValue($value): string
     {
         if ($value === null || $value === '') {
@@ -156,6 +159,9 @@ class SeriesStyleHelper
         return '';
     }
 
+    /**
+     * @param mixed $value
+     */
     private static function isSpacingValueSet($value): bool
     {
         return $value !== null && $value !== '';
