@@ -12,6 +12,8 @@ class SeriesNavigation
 {
     /**
      * @param array<string, string> $style
+     * @param object $prev_post
+     * @param object $next_post
      */
     public static function render($prev_post, $next_post, array $style = [])
     {
@@ -27,7 +29,7 @@ class SeriesNavigation
             <!-- Previous -->
             <?php if ($prev_post): ?>
                 <a href="<?php echo esc_url(get_permalink((int) $prev_post->ID)); ?>"
-                    class="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-all active:scale-95 shadow-sm"<?php echo $buttonStyle; ?>>
+                    class="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-all active:scale-95 shadow-sm" <?php echo $buttonStyle; ?>>
 
                     <span class="material-symbols-outlined">arrow_back</span>
 
@@ -44,7 +46,7 @@ class SeriesNavigation
             <!-- Next -->
             <?php if ($next_post): ?>
                 <a href="<?php echo esc_url(get_permalink((int) $next_post->ID)); ?>"
-                    class="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-all active:scale-95 shadow-sm"<?php echo $buttonStyle; ?>>
+                    class="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary hover:bg-primary-dim transition-all active:scale-95 shadow-sm" <?php echo $buttonStyle; ?>>
 
                     <span class="text-label-lg font-medium">
                         Next Post
