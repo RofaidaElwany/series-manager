@@ -363,7 +363,6 @@ a + .sm-media-list__item {
   border-top: 1px solid #f1f5f9;
 }
 
-
 /* plugin sidebar layout variant styles */
 .sm-series-layout-setting {
   border: 1px solid #dcdcde;
@@ -616,7 +615,8 @@ a + .sm-media-list__item {
   justify-content: center;
   background-color: #007cba !important;
   border: 2px solid;
-  border-radius: 9px;
+  border-radius: 18px;
+  padding: 20px;
 }
 
 .sm-series-dimensions h4 {
@@ -629,6 +629,49 @@ a + .sm-media-list__item {
   padding-bottom: 8px;
 }
 
+/* Fix Border control layout */
+fieldset.components-border-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* space under the "Border" legend/label */
+}
+
+fieldset.components-border-control legend {
+  margin-bottom: 8px; /* space below the "Border" word */
+  float: none;
+  width: 100%;
+}
+
+/* Center the px input vertically within its box */
+fieldset.components-border-control .components-border-control__width {
+  display: flex;
+  align-items: center; /* vertically centers the px input */
+}
+
+/* Center the input wrapper and unit selector */
+fieldset.components-border-control .components-unit-control-wrapper,
+fieldset.components-border-control .components-input-control__container {
+  display: flex;
+  align-items: center;
+  margin: 4px;
+}
+.spacing-sizes-control {
+  margin-bottom: 16px;
+  border: #ddd solid 1px;
+  border-radius: 12px;
+  padding: 16px 10px;
+}
+.components-panel__body .components-base-control {
+  margin-bottom: 0px;
+  flex: 1 1 36%;
+}
+
+/* Ensure the number input itself is vertically centered */
+fieldset.components-border-control input[type="number"] {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
 .sm-tab-content-style .components-tools-panel-header {
   min-height: 48px;
   padding: 0 16px;

@@ -86,12 +86,6 @@ export function SidebarView({
                 </div>
               )}
             </div>
-
-              // {savingTermId === series.id && (
-              //   <span className="sm-series-layout-saving">
-              //     {__("Saving...", "series-manager")}
-              //   </span>
-              // )}
           ))}
       </PanelBody>
     </PluginSidebar>
