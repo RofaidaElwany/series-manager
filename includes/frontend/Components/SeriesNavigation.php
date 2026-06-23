@@ -22,7 +22,7 @@ class SeriesNavigation
         ob_start();
 ?>
         <!-- Navigation Footer -->
-        <div class="flex justify-between items-center pt-8 border-t border-outline-variant/20">
+        <div class=" sm-layout-navigation flex justify-between items-center border-t border-outline-variant/20">
 
             <!-- Previous -->
             <?php if ($prev_post): ?>
