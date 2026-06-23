@@ -18,94 +18,81 @@ class LinkList
      */
     public static function render($posts, $current_post_id, array $style = [])
     {
-        $selectedRowStyle = SeriesStyleHelper::inlineStyle([
-            'background-color' => $style['headerBackgroundColor'] ?? null,
-            'border-left-color' => $style['buttonColor'] ?? null,
-        ]);
-
-        $accentStyle = SeriesStyleHelper::inlineStyle([
-            'color' => $style['buttonColor'] ?? null,
-        ]);
-
-        $accentBgStyle = SeriesStyleHelper::inlineStyle([
-            'background-color' => SeriesStyleHelper::withOpacity($style['buttonColor'] ?? null, 0.2),
-            'color' => $style['buttonColor'] ?? null,
-        ]);
+        $button_color = esc_attr($style['buttonColor'] ?? '#0066d9');
+        $bg_color     = esc_attr($style['headerBackgroundColor'] ?? '#e8f0fe');
 
         ob_start();
 ?>
         <!-- Posts List -->
-        <div class="flex flex-col py-2">
+        <div class="flex flex-col sm-series-variant w-full">
             <?php foreach ($posts as $index => $p): ?>
                 <?php
-                $is_current = ($p->ID == $current_post_id);
+                $is_current  = ($p->ID == $current_post_id);
                 $part_number = $index + 1;
-                $link_url = get_permalink((int) $p->ID);
-                $title_for_avatar = trim((string) $p->post_title);
-                $initial = strtoupper(substr($title_for_avatar, 0, 1));
-                $avatar_img_url = '';
-                if (function_exists('mb_substr') && $title_for_avatar !== '') {
-                    $initial = strtoupper(mb_substr($title_for_avatar, 0, 1));
-                }
-                if ($initial === '') {
-                    $initial = '?';
-                }
-                if (has_post_thumbnail($p->ID)) {
-                    $avatar_img_url = get_the_post_thumbnail_url($p->ID, 'thumbnail');
-                }
-                if (! $avatar_img_url && ! empty($p->post_content)) {
-                    if (preg_match('/<img[^>]+src=[\'"]([^\'"]+)[\'"]/i', $p->post_content, $matches)) {
-                        $avatar_img_url = $matches[1];
-                    }
-                }
-                $currentAccentStyle = $is_current
-                    ? SeriesStyleHelper::inlineStyle([
-                        'color' => $style['buttonColor'] ?? null,
-                    ])
-                    : '';
+                $link_url    = get_permalink((int) $p->ID);
                 ?>
 
                 <?php if ($is_current): ?>
+                    <!-- CURRENT POST -->
                     <a href="<?php echo esc_url($link_url); ?>"
-                        class="relative flex items-center gap-4 bg-primary/10 px-6 py-4 border-l-4 border-primary" <?php echo $selectedRowStyle; ?>>
+                        style="background-color: <?php echo $bg_color; ?>;
+                               border-left: 4px solid <?php echo $button_color; ?>;
+                               box-shadow: 0 4px 24px <?php echo SeriesStyleHelper::withOpacity($style['buttonColor'] ?? '#0066d9', 0.12); ?>;"
+                        class="flex items-center gap-3 md:gap-6 p-3 md:p-4 transition-all duration-200 rounded-xl">
 
-                        <div class="flex items-center justify-center rounded-lg text-on-surface w-10 h-10 overflow-hidden">
-                            <div class="flex items-center justify-center rounded-lg text-primary w-10 h-10" <?php echo $accentStyle; ?>>
-                                <span class="material-symbols-outlined text-2xl">link</span>
-                            </div>
+                        <!-- ICON -->
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl shrink-0 flex items-center justify-center"
+                            style="background-color: <?php echo SeriesStyleHelper::withOpacity($style['buttonColor'] ?? '#0066d9', 0.15); ?>">
+                            <span class="material-symbols-outlined text-2xl"
+                                style="color: <?php echo $button_color; ?>">link</span>
                         </div>
-                        <div class="p-2 flex-1 truncate">
-                            <div class="text-primary font-semibold mb-3" <?php echo $currentAccentStyle; ?>>
-                                Part <?php echo intval($part_number); ?>
-                            </div>
-                            <h3 class="font-bold text-black group-hover:text-primary transition-colors">
+
+                        <!-- CONTENT -->
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-base md:text-lg text-slate-900 truncate">
                                 <?php echo esc_html($p->post_title); ?>
-                            </h3>
+                            </h4>
+                            <span class="block text-xs md:text-sm font-semibold mb-1"
+                                style="color: <?php echo $button_color; ?>">
+                                Part <?php echo intval($part_number); ?> • Reading Now
+                            </span>
                         </div>
 
-                        <div class="flex items-center justify-center rounded-lg bg-primary/20 text-primary w-10 h-10" <?php echo $accentBgStyle; ?>>
-                            <span class="material-symbols-outlined text-2xl">check_circle</span>
-                        </div>
+                        <span class="material-symbols-outlined shrink-0"
+                            style="color: <?php echo $button_color; ?>">
+                            check_circle
+                        </span>
                     </a>
+
                 <?php else: ?>
                     <!-- OTHER POSTS -->
                     <a href="<?php echo esc_url($link_url); ?>"
-                        class="group flex items-center gap-4 px-6 py-4 hover:bg-surface-container-low transition">
+                        style="--sm-hover-color: <?php echo $button_color; ?>;"
+                        class="sm-link-list__item group flex items-center gap-3 md:gap-6 p-3 md:p-4 transition-all duration-200 hover:bg-slate-50 rounded-xl">
 
-                        <div class="flex items-center justify-center rounded-lg text-on-surface w-10 h-10 overflow-hidden">
-                            <div class="flex items-center justify-center rounded-lg text-gray-300 group-hover:text-primary w-16 ">
-                                <span class="material-symbols-outlined text-2xl">link</span>
-                            </div>
+                        <!-- ICON -->
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl shrink-0 flex items-center justify-center bg-slate-100 transition-colors group-hover:bg-[color-mix(in_srgb,var(--sm-hover-color)_15%,transparent)]">
+                            <span class="material-symbols-outlined text-2xl text-slate-400 transition-colors group-hover:text-[var(--sm-hover-color)]">
+                                link
+                            </span>
                         </div>
-                        <p class="text-on-surface font-medium flex-1 truncate group-hover:text-primary">
-                            <?php echo esc_html($p->post_title); ?>
-                        </p>
 
-                        <div class="text-gray-300 group-hover:text-primary">
-                            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+                        <!-- CONTENT -->
+                        <div class="flex-1 min-w-0">
+                            <h4 class="sm-link-list__title font-bold text-base md:text-lg text-slate-900 truncate transition-colors group-hover:text-[var(--sm-hover-color)]">
+                                <?php echo esc_html($p->post_title); ?>
+                            </h4>
+                            <span class="block text-xs md:text-sm text-slate-400 font-medium mb-1">
+                                Part <?php echo intval($part_number); ?>
+                            </span>
                         </div>
+
+                        <span class="material-symbols-outlined shrink-0 text-slate-300 transition-colors group-hover:text-[var(--sm-hover-color)]">
+                            arrow_forward
+                        </span>
                     </a>
                 <?php endif; ?>
+
             <?php endforeach; ?>
         </div>
 <?php

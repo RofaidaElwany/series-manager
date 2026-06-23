@@ -1,0 +1,8 @@
+{
+  "php.validate.enable": false,
+  "intelephense.files.exclude": [
+    "**/.git/**",
+    "**/.vscode/extensions/**",
+    "C:/Users/rofai/.vscode/extensions/**"
+  ]
+}
