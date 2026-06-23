@@ -38,7 +38,7 @@ const SortableItem = ({ id, post, onDelete }) => {
       <li
         ref={setNodeRef}
         style={style}
-        className={`flex items-center font-semibold 
+        className={`flex items-center font-semibold sm-setting-panal-icon
           ${post.isCurrent
             ? ' rounded bg-primary-container/10 text-primary border-l-4 border-primary'
             : ' text-on-surface-variant flex-grow hover:bg-surface-container-low'

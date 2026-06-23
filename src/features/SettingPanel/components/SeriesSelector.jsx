@@ -63,7 +63,7 @@ const SeriesSelector = ({
                   <span
                     key={id}
                     onClick={() => onSetActiveSeries(id)}
-                    className={`px-2 py-1 text-xs rounded cursor-pointer flex items-center gap-1 ${
+                    className={`sm-setting-panal-icon px-2 py-1 text-xs rounded cursor-pointer flex items-center gap-1 ${
                       id === activeSeriesId
                         ? ' bg-primary/10 text-primary ring-1 ring-primary/20 px-3 py-1.5 rounded text-sm font-bold flex items-center gap-2 cursor-default'
                         : ' text-on-surface bg-surface-container-highest px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 group transition-all hover:bg-surface-container-low cursor-default'
