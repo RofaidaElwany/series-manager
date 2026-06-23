@@ -1,7 +1,6 @@
 import { PluginSidebar } from "@wordpress/editor";
 import { Notice, PanelBody, Spinner, TabPanel } from "@wordpress/components";
 import { __} from "@wordpress/i18n";
-import { PositionTab } from "./components/tabs/PositionTab";
 import { LayoutTab } from "./components/tabs/LayoutTab";
 import { StyleTab } from "./components/tabs/StyleTab";
 import "../../index.css";
@@ -10,10 +9,8 @@ export function SidebarView({
   isLoading,
   savingTermId,
   error,
-  getPosition,
   getVariant,
   getStyleSetting,
-  onChangeLayoutPosition,
   onChangeLayoutVariant,
   onChangeStyleSetting,
   onChangeStyleSettings,
@@ -47,11 +44,6 @@ export function SidebarView({
                 activeClass="is-active"
                 tabs={[
                   {
-                    name: "position",
-                    title: __("Position", "series-manager"),
-                    className: "sm-tab-position",
-                  },
-                  {
                     name: "layout",
                     title: __("Layout", "series-manager"),
                     className: "sm-tab-layout",
@@ -64,15 +56,6 @@ export function SidebarView({
                 ]}
               >
                 {(tab) => {
-                  if (tab.name === "position") {
-                    return (
-                      <PositionTab
-                        series={series}
-                        getPosition={getPosition}
-                        onChangeLayoutPosition={onChangeLayoutPosition}
-                      />
-                    );
-                  }
                   if (tab.name === "layout") {
                     return (
                       <LayoutTab

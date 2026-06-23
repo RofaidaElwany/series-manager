@@ -31,7 +31,6 @@ export function SidebarContainer() {
   /**
    * Local component state.
    */
-  const [layoutPositions, setLayoutPositions] = useState({});
   const [layoutVariants, setLayoutVariants] = useState({});
   const [layoutStyles, setLayoutStyles] = useState({});
   const layoutStylesRef = useRef({});
@@ -93,8 +92,6 @@ export function SidebarContainer() {
    * 2. Saved settings
    * 3. Default value
    */
-  const getPosition = (term) =>
-    layoutPositions[term.id] || term.settings.position || "bottom";
 
   const getVariant = (term) =>
     layoutVariants[term.id] || term.settings.layout || "link-list";
@@ -154,38 +151,7 @@ export function SidebarContainer() {
   };
 
 
-  /**
-   * Handle layout position changes.
-   * Update local state first,
-   * then persist changes through the API.
-   */
-  const onChangeLayoutPosition = async (termId, position) => {
-    setError("");
-
-    const nextLayoutPositions = {
-      ...layoutPositions,
-      [termId]: position,
-    };
-
-    /**
-     * Update local state.
-     */
-    setLayoutPositions((current) => ({
-      ...current,
-      [termId]: position,
-    }));
-
-    setSavingTermId(termId);
-
-    try {
-      await updateSeriesSettings(termId, { position });
-    } catch (err) {
-      setError(err.message || "Failed to update series settings");
-    } finally {
-      setSavingTermId(null);
-    }
-  };
-
+  
   const refreshSeriesPreview = () => {
     if (typeof window !== "undefined" && window.dispatchEvent) {
       window.dispatchEvent(
@@ -267,9 +233,7 @@ export function SidebarContainer() {
       isLoading={isResolvingTerms}
       savingTermId={savingTermId}
       error={error}
-      getPosition={getPosition}
       getVariant={getVariant}
-      onChangeLayoutPosition={onChangeLayoutPosition}
       onChangeLayoutVariant={onChangeLayoutVariant}
       getStyleSetting={getStyleSetting}
       onChangeStyleSetting={onChangeStyleSetting}
