@@ -73,7 +73,7 @@ class AccordionLayout
 
                 ?>
 
-                <details class="sm-series-layout-item group bg-surface-container-lowest rounded-2xl border border-outline-variant/20 overflow-hidden"<?php echo SeriesStyleHelper::layoutContainerStyleCustomOnly($style); ?>>
+                <details class="sm-series-layout-item group bg-surface-container-lowest rounded-2xl border border-outline-variant/20 overflow-hidden" data-sm-series-term-id="<?php echo esc_attr((string) $term->term_id); ?>"<?php echo SeriesStyleHelper::layoutContainerStyleCustomOnly($style); ?>>
 
                     <summary class="list-none cursor-pointer">
 

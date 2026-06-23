@@ -12,6 +12,121 @@ import { useSeriesTerms } from "../../hooks/useSeriesTerms";
 import { updateSeriesSettings } from "../../services/seriesApiExports";
 import { normalizeStyleUpdates } from "./components/utils/styleSettings";
 
+const SPACING_PREVIEW_EVENT = "sm-series-spacing-preview";
+
+const resolveSpacingCssValue = (value) => {
+  if (value === undefined || value === null || value === "") {
+    return "0px";
+  }
+
+  const stringValue = String(value).trim();
+
+  if (stringValue === "0") {
+    return "0px";
+  }
+
+  const presetMatch = stringValue.match(/^var:preset\|spacing\|([a-z0-9-]+)$/i);
+
+  if (presetMatch) {
+    return `var(--wp--preset--spacing--${presetMatch[1]})`;
+  }
+
+  if (/^\d+(\.\d+)?(px|rem|em|%|vh|vw)$/i.test(stringValue)) {
+    return stringValue;
+  }
+
+  if (/^\d+(\.\d+)?$/.test(stringValue)) {
+    return `${stringValue}px`;
+  }
+
+  return stringValue.startsWith("var(--") ? stringValue : "0px";
+};
+
+const getSpacingSideValue = (spacing, side) => {
+  if (!spacing || typeof spacing !== "object") {
+    return "0px";
+  }
+
+  if (spacing[side] !== undefined && spacing[side] !== null && spacing[side] !== "") {
+    return resolveSpacingCssValue(spacing[side]);
+  }
+
+  if ((side === "left" || side === "right") && spacing.horizontal) {
+    return resolveSpacingCssValue(spacing.horizontal);
+  }
+
+  if ((side === "top" || side === "bottom") && spacing.vertical) {
+    return resolveSpacingCssValue(spacing.vertical);
+  }
+
+  return "0px";
+};
+
+const getEditorDocuments = () => {
+  const docs = [document];
+
+  document.querySelectorAll("iframe").forEach((iframe) => {
+    try {
+      if (iframe.contentDocument) {
+        docs.push(iframe.contentDocument);
+      }
+    } catch (error) {
+      // Ignore cross-origin frames.
+    }
+  });
+
+  return docs;
+};
+
+const clearSpacingPreview = (element) => {
+  element.classList.remove(
+    "sm-series-spacing-preview",
+    "sm-series-spacing-preview--padding",
+    "sm-series-spacing-preview--margin",
+  );
+};
+
+const applySpacingPreview = ({ termId, style, changedKeys }) => {
+  if (!termId || !Array.isArray(changedKeys) || changedKeys.length === 0) {
+    return;
+  }
+
+  const selector = `[data-sm-series-term-id="${termId}"]`;
+  const target = getEditorDocuments()
+    .flatMap((doc) => Array.from(doc.querySelectorAll(selector)))
+    .find((element) => element.closest(".sm-series-editor-root"));
+
+  if (!target) {
+    return;
+  }
+
+  clearSpacingPreview(target);
+
+  ["padding", "margin"].forEach((type) => {
+    ["top", "right", "bottom", "left"].forEach((side) => {
+      target.style.setProperty(
+        `--sm-preview-${type}-${side}`,
+        getSpacingSideValue(style?.[type], side),
+      );
+    });
+  });
+
+  target.classList.add("sm-series-spacing-preview");
+
+  if (changedKeys.includes("padding")) {
+    target.classList.add("sm-series-spacing-preview--padding");
+  }
+
+  if (changedKeys.includes("margin")) {
+    target.classList.add("sm-series-spacing-preview--margin");
+  }
+
+  window.clearTimeout(target.smSeriesSpacingPreviewTimer);
+  target.smSeriesSpacingPreviewTimer = window.setTimeout(() => {
+    clearSpacingPreview(target);
+  }, 1800);
+};
+
 export function SidebarContainer() {
   /**
    * Get editor and block editor data.
@@ -133,6 +248,22 @@ export function SidebarContainer() {
 
     layoutStylesRef.current[termId] = updatedStyle;
 
+    const spacingKeys = ["padding", "margin"].filter((key) =>
+      Object.prototype.hasOwnProperty.call(updates, key),
+    );
+
+    if (spacingKeys.length > 0) {
+      window.dispatchEvent(
+        new CustomEvent(SPACING_PREVIEW_EVENT, {
+          detail: {
+            termId,
+            style: updatedStyle,
+            changedKeys: spacingKeys,
+          },
+        }),
+      );
+    }
+
     setLayoutStyles((current) => ({
       ...current,
       [termId]: { ...updatedStyle },
@@ -161,6 +292,18 @@ export function SidebarContainer() {
       );
     }
   };
+
+  useEffect(() => {
+    const handleSpacingPreview = (event) => {
+      applySpacingPreview(event.detail || {});
+    };
+
+    window.addEventListener(SPACING_PREVIEW_EVENT, handleSpacingPreview);
+
+    return () => {
+      window.removeEventListener(SPACING_PREVIEW_EVENT, handleSpacingPreview);
+    };
+  }, []);
 
   const onChangeLayoutVariant = async (termId, layout) => {
     setError("");

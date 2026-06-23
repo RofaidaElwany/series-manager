@@ -45,7 +45,7 @@ class StandardLayout
 
 ?>
 
-            <div class="sm-series-layout space-y-8"<?php echo SeriesStyleHelper::layoutContainerStyle($style); ?>>
+            <div class="sm-series-layout space-y-8" data-sm-series-term-id="<?php echo esc_attr((string) $term->term_id); ?>"<?php echo SeriesStyleHelper::layoutContainerStyle($style); ?>>
 
                 <?php
                 echo SeriesStyleHelper::ksesWithStyles(
