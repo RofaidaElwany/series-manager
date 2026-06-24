@@ -38,10 +38,7 @@ require_once plugin_dir_path(__FILE__) . '/includes/Admin/Admin.php';
  *  Admin Initialization
  * ===================================================== */
 
-// ✅ Move inside a hook — never call at file load time
-add_action('admin_menu', function () {
-    SM_Series_Admin::init();
-});
+SM_Series_Admin::init();
 
 /* =====================================================
  *  Plugin Initialization (Core Logic)
@@ -296,3 +293,8 @@ function series_manager_enqueue_admin_assets(string $hook): void
     );
 }
 add_action('admin_enqueue_scripts', 'series_manager_enqueue_admin_assets');
+
+wp_enqueue_style(
+    'series-manager-admin-responsive',
+    plugin_dir_url(__FILE__) . 'assets/css/series-manager-responsive.css'
+);

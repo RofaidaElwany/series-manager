@@ -38,6 +38,10 @@
     font-size: 24px !important;
   }
 
+  .sm-admin-layout .material-symbols-outlined {
+    font-size: 24px !important;
+  }
+
   .components-button.is-primary:disabled {
     @apply text-white !important;
   }
@@ -296,29 +300,26 @@ details summary:focus {
   box-sizing: border-box;
 }
 
-
-
 .sm-link-grid__card:hover .sm-link-grid__title {
   color: var(--sm-hover-color);
 }
 /* ── Layouts navigation ─────────────────────────────────── */
 
-.sm-layout-navigation{
-  padding: 10px ;
+.sm-layout-navigation {
+  padding: 10px;
 }
 
 /* ── Layouts ─────────────────────────────────── */
 
-.sm-series-layout ,.sm-series-variant {
+.sm-series-layout,
+.sm-series-variant {
   background-color: white;
-
 }
 
 /* ── variant ─────────────────────────────────── */
 .sm-series-variant {
   width: 100%;
   padding: 0px 10px;
-;
 }
 
 /* ── LinkGrid variant ─────────────────────────────────── */
@@ -760,3 +761,4 @@ fieldset.components-border-control input[type="number"] {
 .css-1abtnze {
   min-width: 100px;
 }
+
