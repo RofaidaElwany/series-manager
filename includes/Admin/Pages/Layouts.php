@@ -19,7 +19,7 @@ class Layouts
         }
         $selected_layout = isset($_POST['content_variant']) ? sanitize_text_field(wp_unslash($_POST['content_variant'])) : 'link-list';
         update_option('content_variant', $selected_layout);
-        wp_safe_redirect(admin_url('admin.php?page=series-layouts&updated=1'));
+        wp_safe_redirect(admin_url('admin.php?page=series-manager&tab=layouts&updated=1'));
         exit;
     }
 
@@ -59,7 +59,7 @@ class Layouts
                             <label class="sm-layout-card">
                                 <input class="sm-layout-input" name="content_variant" type="radio" value="media-grid" <?php checked($selected_layout, 'media-grid'); ?> />
                                 <div class="sm-layout-card-content">
-                                    <div class="sm-layout-preview">
+                                    <div class="sm-layout-preview sm-preview-grid-container">
                                         <div class="sm-preview-grid">
                                             <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
                                             <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
@@ -85,7 +85,7 @@ class Layouts
                             <label class="sm-layout-card">
                                 <input class="sm-layout-input" name="content_variant" type="radio" value="link-grid" <?php checked($selected_layout, 'link-grid'); ?> />
                                 <div class="sm-layout-card-content">
-                                    <div class="sm-layout-preview">
+                                    <div class="sm-layout-preview sm-preview-grid-container">
                                         <div class="sm-preview-grid">
                                             <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
                                             <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
@@ -111,18 +111,18 @@ class Layouts
                             <label class="sm-layout-card">
                                 <input class="sm-layout-input" name="content_variant" type="radio" value="media-list" <?php checked($selected_layout, 'media-list'); ?> />
                                 <div class="sm-layout-card-content">
-                                    <div class="sm-layout-preview">
+                                    <div class="sm-layout-preview sm-preview-list-container">
                                         <div class="sm-preview-list">
                                             <div class="sm-preview-list-item">
-                                                <div class="sm-preview-icon"></div>
+                                                <span class="material-symbols-outlined">image</span>
                                                 <div class="sm-preview-text"></div>
                                             </div>
                                             <div class="sm-preview-list-item">
-                                                <div class="sm-preview-icon"></div>
+                                                <span class="material-symbols-outlined">image</span>
                                                 <div class="sm-preview-text"></div>
                                             </div>
                                             <div class="sm-preview-list-item">
-                                                <div class="sm-preview-icon"></div>
+                                                <span class="material-symbols-outlined">image</span>
                                                 <div class="sm-preview-text"></div>
                                             </div>
                                         </div>
@@ -143,18 +143,18 @@ class Layouts
                             <label class="sm-layout-card">
                                 <input class="sm-layout-input" name="content_variant" type="radio" value="link-list" <?php checked($selected_layout, 'link-list'); ?> />
                                 <div class="sm-layout-card-content">
-                                    <div class="sm-layout-preview">
+                                    <div class="sm-layout-preview sm-preview-list-container">
                                         <div class="sm-preview-list">
-                                            <div class="sm-preview-list-item">
-                                                <div class="sm-preview-icon-link"></div>
+                                            <div class="sm-preview-list-item-link">
+                                                <div class="sm-preview-icon-link"><span class="material-symbols-outlined">link</span></div>
                                                 <div class="sm-preview-text"></div>
                                             </div>
-                                            <div class="sm-preview-list-item">
-                                                <div class="sm-preview-icon-link"></div>
+                                            <div class="sm-preview-list-item-link">
+                                                <div class="sm-preview-icon-link"><span class="material-symbols-outlined">link</span></div>
                                                 <div class="sm-preview-text"></div>
                                             </div>
-                                            <div class="sm-preview-list-item">
-                                                <div class="sm-preview-icon-link"></div>
+                                            <div class="sm-preview-list-item-link">
+                                                <div class="sm-preview-icon-link"><span class="material-symbols-outlined">link</span></div>
                                                 <div class="sm-preview-text"></div>
                                             </div>
                                         </div>

@@ -1,4 +1,4 @@
-// import { createBlock } from "@wordpress/blocks";
+import { createBlock } from "@wordpress/blocks";
 import { useState, useEffect, useRef } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { SeriesSidebarView } from "./SeriesSidebarView";
@@ -9,6 +9,13 @@ import { useSeriesPostActions } from "../../hooks/useSeriesPostActions";
 import { createSeriesTerm } from "../../services/seriesApiExports";
 
 const SeriesSidebarContainer = () => {
+  const hasBlock = (blockList, blockName) =>
+    blockList.some(
+      (block) =>
+        block.name === blockName ||
+        hasBlock(block.innerBlocks || [], blockName),
+    );
+
   /* ========================= Editor Data ========================= */
   // Get necessary data from the editor store
   const { postId, postTitle, postType, currentSeries, blocks } = useSelect(
@@ -53,7 +60,8 @@ const SeriesSidebarContainer = () => {
   }, [selectedSeriesIds]);
 
   const { editPost } = useDispatch("core/editor");
-  // const { insertBlocks, selectBlock } = useDispatch("core/block-editor");
+  const { insertBlocks, selectBlock } = useDispatch("core/block-editor");
+  const hasSeriesBlock = hasBlock(blocks, "series-manager/series-list");
 
   /* ========================= Terms ========================= */
   const { seriesTerms, isResolvingTerms } = useSeriesTerms(postType);
@@ -135,17 +143,15 @@ const SeriesSidebarContainer = () => {
 
   /* =========================    Handler(Change series)  ========================= */
   // Ensure the series block exists in the editor when changing series
-  // const ensureSeriesBlockExists = () => {
-  //   const hasSeriesBlock = blocks.some(
-  //     (block) => block.name === "series-manager/series-list",
-  //   );
+  const insertSeriesBlock = () => {
+    if (!selectedSeriesIds.length || hasSeriesBlock) {
+      return;
+    }
 
-  //   if (!hasSeriesBlock) {
-  //     const block = createBlock("series-manager/series-list");
-  //     insertBlocks(block);
-  //     selectBlock(block.clientId);
-  //   }
-  // };
+    const block = createBlock("series-manager/series-list");
+    insertBlocks(block);
+    selectBlock(block.clientId);
+  };
 
   const onChangeSeries = (seriesId) => {
     const id = Number(seriesId);
@@ -200,6 +206,8 @@ const SeriesSidebarContainer = () => {
       postType={postType}
       onChangeSeries={onChangeSeries}
       onCreateSeries={handleCreateSeries}
+      hasSeriesBlock={hasSeriesBlock}
+      onInsertSeriesBlock={insertSeriesBlock}
       onReorder={handleReorder}
       onDelete={handleDelete}
       onSave={handleSave}

@@ -13,6 +13,8 @@ const SeriesSidebarView = ({
   postType,
   onChangeSeries,
   onCreateSeries,
+  hasSeriesBlock,
+  onInsertSeriesBlock,
   onReorder,
   onDelete,
   onSave,
@@ -51,6 +53,8 @@ const SeriesSidebarView = ({
           isLoading={isResolvingTerms}
           onChangeSeries={onChangeSeries}
           onCreateSeries={onCreateSeries}
+          hasSeriesBlock={hasSeriesBlock}
+          onInsertSeriesBlock={onInsertSeriesBlock}
         />
 
         <SeriesPostsList

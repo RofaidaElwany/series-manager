@@ -32,15 +32,14 @@
       "wght" 400,
       "GRAD" 0,
       "opsz" 48;
-    font-size: 40px !important;
   }
   .sm-setting-panal-icon .material-symbols-outlined {
     font-size: 24px !important;
   }
 
-  .sm-admin-layout .material-symbols-outlined {
+  /* .sm-admin-layout .material-symbols-outlined {
     font-size: 24px !important;
-  }
+  } */
 
   .components-button.is-primary:disabled {
     @apply text-white !important;
@@ -220,6 +219,7 @@ details summary:focus {
   max-width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  margin-top: 40px;
 }
 
 /* Nested SSR wrapper inside the editor block root */
@@ -448,7 +448,7 @@ a + .sm-media-list__item {
   gap: 14px;
   width: 100%;
   min-height: 112px;
-  padding: 14px 16px 14px 12px;
+  padding: 20px;
   border: 1px solid #dcdcde;
   border-radius: 8px;
   background: #ffffff;

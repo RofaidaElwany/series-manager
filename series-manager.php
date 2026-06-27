@@ -278,23 +278,28 @@ function series_manager_enqueue_admin_assets(string $hook): void
     );
 
     $css_file_path = plugin_dir_path(__FILE__) . 'build/index.css';
+    $responsive_css_file_path = plugin_dir_path(__FILE__) . 'assets/css/series-manager-responsive.css';
+    $responsive_css_dependencies = [];
 
-    // Ensure CSS file exists
-    if (! file_exists($css_file_path)) {
-        return;
+    if (file_exists($css_file_path)) {
+        // Enqueue Tailwind CSS
+        wp_enqueue_style(
+            'sm-series-admin',
+            plugins_url('build/index.css', __FILE__),
+            [],
+            filemtime($css_file_path)
+        );
+
+        $responsive_css_dependencies[] = 'sm-series-admin';
     }
 
-    // Enqueue Tailwind CSS
-    wp_enqueue_style(
-        'sm-series-admin',
-        plugins_url('build/index.css', __FILE__),
-        [],
-        filemtime($css_file_path)
-    );
+    if (file_exists($responsive_css_file_path)) {
+        wp_enqueue_style(
+            'series-manager-admin-responsive',
+            plugins_url('assets/css/series-manager-responsive.css', __FILE__),
+            $responsive_css_dependencies,
+            filemtime($responsive_css_file_path)
+        );
+    }
 }
 add_action('admin_enqueue_scripts', 'series_manager_enqueue_admin_assets');
-
-wp_enqueue_style(
-    'series-manager-admin-responsive',
-    plugin_dir_url(__FILE__) . 'assets/css/series-manager-responsive.css'
-);

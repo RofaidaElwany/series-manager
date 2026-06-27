@@ -95,9 +95,6 @@ class SM_Series_Renderer
         return defined('REST_REQUEST') && REST_REQUEST;
     }
 
-
-
-
     private static function get_preview_post_id(): int
     {
         if (! self::is_editor_preview_request()) {
@@ -118,6 +115,44 @@ class SM_Series_Renderer
     }
 
     /**
+     * ✅ NEW: Get series data from live preview (unsaved changes)
+     */
+    private static function get_live_preview_series($attributes = []): array
+    {
+        // Check if preview data is passed from React component
+        if (! empty($attributes['__seriesPreviewData']) && is_array($attributes['__seriesPreviewData'])) {
+            return $attributes['__seriesPreviewData'];
+        }
+
+        return [];
+    }
+
+    /**
+     * ✅ UPDATED: Get series data - fallback to preview if post not saved
+     * @param int $post_id
+     */
+    private static function get_series_data_for_post($post_id, $attributes = [])
+    {
+        global $wpdb;
+
+        // Try live preview data first (for unsaved posts)
+        $preview_series = self::get_live_preview_series($attributes);
+        if (! empty($preview_series)) {
+            return $preview_series;
+        }
+
+        // Fallback to database
+        if (! $post_id) {
+            return [];
+        }
+
+        $repository = new \SeriesRepository($wpdb);
+        $navigation_service = new \Service\SeriesNavigationService($repository);
+
+        return $navigation_service->getSeriesWithPosts($post_id) ?? [];
+    }
+
+    /**
      * Render
      */
     public static function render_series($attributes = []): string
@@ -129,25 +164,16 @@ class SM_Series_Renderer
             return '';
         }
 
-        global $wpdb;
+        // ✅ UPDATED: Get series data with fallback to live preview
+        $series_data = self::get_series_data_for_post($post_id, $attributes);
 
-        $repository = new \SeriesRepository($wpdb);
-        $navigation_service = new \Service\SeriesNavigationService($repository);
-        $series_data = $navigation_service->getSeriesWithPosts(
-            $post_id
-        );
-
-        // Editor preview: show placeholder instead of empty string
+        // Editor preview: show placeholder if no series
         if (empty($series_data)) {
             if (self::is_editor_preview_request()) {
                 return '<div class="sm-series-block sm-series-empty-preview" style="padding:1em;border:1px dashed #ccc;color:#888;">'
-                    . __('Series block: save the post to see your series here.', 'series-manager')
+                    . __('Series block: add a series in the sidebar to see it rendered here.', 'series-manager')
                     . '</div>';
             }
-            return '';
-        }
-
-        if (empty($series_data)) {
             return '';
         }
 
@@ -160,16 +186,15 @@ class SM_Series_Renderer
             $variant_classes[$item['term']->term_id] = self::get_variant_class_for_term($item['term']);
         }
 
-
         $wrapper_attributes = get_block_wrapper_attributes([
             'class' => 'sm-series-block alignwide',
+            'data-sm-series-live-preview' => 'true', // ✅ Mark as live preview
         ]);
 
         return sprintf(
             '<div %s>%s</div>',
             $wrapper_attributes,
-            $layout_class::render($series_data, $variant_classes) 
-
+            $layout_class::render($series_data, $variant_classes)
         );
     }
 }

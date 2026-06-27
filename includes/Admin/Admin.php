@@ -8,7 +8,6 @@ require_once __DIR__ . '/../Services/SeriesService.php';
 require_once __DIR__ . '/Pages/CPTpage.php';
 require_once __DIR__ . '/Pages/Layouts.php';
 
-use Admin\Pages\DashboardPage;
 use Admin\Pages\CPTpage;
 use Admin\Pages\Layouts;
 
@@ -51,12 +50,11 @@ class SM_Series_Admin
 
     public static function render_tabbed_page()
     {
-        // Get current tab from URL parameter, default to 'dashboard'
-        $current_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'dashboard';
+        $default_tab = array_key_first(self::$tabs);
+        $current_tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : $default_tab;
 
-        // Verify tab exists
         if (!isset(self::$tabs[$current_tab])) {
-            $current_tab = 'dashboard';
+            $current_tab = $default_tab;
         }
 
         ?>

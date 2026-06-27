@@ -16,6 +16,8 @@ const SeriesSelector = ({
   isLoading,
   onChangeSeries,
   onCreateSeries,
+  hasSeriesBlock,
+  onInsertSeriesBlock,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSeriesName, setNewSeriesName] = useState('');
@@ -98,6 +100,19 @@ const SeriesSelector = ({
               + New Series
             </button>
           </div>
+
+          {selectedSeriesIds.length > 0 && (
+            <div className="mb-4">
+              <Button
+                variant="secondary"
+                onClick={onInsertSeriesBlock}
+                disabled={hasSeriesBlock}
+                className="w-full justify-center"
+              >
+                {hasSeriesBlock ? 'Series List block already added' : 'Add Series List block'}
+              </Button>
+            </div>
+          )}
 
           {/* Modal */}
           {isModalOpen && (

@@ -13,6 +13,8 @@ import { updateSeriesSettings } from "../../services/seriesApiExports";
 import { normalizeStyleUpdates } from "./components/utils/styleSettings";
 
 const SPACING_PREVIEW_EVENT = "sm-series-spacing-preview";
+const LIVE_PREVIEW_EVENT = "sm-series-live-preview";
+const SERIES_DATA_UPDATE_EVENT = "sm-series-data-update"; // ✅ NEW
 
 const resolveSpacingCssValue = (value) => {
   if (value === undefined || value === null || value === "") {
@@ -131,17 +133,19 @@ export function SidebarContainer() {
   /**
    * Get editor and block editor data.
    */
-  const { postType, currentSeries, blocks } = useSelect((select) => {
+  const { postType, currentSeries, blocks, postId } = useSelect((select) => {
     const editor = select("core/editor");
     const blockEditor = select("core/block-editor");
 
     return {
       postType: editor.getCurrentPostType(),
+      postId: editor.getCurrentPostId(), // ✅ NEW: Get post ID
       currentSeries: editor.getEditedPostAttribute("series") || [],
       blocks: blockEditor.getBlocks(),
     };
   }, []);
 
+  const { updateBlock } = useDispatch("core/block-editor"); // ✅ NEW
 
   /**
    * Local component state.
@@ -199,6 +203,37 @@ export function SidebarContainer() {
       ),
     [seriesTerms, selectedSeriesKey],
   );
+
+  /**
+   * ✅ UPDATED: Dispatch live preview event and inject series data into blocks
+   */
+  useEffect(() => {
+    if (typeof window !== "undefined" && selectedSeries.length > 0) {
+      // Dispatch live preview event
+      window.dispatchEvent(
+        new CustomEvent(LIVE_PREVIEW_EVENT, {
+          detail: {
+            series: selectedSeries,
+            layoutVariants,
+            layoutStyles,
+            postId, // ✅ Include post ID
+          },
+        }),
+      );
+
+      // ✅ NEW: Update blocks with series preview data
+      window.dispatchEvent(
+        new CustomEvent(SERIES_DATA_UPDATE_EVENT, {
+          detail: {
+            seriesTermIds: selectedSeriesIds,
+            series: selectedSeries,
+            layoutVariants,
+            layoutStyles,
+          },
+        }),
+      );
+    }
+  }, [selectedSeries, layoutVariants, layoutStyles, selectedSeriesIds, postId]);
 
   /**
    * Get the current layout position for a term.
@@ -281,8 +316,6 @@ export function SidebarContainer() {
     }
   };
 
-
-  
   const refreshSeriesPreview = () => {
     if (typeof window !== "undefined" && window.dispatchEvent) {
       window.dispatchEvent(
