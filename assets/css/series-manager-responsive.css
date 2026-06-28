@@ -322,8 +322,8 @@
   background-color: var(--sm-color-primary);
   color: white;
   border: none;
-  padding: var(--sm-spacing-md) var(--sm-spacing-xl);
-  border-radius: var(--sm-radius-md);
+  padding: 8px;
+  border-radius: 24px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
