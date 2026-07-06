@@ -1,17 +1,20 @@
-import { reorderPosts, removePostFromList } from '../utils/postHelpers';
-import { updateSeriesOrder } from '../services/seriesApiExports';
+import { reorderPosts, removePostFromList } from "../utils/postHelpers";
+import {
+  updateSeriesOrder,
+  removePostFromSeries as removePostFromSeriesApi,
+} from "../services/seriesApiExports";
 
 export const useSeriesPostActions = (
   activeSeriesId,
   orderedPosts,
-  setOrderedPosts
+  setOrderedPosts,
 ) => {
   const refreshSeriesPreview = () => {
-    if (typeof window !== 'undefined' && window.dispatchEvent) {
+    if (typeof window !== "undefined" && window.dispatchEvent) {
       window.dispatchEvent(
-        new CustomEvent('sm-series-preview-refresh', {
+        new CustomEvent("sm-series-preview-refresh", {
           detail: { termId: activeSeriesId },
-        })
+        }),
       );
     }
   };
@@ -21,31 +24,37 @@ export const useSeriesPostActions = (
       return Promise.resolve();
     }
 
-    return Promise.resolve(updateSeriesOrder(activeSeriesId, posts)).then((response) => {
-      refreshSeriesPreview();
-      return response;
-    });
+    return Promise.resolve(updateSeriesOrder(activeSeriesId, posts)).then(
+      (response) => {
+        refreshSeriesPreview();
+        return response;
+      },
+    );
   };
 
   const handleReorder = (activeId, overId) => {
-    const newPosts = reorderPosts(
-      orderedPosts,
-      activeId,
-      overId
-    );
+    const newPosts = reorderPosts(orderedPosts, activeId, overId);
 
     setOrderedPosts(newPosts);
     // Removed automatic save - will save only on Save button click
   };
 
-  const handleDelete = (postToDelete) => {
-    const updatedPosts = removePostFromList(
-      orderedPosts,
-      postToDelete.id
-    );
+  const handleDelete = async (postToDelete) => {
+    if (!activeSeriesId || !postToDelete?.id) {
+      return null;
+    }
 
-    setOrderedPosts(updatedPosts);
-    // Removed automatic save - will save only on Save button click
+    const updatedPosts = removePostFromList(orderedPosts, postToDelete.id);
+
+    try {
+      await removePostFromSeriesApi(activeSeriesId, postToDelete.id);
+      setOrderedPosts(updatedPosts);
+      refreshSeriesPreview();
+      return updatedPosts;
+    } catch (error) {
+      console.error("Failed to remove post from series", error);
+      throw error;
+    }
   };
 
   return {

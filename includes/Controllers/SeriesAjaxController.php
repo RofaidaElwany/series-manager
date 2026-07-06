@@ -208,6 +208,9 @@ class SeriesAjaxController
         }
 
         $this->repository->removePostFromSeries($term->term_taxonomy_id, $post_id);
+        $remaining_post_ids = $this->repository->getOrderedPostIds($term->term_taxonomy_id);
+        $this->repository->persistOrderMeta($term->term_id, $remaining_post_ids);
+        wp_update_term_count_now([$term->term_taxonomy_id], 'series');
 
         wp_send_json_success(['message' => 'Post removed from series']);
     }

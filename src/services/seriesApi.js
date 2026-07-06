@@ -85,10 +85,35 @@ export const createSeriesApi = ({ ajaxurl, nonce, fetchFn, wpData }) => {
     return data.data;
   };
 
+  const removePostFromSeries = async (termId, postId) => {
+    const formData = new URLSearchParams({
+      action: "sm_remove_post_from_series",
+      nonce,
+      term_id: termId,
+      post_id: postId,
+    });
+
+    const res = await fetchFn(ajaxurl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    });
+
+    const data = await res.json();
+    if (!data.success) {
+      throw new Error(
+        data.data?.message || "Failed to remove post from series",
+      );
+    }
+
+    return data.data;
+  };
+
   return {
     fetchSeriesPosts,
     updateSeriesOrder,
     createSeriesTerm,
     updateSeriesSettings,
+    removePostFromSeries,
   };
 };

@@ -1,4 +1,4 @@
-import { SeriesApi } from './seriesApiInstance';
+import { SeriesApi } from "./seriesApiInstance";
 
 // We avoid calling SeriesApi() during module evaluation because at that
 // point wp_localize_script may not have run yet.  Instead each exported
@@ -6,14 +6,15 @@ import { SeriesApi } from './seriesApiInstance';
 
 const getApi = () => SeriesApi();
 
-export const fetchSeriesPosts = (...args) =>
-  getApi().fetchSeriesPosts(...args);
+export const fetchSeriesPosts = (...args) => getApi().fetchSeriesPosts(...args);
 
 export const updateSeriesOrder = (...args) =>
   getApi().updateSeriesOrder(...args);
 
-export const createSeriesTerm = (...args) =>
-  getApi().createSeriesTerm(...args);
+export const createSeriesTerm = (...args) => getApi().createSeriesTerm(...args);
 
 export const updateSeriesSettings = (...args) =>
   getApi().updateSeriesSettings(...args);
+
+export const removePostFromSeries = (...args) =>
+  getApi().removePostFromSeries(...args);

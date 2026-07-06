@@ -82,6 +82,19 @@ class SeriesRepository
     public function updateOrder(int $term_taxonomy_id, array $post_ids): void
     {
         $this->ensureTermOrderColumn();
+        $term = get_term_by(
+            'term_taxonomy_id',
+            $term_taxonomy_id,
+            'series'
+        );
+        $this->removeMissingPostsFromSeries(
+            $term->term_id,
+            $post_ids
+        );
+
+        if (! $term || is_wp_error($term)) {
+            return;
+        }
 
         foreach ($post_ids as $index => $post_id) {
             $this->wpdb->replace(
@@ -96,6 +109,36 @@ class SeriesRepository
                     '%d',
                     '%d',
                 ]
+            );
+        }
+    }
+
+    /* ===========================
+        *remove posts from series
+        ========================= */
+
+    public function removeMissingPostsFromSeries(int $term_id, array $post_ids): void
+    {
+        $current_posts = get_posts([
+            'post_type' => 'any',
+            'posts_per_page' => -1,
+            'fields' => 'ids',
+            'tax_query' => [
+                [
+                    'taxonomy' => 'series',
+                    'field' => 'term_id',
+                    'terms' => $term_id,
+                ],
+            ],
+        ]);
+
+        $removed_posts = array_diff($current_posts, $post_ids);
+
+        foreach ($removed_posts as $post_id) {
+            wp_remove_object_terms(
+                $post_id,
+                $term_id,
+                'series'
             );
         }
     }
