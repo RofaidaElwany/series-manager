@@ -678,3 +678,10 @@
   color: #0073aa;
   background-color: #f5f5f5;
 }
+
+.wp-core-ui .button-primary {
+  padding: 6px 16px;
+  border-radius: 24px;
+  background-color: #0062a2;
+  text: white;
+}
