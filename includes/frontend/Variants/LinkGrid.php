@@ -40,8 +40,8 @@ class LinkGrid
                                 md:rounded-3xl 
                                 transition-all duration-300 overflow-hidden">
                         <?php if ($is_current): ?>
-                            <div class="absolute top-6 right-6">
-                                <span class="px-5 py-2 rounded-full text-white text-sm font-semibold"
+                            <div class=" reading-now ">
+                                <span class=" px-5 py-2 rounded-full text-white text-sm font-semibold"
                                     style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>">
                                     Reading Now
                                 </span>

@@ -762,3 +762,17 @@ fieldset.components-border-control input[type="number"] {
   min-width: 100px;
 }
 
+.sm-preview-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 8px;
+}
+
+.reading-now{
+  position: absolute;
+  top: 10px;
+  right: 6px;
+}

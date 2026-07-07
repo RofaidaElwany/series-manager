@@ -105,7 +105,7 @@ class MediaGrid
                             <?php endif; ?>
                         </div>
                         <!-- CONTENT -->
-                        <div class="p-2 md:p-3">
+                        <div class="p-2 md:p-3 sm-preview-lines">
                             <h3 class="sm-media-grid__title text-xl md:text-3xl font-bold text-slate-900 transition-colors">
                                 <?php echo esc_html($p->post_title); ?>
                             </h3>
