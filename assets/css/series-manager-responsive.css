@@ -685,3 +685,8 @@
   background-color: #0062a2;
   text: white;
 }
+
+.nav-tab:hover {
+  background-color: #005a8a;
+  color: #fff;
+}
