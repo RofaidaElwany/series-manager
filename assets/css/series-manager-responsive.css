@@ -187,11 +187,47 @@
   background: linear-gradient(135deg, var(--sm-color-primary) 0%, #005a8a 100%);
   border-radius: var(--sm-radius-sm);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   color: white;
   font-size: 18px;
   border-left: 2px solid white;
+}
+
+.sm-preview-item .material-symbols-outlined {
+  font-size: 48px;
+}
+
+.sm-preview-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 8px;
+}
+
+.sm-preview-list .sm-preview-lines {
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.sm-preview-line {
+  height: 4px;
+  width: 100%;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.sm-preview-line-title {
+  width: 70%;
+}
+
+.sm-preview-line-part {
+  width: 40%;
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .sm-preview-item:first-child {

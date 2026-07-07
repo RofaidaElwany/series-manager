@@ -61,12 +61,48 @@ class Layouts
                                 <div class="sm-layout-card-content">
                                     <div class="sm-layout-preview sm-preview-grid-container">
                                         <div class="sm-preview-grid">
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">image</span></div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">image</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">image</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">image</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">image</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">image</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">image</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="sm-layout-info">
@@ -87,12 +123,48 @@ class Layouts
                                 <div class="sm-layout-card-content">
                                     <div class="sm-layout-preview sm-preview-grid-container">
                                         <div class="sm-preview-grid">
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
-                                            <div class="sm-preview-item"><span class="material-symbols-outlined">link</span></div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">link</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">link</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">link</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">link</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">link</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
+                                            <div class="sm-preview-item">
+                                                <span class="material-symbols-outlined">link</span>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="sm-layout-info">
@@ -115,15 +187,24 @@ class Layouts
                                         <div class="sm-preview-list">
                                             <div class="sm-preview-list-item">
                                                 <span class="material-symbols-outlined">image</span>
-                                                <div class="sm-preview-text"></div>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
                                             </div>
                                             <div class="sm-preview-list-item">
                                                 <span class="material-symbols-outlined">image</span>
-                                                <div class="sm-preview-text"></div>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
                                             </div>
                                             <div class="sm-preview-list-item">
                                                 <span class="material-symbols-outlined">image</span>
-                                                <div class="sm-preview-text"></div>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -147,15 +228,24 @@ class Layouts
                                         <div class="sm-preview-list">
                                             <div class="sm-preview-list-item-link">
                                                 <div class="sm-preview-icon-link"><span class="material-symbols-outlined">link</span></div>
-                                                <div class="sm-preview-text"></div>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
                                             </div>
                                             <div class="sm-preview-list-item-link">
                                                 <div class="sm-preview-icon-link"><span class="material-symbols-outlined">link</span></div>
-                                                <div class="sm-preview-text"></div>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
                                             </div>
                                             <div class="sm-preview-list-item-link">
                                                 <div class="sm-preview-icon-link"><span class="material-symbols-outlined">link</span></div>
-                                                <div class="sm-preview-text"></div>
+                                                <div class="sm-preview-lines">
+                                                    <div class="sm-preview-line sm-preview-line-title"></div>
+                                                    <div class="sm-preview-line sm-preview-line-part"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
