@@ -42,7 +42,7 @@
 }
 
 .sm-layouts-container {
-  max-width: 1800px;
+  max-width: 1200px;
   margin: 0 auto;
   background-color: var(--sm-color-surface);
   border-radius: var(--sm-radius-xl);
@@ -199,7 +199,7 @@
 }
 
 .sm-preview-item .material-symbols-outlined {
-  font-size: 46px;
+  font-size: 36px;
 }
 
 .sm-preview-lines {
