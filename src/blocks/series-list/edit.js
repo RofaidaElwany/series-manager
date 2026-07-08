@@ -1,16 +1,26 @@
 import ServerSideRender from "@wordpress/server-side-render";
-import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
-import { PanelBody, RangeControl } from "@wordpress/components";
-import { useSelect } from "@wordpress/data";
+import {
+  InspectorControls,
+  store as blockEditorStore,
+  useBlockProps,
+} from "@wordpress/block-editor";
+import {
+  PanelBody,
+  RangeControl,
+  ToolbarGroup,
+} from "@wordpress/components";
+import { useDispatch, useSelect } from "@wordpress/data";
+import { arrowDown, arrowUp, dragHandle } from "@wordpress/icons";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import ModeSelector from "./components/ModeSelector";
 import UserSelector from "./components/UserSelector";
 import SeriesPreview from "./components/SeriesPreview";
 
-const Edit = ({ attributes, setAttributes }) => {
+const Edit = ({ attributes, setAttributes, clientId }) => {
   const { mode, limit, userId } = attributes;
   const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
+  const { moveBlocksUp, moveBlocksDown } = useDispatch(blockEditorStore);
   const blockProps = useBlockProps({
     className: "sm-series-editor-root",
   });
