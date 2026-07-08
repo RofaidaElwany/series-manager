@@ -42,7 +42,7 @@
 }
 
 .sm-layouts-container {
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
   background-color: var(--sm-color-surface);
   border-radius: var(--sm-radius-xl);
@@ -184,28 +184,31 @@
 
 .sm-preview-item {
   aspect-ratio: 1;
+  min-width: 0;
   background: linear-gradient(135deg, var(--sm-color-primary) 0%, #005a8a 100%);
   border-radius: var(--sm-radius-sm);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 2px;
+  padding: 6px 0px;
   color: white;
   font-size: 18px;
   border-left: 2px solid white;
 }
 
 .sm-preview-item .material-symbols-outlined {
-  font-size: 48px;
+  font-size: 46px;
 }
 
 .sm-preview-lines {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   width: 100%;
+  min-width: 0;
   padding: 0 8px;
 }
 
@@ -217,6 +220,7 @@
 .sm-preview-line {
   height: 4px;
   width: 100%;
+  min-width: 0;
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.5);
 }
