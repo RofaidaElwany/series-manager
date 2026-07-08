@@ -14,7 +14,11 @@ export function LayoutPreview({ type }) {
         <div className="sm-preview sm-preview--grid">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="sm-preview__cell">
-              <Icon icon={media} />
+              <Icon className="material-symbols-outlined" icon={media} />
+              <div className="sm-preview-lines">
+                <div className="sm-preview__line_1" />
+                <div className="sm-preview__line_2" />
+              </div>              
             </div>
           ))}
         </div>
@@ -26,6 +30,10 @@ export function LayoutPreview({ type }) {
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="sm-preview__cell">
               <Icon icon={link} />
+              <div className="sm-preview-lines">
+                <div className="sm-preview__line_1" />
+                <div className="sm-preview__line_2" />
+              </div> 
             </div>
           ))}
         </div>

@@ -448,7 +448,7 @@ a + .sm-media-list__item {
   gap: 14px;
   width: 100%;
   min-height: 112px;
-  padding: 20px;
+  padding: 6px;
   border: 1px solid #dcdcde;
   border-radius: 8px;
   background: #ffffff;
@@ -512,16 +512,18 @@ a + .sm-media-list__item {
 
 .sm-preview__cell {
   display: flex;
+  flex-direction: column;
+  gap : 2px; 
   align-items: center;
   justify-content: center;
-  height: 32px;
+  height: 46px;
   border-radius: 4px;
   background: #eef4ff;
 }
 
 .sm-preview__cell svg {
-  width: 18px;
-  height: 18px;
+  width: 30px;
+  height: 25px;
   color: #2271b1;
   fill: currentColor;
 }
@@ -549,8 +551,8 @@ a + .sm-media-list__item {
 }
 
 .sm-preview__media-icon svg {
-  width: 16px;
-  height: 16px;
+  width: 30px;
+  height: 25px;
   color: #2271b1;
   fill: currentColor;
 }
@@ -771,7 +773,19 @@ fieldset.components-border-control input[type="number"] {
   padding: 0 8px;
 }
 
-.reading-now{
+.sm-preview .sm-preview-lines {
+  gap: 2px;
+  padding: 0px 4px;
+
+}
+.sm-preview .sm-preview-line {
+  height: 4px;
+  background: #dcdcde;
+  border-radius: 999px;
+  width: 100%;
+}
+
+.reading-now {
   position: absolute;
   top: 8px;
   right: 6px;
