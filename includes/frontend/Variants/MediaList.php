@@ -21,15 +21,6 @@ class MediaList
         $button_color = esc_attr($style['buttonColor'] ?? '#0066d9');
         $bg_color = esc_attr($style['headerBackgroundColor'] ?? '#e8f0fe');
 
-        $accentStyle = SeriesStyleHelper::inlineStyle([
-            'color' => $style['buttonColor'] ?? null,
-        ]);
-
-        $accentBgStyle = SeriesStyleHelper::inlineStyle([
-            'background-color' => SeriesStyleHelper::withOpacity($style['buttonColor'] ?? null, 0.2),
-            'color' => $style['buttonColor'] ?? null,
-        ]);
-
         ob_start();
 ?>
         <!-- Posts List -->
@@ -52,13 +43,8 @@ class MediaList
                         $avatar_img_url = $matches[1];
                     }
                 }
+                $placeholder_img_url = plugins_url('assets\img\1.jpg', dirname(__DIR__, 3) . '/series-manager.php');
 
-                $title_plain = trim(wp_strip_all_tags((string) $p->post_title));
-                $initial = $title_plain !== ''
-                    ? (function_exists('mb_substr')
-                        ? mb_strtoupper(mb_substr($title_plain, 0, 1, 'UTF-8'), 'UTF-8')
-                        : strtoupper(substr($title_plain, 0, 1)))
-                    : '?';
                 ?>
 
                 <?php if ($is_current): ?>
@@ -78,7 +64,10 @@ class MediaList
                         <?php else: ?>
                             <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl shrink-0 flex items-center justify-center text-white text-xl font-bold"
                                 style="background-color: <?php echo $button_color; ?>">
-                                <?php echo esc_html($initial); ?>
+                                <img
+                                    src="<?php echo esc_url($placeholder_img_url); ?>"
+                                    alt="No image available"
+                                    class="w-full h-full object-cover">
                             </div>
                         <?php endif; ?>
 
@@ -103,7 +92,7 @@ class MediaList
                     <!-- OTHER POSTS -->
                     <a href="<?php echo esc_url($link_url); ?>"
                         style="--sm-hover-color: <?php echo $button_color; ?>;"
-                        class="sm-media-list__item group flex items-center gap-3 md:gap-6 p-3 md:p-4 transition-all duration-200 hover:bg-slate-50">
+                        class="sm-media-list__item group flex items-center gap-3 md:gap-6 p-3 md:p-4 transition-all duration-200  hover:bg-slate-50 rounded-xl">
 
                         <!-- IMAGE -->
                         <?php if ($avatar_img_url): ?>
@@ -112,9 +101,10 @@ class MediaList
                                 alt="<?php echo esc_attr($p->post_title); ?>"
                                 class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shrink-0">
                         <?php else: ?>
-                            <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl shrink-0 flex items-center justify-center bg-slate-100 text-slate-500 text-xl font-bold">
-                                <?php echo esc_html($initial); ?>
-                            </div>
+                            <img
+                                src="<?php echo esc_url($placeholder_img_url); ?>"
+                                alt="No image available"
+                                class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shrink-0">
                         <?php endif; ?>
 
                         <!-- CONTENT -->

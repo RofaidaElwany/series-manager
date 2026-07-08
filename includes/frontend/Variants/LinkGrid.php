@@ -35,8 +35,8 @@ class LinkGrid
                                 border-radius: 1rem;
                                 box-shadow: 0 4px 24px <?php echo SeriesStyleHelper::withOpacity($style['buttonColor'] ?? '#0066d9', 0.12); ?>, 0 1px 4px <?php echo SeriesStyleHelper::withOpacity($style['buttonColor'] ?? '#0066d9', 0.08); ?>;"
                         class="sm-link-grid__card <?php echo $is_current ? 'sm-link-grid__card--current' : 'sm-link-grid__card--default'; ?> 
-                                group relative flex items-start gap-4 p-5 
-                                md:gap-6 md:p-8 
+                                group relative flex items-start gap-4
+                                md:gap-6 md:p-6 
                                 md:rounded-3xl 
                                 transition-all duration-300 overflow-hidden">
                         <?php if ($is_current): ?>
@@ -48,7 +48,7 @@ class LinkGrid
                             </div>
                         <?php endif; ?>
                         <!-- ICON -->
-                        <div class="sm-link-grid__icon w-16 h-16 md:w-24 md:h-24 shrink-0 rounded-2xl md:rounded-3xl bg-slate-50 flex items-center justify-center">
+                        <div class="sm-link-grid__icon w-16 h-16 md:h-24 shrink-0 rounded-2xl md:rounded-3xl bg-slate-50 flex items-center justify-center">
                             <span class="material-symbols-outlined"
                                 style="color: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>; font-size: 32px;">
                                 link
