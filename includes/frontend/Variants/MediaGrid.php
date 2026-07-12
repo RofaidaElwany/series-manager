@@ -109,7 +109,7 @@ class MediaGrid
                             <h3 class="sm-media-grid__title text-xl md:text-3xl font-bold text-slate-900 transition-colors">
                                 <?php echo esc_html($p->post_title); ?>
                             </h3>
-                            <div class="w-16 md:w-20 h-1 rounded-full mt-3 md:mt-4 mb-3 md:mb-5"
+                            <div class="w-16 md:w-20 h-1 rounded-full"
                                 style="background: <?php echo esc_attr($style['buttonColor'] ?? '#0066d9'); ?>">
                             </div>
                             <span class="text-base font-semibold" ...>
